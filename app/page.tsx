@@ -4,12 +4,12 @@ import { Authenticated, Unauthenticated } from 'convex/react'
 import { SignInButton, UserButton } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
+import { NavigationMenuDemo } from './src/NavigationMenuDemo'
 
 export default function Home() {
   return (
     <>
-    
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'end', justifyContent: 'start', height: '100vh', padding: '1rem', boxSizing: 'border-box' }}>
+      <NavigationMenuDemo  />
 
         <Authenticated>
           <UserButton />
@@ -18,9 +18,6 @@ export default function Home() {
         <Unauthenticated>
           <SignInButton />
         </Unauthenticated>
-      
-      </div>
-
 
     </>
   )
