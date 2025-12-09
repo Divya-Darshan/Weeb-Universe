@@ -4,7 +4,7 @@ import { Authenticated, Unauthenticated } from 'convex/react'
 import { SignInButton, UserButton } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
-import { NavigationMenuDemo } from './src/NavigationMenuDemo'
+import { NavigationMenuDemo } from './src/nav/NavigationMenuDemo'
 
 export default function Home() {
   return (
