@@ -3,14 +3,13 @@
 
 import { useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
-import { NavigationMenuDemo } from './src/nav/NavigationMenuDemo'
-import Profile from './src/profile/Profile'
+import { NavigationMenu } from './src/nav/NavigationMenu'
 
 export default function Home() {
   return (
     <>
-      <NavigationMenuDemo  />
-      <Profile /> 
+    
+      <NavigationMenu />
 
 
     </>
