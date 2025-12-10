@@ -1,23 +1,17 @@
 'use client'
 
-import { Authenticated, Unauthenticated } from 'convex/react'
-import { SignInButton, UserButton } from '@clerk/nextjs'
+
 import { useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
 import { NavigationMenuDemo } from './src/nav/NavigationMenuDemo'
+import Profile from './src/profile/Profile'
 
 export default function Home() {
   return (
     <>
       <NavigationMenuDemo  />
+      <Profile /> 
 
-        <Authenticated>
-          <UserButton />
-          <Content />
-        </Authenticated>
-        <Unauthenticated>
-          <SignInButton />
-        </Unauthenticated>
 
     </>
   )
