@@ -24,7 +24,7 @@ export default function Hero() {
               <span className="sr-only">Your Company</span>
               <img
                 alt=""
-                src="" // logo source here
+                src="https://yt3.googleusercontent.com/MUldyqL2E7aShIFghCq8AAvZMFrQqTgOJmSIbzbuyyyiEiytkzWXyQf3c1VXnXjL8OhJyZXgULg=s160-c-k-c0x00ffffff-no-rj" // logo source here
                 className="h-8 w-auto"
               />
             </a>
@@ -60,7 +60,7 @@ export default function Hero() {
                 <span className="sr-only">Your Company</span>
                 <img
                   alt=""
-                  src="" // logo source here for mobile
+                  src="https://yt3.googleusercontent.com/MUldyqL2E7aShIFghCq8AAvZMFrQqTgOJmSIbzbuyyyiEiytkzWXyQf3c1VXnXjL8OhJyZXgULg=s160-c-k-c0x00ffffff-no-rj" // logo source here for mobile
                   className="h-8 w-auto"
                 />
               </a>
