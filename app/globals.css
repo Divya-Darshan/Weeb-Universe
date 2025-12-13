@@ -116,6 +116,8 @@
 .cl-avatarBox {
   width: 2.5rem;
   height: 2.5rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 6px rgb(92, 76, 76)
 
 }
 

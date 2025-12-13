@@ -15,7 +15,7 @@ export default function Profile() {
               <UserButton 
                 appearance={{
                   elements: {
-                    userButtonAvatarBox: " ring-2  ring-emerald-500  rounded-full shadow-lg ",
+                    userButtonAvatarBox: "    ",
                   }
                 }} 
               />

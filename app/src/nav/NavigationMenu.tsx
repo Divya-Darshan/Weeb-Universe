@@ -4,6 +4,10 @@ import * as React from "react"
 import Link from "next/link"
 import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from "lucide-react"
 import Profile from "./profile/Profile"
+import { Menu as MenuIcon } from "lucide-react"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+
 
 import {
   NavigationMenu as NavigationMenuComponent,
@@ -57,7 +61,10 @@ export function NavigationMenu() {
 
 
   return (
-   <div className="w-full flex justify-center md:justify-start mt-4 px-2 border-b pb-2.5 ">
+   <div className="w-full flex justify-center md:justify-start mt-2 px-2 border-b pb-2.5 ">
+
+      <Sheet />
+    
       <NavigationMenuComponent className="w-full max-w-5xl">
       <NavigationMenuList className="flex-wrap">
         <NavigationMenuItem>
