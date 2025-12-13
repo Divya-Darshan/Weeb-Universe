@@ -10,7 +10,7 @@ export default function Profile() {
   return (
     <>
         
-<div className="  p-4 pt-2.5 w-max absolute top-[-0.1]  right-4  ">
+<div className="   ">
     <Authenticated> 
               <UserButton 
                 appearance={{
