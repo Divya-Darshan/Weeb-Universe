@@ -5,7 +5,7 @@ import { useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
 import Hero from './src/hero/Hero'
 import Products from './src/products/Products'
-import ProductsOverviews from './src/products/ProductsOverviews'
+
 
 
 export default function Home() {
