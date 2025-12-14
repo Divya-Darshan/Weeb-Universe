@@ -3,9 +3,10 @@
 
 import { useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
-import Hero from './src/nav/demo/Hero'
+import Hero from './src/hero/Hero'
+import Products from './src/products/Products'
+import ProductsOverviews from './src/products/ProductsOverviews'
 
-import Demo from './src/nav/demo/Hero'
 
 export default function Home() {
   return (
@@ -13,6 +14,8 @@ export default function Home() {
     
  
       <Hero />
+      <Products />
+   
 
 
     </>
