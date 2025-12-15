@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import  Profile from '../profile/Profile'
+import  Profile from '@/app/src/profile/Profile'; // import Profile component for src !from components
 const navigation = [
   { name: 'Home', href: '#' },
   { name: 'Limited Drops', href: '#' },

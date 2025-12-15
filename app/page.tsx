@@ -1,11 +1,10 @@
 'use client'
 
 
-import LogoLoop from './src/hero/logoloop/LogoLoop'
+import LogoLoop from '@/components/hero/logoloop/LogoLoop'
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss } from 'react-icons/si';
 
 //logo loop data
-
 const techLogos = [
   { node: <SiReact />, title: "React", href: "https://react.dev" },
   { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
@@ -13,24 +12,24 @@ const techLogos = [
   { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
 ];
 
-// Alternative with image sources
+// Alternative with image sources for logoloop
 const imageLogos = [
   { src: "/logos/company1.png", alt: "Company 1", href: "https://company1.com" },
   { src: "/logos/company2.png", alt: "Company 2", href: "https://company2.com" },
   { src: "/logos/company3.png", alt: "Company 3", href: "https://company3.com" },
 ];
 
-// Import Convex hooks
+
 import './globals.css'
 import { useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
-import Hero from './src/hero/Hero'
-import Products from './src/products/Products'
-import Carousel from './src/hero/carousel/Carousel'
-import  MagicBento  from './src/hero/magicbento/MagicBento'
-
-
-
+import Hero from '@/components/hero/Hero'
+import Products from '@/components/products/Products'
+//import OverView from '@/app/src/products/OverView';
+import Promo from '@/components/hero/promo/Promo';
+import Footer from '@/components/footer/Footer';
+//import Carousel from './src/hero/carousel/Carousel'
+//import  MagicBento  from './src/hero/magicbento/MagicBento'
 
 
 export default function Home() {
@@ -41,7 +40,7 @@ export default function Home() {
  
       <Hero />
       <Products />
-   
+
     <div style={{ height: '200px', position: 'relative', overflow: 'hidden', marginTop: '100px' }}>
         {/* Basic horizontal loop */}
         <LogoLoop
@@ -57,9 +56,13 @@ export default function Home() {
           ariaLabel="Technology partners"
         />
     </div> 
-
-
-      <div
+    <Promo />
+ 
+ 
+        <Footer />
+    
+ 
+      {/* <div
         style={{ height: '200px', position: 'relative',  }} id='Carousel'  className="mb-20 flex items-center justify-center gap-10 ">
           
         {[0, 1, 2, 3].map((index) => (
@@ -67,7 +70,8 @@ export default function Home() {
             key={index}
             baseWidth={300}
             autoplay
-            autoplayDelay={4000}
+      //carousel and magic bento temporarily removed 
+            autoplayDelay={4000}   
             pauseOnHover
             loop
             round={false}
@@ -91,7 +95,7 @@ export default function Home() {
       glowColor="182, 0, 255"
     />
 
-      </div>
+      </div> */}
 
 
 
