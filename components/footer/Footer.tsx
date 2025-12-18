@@ -1,5 +1,6 @@
 // src/components/Footer.tsx
 
+import { time } from 'console'
 import { FaFacebookF, FaInstagram, FaXTwitter, FaGithub, FaYoutube } from 'react-icons/fa6'
 
 const navigation = {
@@ -10,6 +11,9 @@ const navigation = {
 }
 
 export default function Footer() {
+
+
+
   return (
     <footer className="bg-[#020617] text-gray-400">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
@@ -30,16 +34,13 @@ export default function Footer() {
             {/* social icons */}
             <div className="flex items-center gap-4 text-gray-400">
               <button className="rounded-full p-2 hover:text-white hover:bg-white/5 transition">
-                <FaFacebookF className="h-4 w-4" />
+                <FaFacebookF  className="h-4 w-4" />
               </button>
               <button className="rounded-full p-2 hover:text-white hover:bg-white/5 transition">
                 <FaInstagram className="h-4 w-4" />
               </button>
               <button className="rounded-full p-2 hover:text-white hover:bg-white/5 transition">
                 <FaXTwitter className="h-4 w-4" />
-              </button>
-              <button className="rounded-full p-2 hover:text-white hover:bg-white/5 transition">
-                <FaGithub className="h-4 w-4" />
               </button>
               <button className="rounded-full p-2 hover:text-white hover:bg-white/5 transition">
                 <FaYoutube className="h-4 w-4" />
@@ -106,10 +107,13 @@ export default function Footer() {
         {/* divider */}
         <div className="mt-10 border-t border-white/10 pt-6">
           <p className="text-xs text-gray-500">
-            © 2024 Your Company, Inc. All rights reserved.
+            © 2024 Weeb Universe , Inc. All rights reserved.
           </p>
         </div>
       </div>
     </footer>
   )
+
+  
+
 }
