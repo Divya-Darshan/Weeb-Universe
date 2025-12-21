@@ -6,10 +6,10 @@ import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss } from 'react-icons/s
 
 //logo loop data
 const techLogos = [
-  { node: <SiReact />, title: "React", href: "https://react.dev" },
-  { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
-  { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org" },
-  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
+  { node: <SiReact />, title: "React", href: "#" },
+  { node: <SiNextdotjs />, title: "Next.js", href: "#" },
+  { node: <SiTypescript />, title: "TypeScript", href: "#" },
+  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "#" },
 ];
 
 // Alternative with image sources for logoloop
@@ -21,11 +21,9 @@ const imageLogos = [
 
 
 import './globals.css'
-import { useQuery } from 'convex/react'
-import { api } from '../convex/_generated/api'
 import Hero from '@/components/hero/Hero'
 import Products from '@/components/products/Products'
-//import OverView from '@/app/src/products/OverView';
+import OverView from '@/components/products/OverView';
 import Promo from '@/components/hero/promo/Promo';
 import Footer from '@/components/footer/Footer';
 //import Carousel from './src/hero/carousel/Carousel'
@@ -36,8 +34,9 @@ export default function Home() {
   
   return (
     <>
-    
- 
+
+      {/*<OverView   /> */}
+
       <Hero />
       <Products />
 
