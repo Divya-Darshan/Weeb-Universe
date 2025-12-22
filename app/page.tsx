@@ -6,7 +6,7 @@ import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss } from 'react-icons/s
 
 //logo loop data
 const techLogos = [ 
-  { src: 'https://yt3.ggpht.com/MUldyqL2E7aShIFghCq8AAvZMFrQqTgOJmSIbzbuyyyiEiytkzWXyQf3c1VXnXjL8OhJyZXgULg=s88-c-k-c0x00ffffff-no-rj', alt: 'React', title: 'React' },
+  { src: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-04-image-card-08.jpg', alt: 'React', title: 'React' },
   { src: 'https://yt3.ggpht.com/MUldyqL2E7aShIFghCq8AAvZMFrQqTgOJmSIbzbuyyyiEiytkzWXyQf3c1VXnXjL8OhJyZXgULg=s88-c-k-c0x00ffffff-no-rj', alt: 'Next.js', title: 'Next.js' },
   { src: 'https://yt3.ggpht.com/MUldyqL2E7aShIFghCq8AAvZMFrQqTgOJmSIbzbuyyyiEiytkzWXyQf3c1VXnXjL8OhJyZXgULg=s88-c-k-c0x00ffffff-no-rj', alt: 'TypeScript', title: 'TypeScript' },
   { src: 'https://yt3.ggpht.com/MUldyqL2E7aShIFghCq8AAvZMFrQqTgOJmSIbzbuyyyiEiytkzWXyQf3c1VXnXjL8OhJyZXgULg=s88-c-k-c0x00ffffff-no-rj', alt: 'Tailwind CSS', title: 'Tailwind CSS' },
