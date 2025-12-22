@@ -5,12 +5,13 @@ import LogoLoop from '@/components/hero/logoloop/LogoLoop'
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss } from 'react-icons/si';
 
 //logo loop data
-const techLogos = [
-  { node: <SiReact />, title: "React", href: "#" },
-  { node: <SiNextdotjs />, title: "Next.js", href: "#" },
-  { node: <SiTypescript />, title: "TypeScript", href: "#" },
-  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "#" },
-];
+const techLogos = [ 
+  { src: 'https://yt3.ggpht.com/MUldyqL2E7aShIFghCq8AAvZMFrQqTgOJmSIbzbuyyyiEiytkzWXyQf3c1VXnXjL8OhJyZXgULg=s88-c-k-c0x00ffffff-no-rj', alt: 'React', title: 'React' },
+  { src: 'https://yt3.ggpht.com/MUldyqL2E7aShIFghCq8AAvZMFrQqTgOJmSIbzbuyyyiEiytkzWXyQf3c1VXnXjL8OhJyZXgULg=s88-c-k-c0x00ffffff-no-rj', alt: 'Next.js', title: 'Next.js' },
+  { src: 'https://yt3.ggpht.com/MUldyqL2E7aShIFghCq8AAvZMFrQqTgOJmSIbzbuyyyiEiytkzWXyQf3c1VXnXjL8OhJyZXgULg=s88-c-k-c0x00ffffff-no-rj', alt: 'TypeScript', title: 'TypeScript' },
+  { src: 'https://yt3.ggpht.com/MUldyqL2E7aShIFghCq8AAvZMFrQqTgOJmSIbzbuyyyiEiytkzWXyQf3c1VXnXjL8OhJyZXgULg=s88-c-k-c0x00ffffff-no-rj', alt: 'Tailwind CSS', title: 'Tailwind CSS' },
+]
+
 
 // Alternative with image sources for logoloop
 const imageLogos = [
@@ -35,7 +36,7 @@ export default function Home() {
   return (
     <>
 
-      {/*<OverView   /> */}
+      <OverView   /> 
 
       <Hero />
       <Products />
