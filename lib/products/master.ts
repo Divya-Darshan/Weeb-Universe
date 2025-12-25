@@ -18,8 +18,8 @@ export const products: Product[] = [
   {
     id: 'p_gojo-hoodie',
     name: 'Gojo Hoodie',
-    price: 1499,
-    image: '/products/gojo-hoodie.jpg',
+    price: 100,
+    image: `https://res.cloudinary.com/dllduppce/image/upload/v1766402083/anime3.png?v=${cacheBust()}`,
     colors: ['black', 'purple'],
     sizes: ['S', 'M', 'L', 'XL'],
     description: 'Oversized hoodie inspired by Gojo Satoru with soft fleece lining.',
@@ -27,7 +27,7 @@ export const products: Product[] = [
   {
     id: 'p_itachi-tee',
     name: `hello`,
-    price: 799,
+    price: 120,
     image: 'https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png?v=${cacheBust()}',
     colors: ['black', 'red'],
     sizes: ['M', 'L', 'XL'],
