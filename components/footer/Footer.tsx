@@ -12,6 +12,7 @@ const navigation = {
 
 export default function Footer() {
 
+  const date = new Date();// Outputs: "12/25/2025, 12:00:00 AM" (example format)   
 
 
   return (
@@ -107,7 +108,7 @@ export default function Footer() {
         {/* divider */}
         <div className="mt-10 border-t border-white/10 pt-6">
           <p className="text-xs text-gray-500">
-            © 2024 Weeb Universe , Inc. All rights reserved.
+            © { date.getFullYear() } Weeb Universe , Inc. All rights reserved.
           </p>
         </div>
       </div>

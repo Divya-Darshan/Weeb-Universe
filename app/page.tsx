@@ -39,37 +39,31 @@ import Products from '@/components/products/Products'
 import OverView from '@/components/products/OverView'
 import Promo from '@/components/hero/promo/Promo'
 import Footer from '@/components/footer/Footer'
+import { Radius } from 'lucide-react'
 // import Carousel from './src/hero/carousel/Carousel'
 // import MagicBento from './src/hero/magicbento/MagicBento'
 
 export default function Home() {
   return (
     <>
-      <OverView />
+      {/* <OverView /> */}
 
       <Hero />
       <Products />
 
-      <div
-        style={{
-          height: '200px',
-          position: 'relative',
-          overflow: 'hidden',
-          marginTop: '100px',
-        }}
-      >
+      <div>
         {/* Basic horizontal loop */}
-        <LogoLoop
+        <LogoLoop 
           logos={techLogos}
-          speed={120}
+          speed={110}
           direction="left"
-          logoHeight={48}
-          gap={40}
+          logoHeight={200}
+          gap={20}
           hoverSpeed={0}
           scaleOnHover
           fadeOut
           fadeOutColor="#ffffff"
-          ariaLabel="Technology partners"
+          ariaLabel="Anime Characters Logo Loop"
         />
       </div>
 

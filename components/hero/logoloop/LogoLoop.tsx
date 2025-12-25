@@ -357,8 +357,9 @@ export const LogoLoop = React.memo<LogoLoopProps>(
           </span>
         ) : (
           <img
+           style={ {borderRadius: '15px'} }
             className={cx(
-              'h-[var(--logoloop-logoHeight)] w-auto block object-contain',
+              'h-[var(--logoloop-logoHeight)] w-auto block object-contain  ',
               '[-webkit-user-drag:none] pointer-events-none',
               '[image-rendering:-webkit-optimize-contrast]',
               'motion-reduce:transition-none',
