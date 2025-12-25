@@ -42,7 +42,7 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
           <button
             type="button"
             onClick={onClose}
-            className="absolute right-4 top-4 text-gray-400 hover:text-gray-500"
+            className="absolute right-1 top-1 text-gray-400 hover:text-gray-500"
           >
             <span className="sr-only">Close</span>
             <XMarkIcon aria-hidden="true" className="size-6" />

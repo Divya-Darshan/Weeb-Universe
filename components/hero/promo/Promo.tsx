@@ -1,15 +1,22 @@
 export default function Promo() {
+
+  // Simple cache buster function for image URLs in prorom0
+  const cacheBust = () => Date.now()
+
+
+
+
+
   return (
     <div className="relative overflow-hidden bg-white">
       <div className="pt-16 pb-80 sm:pt-24 sm:pb-40 lg:pt-40 lg:pb-48">
         <div className="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
           <div className="sm:max-w-lg">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Summer styles are finally here
+              Anime Figures and Props
             </h1>
             <p className="mt-4 text-xl text-gray-500">
-              This year, our new summer collection will shelter you from the harsh elements of a world that doesn't care
-              if you live or die.
+              Anime keychains, toys, and props from your favorite shows, made for everyday use on your bags, desks, and shelves.
             </p>
           </div>
           <div>
@@ -25,37 +32,14 @@ export default function Promo() {
                       <div className="h-64 w-44 overflow-hidden rounded-lg sm:opacity-0 lg:opacity-100">
                         <img
                           alt=""
-                          src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-hero-image-tile-01.jpg"
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png?v=${cacheBust()}` }
                           className="size-full object-cover"
                         />
                       </div>
                       <div className="h-64 w-44 overflow-hidden rounded-lg">
                         <img
                           alt=""
-                          src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-hero-image-tile-02.jpg"
-                          className="size-full object-cover"
-                        />
-                      </div>
-                    </div>
-                    <div className="grid shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
-                      <div className="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          alt=""
-                          src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-hero-image-tile-03.jpg"
-                          className="size-full object-cover"
-                        />
-                      </div>
-                      <div className="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          alt=""
-                          src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-hero-image-tile-04.jpg"
-                          className="size-full object-cover"
-                        />
-                      </div>
-                      <div className="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          alt=""
-                          src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-hero-image-tile-05.jpg"
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png?v=${cacheBust()}` }
                           className="size-full object-cover"
                         />
                       </div>
@@ -64,14 +48,37 @@ export default function Promo() {
                       <div className="h-64 w-44 overflow-hidden rounded-lg">
                         <img
                           alt=""
-                          src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-hero-image-tile-06.jpg"
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png?v=${cacheBust()}` }
                           className="size-full object-cover"
                         />
                       </div>
                       <div className="h-64 w-44 overflow-hidden rounded-lg">
                         <img
                           alt=""
-                          src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-hero-image-tile-07.jpg"
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png?v=${cacheBust()}` }
+                          className="size-full object-cover"
+                        />
+                      </div>
+                      <div className="h-64 w-44 overflow-hidden rounded-lg">
+                        <img
+                          alt=""
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png?v=${cacheBust()}` }
+                          className="size-full object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
+                      <div className="h-64 w-44 overflow-hidden rounded-lg">
+                        <img
+                          alt=""
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png?v=${cacheBust()}` }
+                          className="size-full object-cover"
+                        />
+                      </div>
+                      <div className="h-64 w-44 overflow-hidden rounded-lg">
+                        <img
+                          alt=""
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png?v=${cacheBust()}` }
                           className="size-full object-cover"
                         />
                       </div>
