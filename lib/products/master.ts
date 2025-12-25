@@ -11,6 +11,9 @@ export type Product = {
   description: string
 }
 
+// Simple cache buster function for image URLs👇
+const cacheBust = () => Date.now()
+
 export const products: Product[] = [
   {
     id: 'p_gojo-hoodie',
@@ -23,11 +26,12 @@ export const products: Product[] = [
   },
   {
     id: 'p_itachi-tee',
-    name: 'Itachi Tee',
+    name: `hello`,
     price: 799,
-    image: '/products/itachi-tee.jpg',
+    image: 'https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png?v=${cacheBust()}',
     colors: ['black', 'red'],
     sizes: ['M', 'L', 'XL'],
     description: 'Graphic tee featuring Itachi with minimal line art style.',
   },
+  
 ]
