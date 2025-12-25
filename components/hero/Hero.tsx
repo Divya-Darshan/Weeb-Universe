@@ -4,6 +4,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Profile from '@/app/src/profile/Profile'
+import Cart from '@/components/products/cart'
 
 const navigation = [
   { name: 'Home', href: '#' },
@@ -28,8 +29,9 @@ export default function Hero() {
               />
             </a>
           </div>
-
+            <Cart />
           <div className="flex lg:hidden">
+            
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
@@ -38,7 +40,10 @@ export default function Hero() {
               <span className="sr-only">Open main menu</span>
               <Bars3Icon aria-hidden="true" className="size-6" />
             </button>
+
+            
           </div>
+          
 
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
@@ -82,13 +87,14 @@ export default function Hero() {
               <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
                 <div className="flex items-center justify-between">
                   <a href="#" className="-m-1.5 mt-[-40] p-1.5">
-                    <span className="sr-only">Your Company</span>
+                    <span className="sr-only"> Weeb Universe</span>
                     <img
                       alt="logo mobile"
                       src="/favicon.png"
                       className="h-25 w-auto drop-shadow-[0px_0px_5px_#754fb0]"
                     />
                   </a>
+                  
                   <button
                     type="button"
                     onClick={() => setMobileMenuOpen(false)}

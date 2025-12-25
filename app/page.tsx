@@ -36,7 +36,6 @@ const imageLogos = [
 import './globals.css'
 import Hero from '@/components/hero/Hero'
 import Products from '@/components/products/Products'
-import OverView from '@/components/products/OverView'
 import Promo from '@/components/hero/promo/Promo'
 import Footer from '@/components/footer/Footer'
 import { Radius } from 'lucide-react'
