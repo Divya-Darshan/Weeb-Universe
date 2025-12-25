@@ -1,4 +1,4 @@
-// lib/products/master.ts
+// @/lib/products/master.ts
 export type ProductId = `p_${string}`
 
 export type Product = {
@@ -13,7 +13,7 @@ export type Product = {
 
 // Simple cache buster function for image URLs👇
 const cacheBust = () => Date.now()
-
+//divya2006@#@#@
 export const products: Product[] = [
   {
     id: 'p_gojo-hoodie',
