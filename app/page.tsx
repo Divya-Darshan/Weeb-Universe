@@ -58,7 +58,7 @@ export default function Home() {
           speed={110}
           direction="left"
           logoHeight={200}
-          gap={20}
+          gap={30}
           hoverSpeed={0}
           scaleOnHover
           fadeOut
