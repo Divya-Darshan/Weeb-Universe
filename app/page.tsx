@@ -1,3 +1,6 @@
+
+// app/page.tsx (or app/products/page.tsx)
+
 'use client'
 
 import LogoLoop from '@/components/hero/logoloop/LogoLoop'
