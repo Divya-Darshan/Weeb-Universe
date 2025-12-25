@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { ShoppingCartIcon } from '@heroicons/react/24/outline'
 
 const products = [
   {
@@ -43,12 +44,14 @@ export default function Example() {
 
   return (
     <div>
-      <button
-        onClick={() => setOpen(true)}
-        className="rounded-md bg-gray-950/5  absolute right-40 top-12  text-sm font-semibold text-white hover:bg-gray-950/10"
-      >
-        Open drawer
-      </button>
+        <button
+          onClick={() => setOpen(true)}
+          className="rounded-md bg-gray-950/5 absolute right-18  top-11 md:right-40 md:top-12 text-sm font-semibold text-white hover:bg-gray-950/10"
+        >
+          <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
+          
+        </button>
+
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <DialogBackdrop
           transition
