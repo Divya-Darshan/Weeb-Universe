@@ -4,35 +4,40 @@
 import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
-
+import { useRouter } from 'next/navigation'
 import { useCart } from '@/lib/cart/context'
-
-
 
 export default function Cart() {
   const [open, setOpen] = useState(false)
-  const { items, removeFromCart } = useCart()
   const [pressed, setPressed] = useState(false)
+  const { items, removeFromCart } = useCart()
+  const router = useRouter()
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const count = items.reduce((sum, item) => sum + item.quantity, 0) // ✅ total quantity
+  const count = items.reduce((sum, item) => sum + item.quantity, 0)
+
+  function handleCheckout() {
+    setPressed(true)
+    setTimeout(() => setPressed(false), 500)
+    setOpen(false)
+    router.push('/checkout')
+  }
 
   return (
     <div>
-        <button
-          onClick={() => setOpen(true)}
-          className="
-            absolute
-            top-9 right-14        /* tweak these to match your design */
-            md:top-9 md:right-32  /* different offset on desktop if you want */
-            z-50
-            rounded-md bg-gray-950/5
-            p-2
-            text-sm font-semibold text-white
-            hover:bg-gray-950/10
-          "
-        >
-
+      <button
+        onClick={() => setOpen(true)}
+        className="
+          absolute
+          top-9 right-14
+          md:top-9 md:right-32
+          z-50
+          rounded-md bg-gray-950/5
+          p-2
+          text-sm font-semibold text-white
+          hover:bg-gray-950/10
+        "
+      >
         <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
         {count > 0 && (
           <span className="absolute -top-2 -right-2 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-600 px-1 text-xs font-bold text-white">
@@ -130,9 +135,10 @@ export default function Cart() {
                     <p className="mt-0.5 text-sm text-gray-500">
                       Shipping and taxes calculated at checkout.
                     </p>
+
                     <button
                       type="button"
-                      onClick={() => setPressed(true)}
+                      onClick={handleCheckout}
                       className={`w-full sm:w-auto flex-1 rounded-md mx-2 my-5
                         px-6 sm:px-10 lg:px-14 py-3
                         text-sm sm:text-base font-medium text-white
@@ -145,7 +151,6 @@ export default function Cart() {
                       Checkout
                     </button>
 
-                    
                     {/* checkout etc... */}
                   </div>
                 </div>

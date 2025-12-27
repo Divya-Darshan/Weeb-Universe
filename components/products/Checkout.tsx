@@ -258,7 +258,7 @@ export default function Checkout() {
                   >
                     <div className="flex items-center gap-3">
                       <img
-                        src={item.image}
+                        src={item.image + `?v=${Date.now()}`}
                         alt={item.name}
                         className="h-14 w-14 rounded-md object-cover"
                       />
