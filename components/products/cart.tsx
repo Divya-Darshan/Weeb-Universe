@@ -4,11 +4,15 @@
 import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
+
 import { useCart } from '@/lib/cart/context'
+
+
 
 export default function Cart() {
   const [open, setOpen] = useState(false)
   const { items, removeFromCart } = useCart()
+  const [pressed, setPressed] = useState(false)
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const count = items.reduce((sum, item) => sum + item.quantity, 0) // ✅ total quantity
@@ -126,6 +130,22 @@ export default function Cart() {
                     <p className="mt-0.5 text-sm text-gray-500">
                       Shipping and taxes calculated at checkout.
                     </p>
+                    <button
+                      type="button"
+                      onClick={() => setPressed(true)}
+                      className={`w-full sm:w-auto flex-1 rounded-md mx-2 my-5
+                        px-6 sm:px-10 lg:px-14 py-3
+                        text-sm sm:text-base font-medium text-white
+                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2
+                        transition transform duration-150
+                        ${pressed
+                          ? 'bg-green-600 hover:bg-green-700 scale-95'
+                          : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02]'}`}
+                    >
+                      Checkout
+                    </button>
+
+                    
                     {/* checkout etc... */}
                   </div>
                 </div>
