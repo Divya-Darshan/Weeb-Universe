@@ -5,6 +5,9 @@ import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/20/solid'
 import type { Product } from '@/lib/products'
+import { useCart } from '@/lib/cart/context' // ✅ add this
+
+const cacheBust = () => Date.now()
 
 type OverViewProps = {
   open: boolean
@@ -19,6 +22,8 @@ function classNames(classes: (string | false | null | undefined)[]) {
 }
 
 export default function OverView({ open, onClose, product }: OverViewProps) {
+  const { addToCart } = useCart() // ✅ get addToCart
+
   if (!product) return null
 
   const rating = 4
@@ -52,7 +57,7 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
           <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
             <img
               alt={product.name}
-              src={product.image}
+              src={product.image + `?v=${Date.now()}`}
               className="aspect-2/3 w-full rounded-lg bg-gray-100 object-cover sm:col-span-4 lg:col-span-5"
             />
 
@@ -101,6 +106,7 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
               <div className="mt-8 flex gap-3">
                 <button
                   type="button"
+                  onClick={() => addToCart(product)} // ✅ only change in the button
                   className="flex-1 rounded-md bg-indigo-600 px-4 py-3 text-sm font-medium text-white hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
                 >
                   Add to cart
