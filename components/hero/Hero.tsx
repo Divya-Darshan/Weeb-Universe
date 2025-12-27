@@ -4,7 +4,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Profile from '@/app/src/profile/Profile'
-import Cart from '@/components/products/Cart.tsx'
+import Cart from '@/components/products/Cart'
 
 const navigation = [
   { name: 'Home', href: '#' },
