@@ -11,14 +11,30 @@ export default function Cart() {
   const { items, removeFromCart } = useCart()
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const count = items.reduce((sum, item) => sum + item.quantity, 0) // ✅ total quantity
 
   return (
     <div>
-      <button
-        onClick={() => setOpen(true)}
-        className="rounded-md bg-gray-950/5 absolute right-18 top-11 md:right-40 md:top-12 text-sm font-semibold text-white hover:bg-gray-950/10"
-      >
+        <button
+          onClick={() => setOpen(true)}
+          className="
+            absolute
+            top-9 right-14        /* tweak these to match your design */
+            md:top-9 md:right-32  /* different offset on desktop if you want */
+            z-50
+            rounded-md bg-gray-950/5
+            p-2
+            text-sm font-semibold text-white
+            hover:bg-gray-950/10
+          "
+        >
+
         <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
+        {count > 0 && (
+          <span className="absolute -top-2 -right-2 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-600 px-1 text-xs font-bold text-white">
+            {count}
+          </span>
+        )}
       </button>
 
       <Dialog open={open} onClose={setOpen} className="relative z-10">

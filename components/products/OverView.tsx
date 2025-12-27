@@ -1,11 +1,12 @@
 // components/products/OverView.tsx
 'use client'
 
+import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/20/solid'
 import type { Product } from '@/lib/products'
-import { useCart } from '@/lib/cart/context' // ✅ add this
+import { useCart } from '@/lib/cart/context'
 
 const cacheBust = () => Date.now()
 
@@ -22,11 +23,29 @@ function classNames(classes: (string | false | null | undefined)[]) {
 }
 
 export default function OverView({ open, onClose, product }: OverViewProps) {
-  const { addToCart } = useCart() // ✅ get addToCart
+  const { addToCart } = useCart()
+  const [added, setAdded] = useState(false)
+  const [quantity, setQuantity] = useState(1) // ✅ quantity selector
 
   if (!product) return null
 
   const rating = 4
+
+  function handleAdd() {
+    if (!product) return
+    if (quantity < 1) return
+    addToCart(product as Product, quantity)
+    setAdded(true)
+    setTimeout(() => setAdded(false), 600)
+  }
+
+  function dec() {
+    setQuantity((q) => (q > 1 ? q - 1 : 1))
+  }
+
+  function inc() {
+    setQuantity((q) => (q < 10 ? q + 1 : 10)) // e.g. max 10, adjust if you want
+  }
 
   return (
     <Dialog open={open} onClose={onClose} className="relative z-50">
@@ -103,13 +122,39 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
                 {product.description}
               </p>
 
+              {/* ✅ Quantity selector */}
+              <div className="mt-6 inline-flex items-center rounded-md border border-gray-300">
+                <button
+                  type="button"
+                  onClick={dec}
+                  className="px-3 py-1 text-lg font-medium text-gray-700 hover:bg-gray-100"
+                >
+                  −
+                </button>
+                <span className="min-w-[3rem] text-center text-sm font-medium text-gray-900">
+                  Qty: {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={inc}
+                  className="px-3 py-1 text-lg font-medium text-gray-700 hover:bg-gray-100"
+                >
+                  +
+                </button>
+              </div>
+
               <div className="mt-8 flex gap-3">
                 <button
                   type="button"
-                  onClick={() => addToCart(product)} // ✅ only change in the button
-                  className="flex-1 rounded-md bg-indigo-600 px-4 py-3 text-sm font-medium text-white hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+                  onClick={handleAdd}
+                  className={`flex-1 rounded-md px-4 py-3 text-sm font-medium text-white
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2
+                    transition transform duration-150
+                    ${added
+                      ? 'bg-green-600 hover:bg-green-700 scale-95'
+                      : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02]'}`}
                 >
-                  Add to cart
+                  {added ? 'Added!' : `Add ${quantity} to cart`}
                 </button>
                 <button
                   type="button"
