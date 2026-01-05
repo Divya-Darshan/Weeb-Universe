@@ -17,7 +17,7 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false)
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const shipping = items.length > 0 ? 99 : 0
+  const shipping = items.length > 0 ? 0 : 0
   const taxes = Math.round(subtotal * 0.18)
   const total = subtotal + shipping + taxes
 
