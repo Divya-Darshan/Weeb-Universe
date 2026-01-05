@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const { amount } = await req.json()
     
     const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID
-    const keySecret = process.env.RAZORPAY_KEY_SECRET
+    const keySecret = process.env.RAZORPAY_KEY_SECRET // live secret key added
 
     if (!keyId || !keySecret) {
       throw new Error("Razorpay keys missing")

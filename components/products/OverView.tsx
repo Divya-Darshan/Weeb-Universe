@@ -90,9 +90,9 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
                   Product information
                 </h3>
 
-                <p className="text-xl mt-[-5] sm:text-2xl text-gray-900 font-bold">₹{product.price}</p>
-
-
+                <p className="text-xl mt-[-5] sm:text-2xl text-gray-900 font-bold">
+                  ₹{product.price}
+                </p>
               </section>
 
               <p className="text-xs sm:text-sm text-gray-700 line-clamp-3">
@@ -120,6 +120,7 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
                 </button>
               </div>
 
+              {/* Action buttons - Add to cart only */}
               <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <button
                   type="button"
@@ -127,13 +128,14 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
                   className={`flex-1 rounded-md px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-medium text-white
                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2
                     transition transform duration-150
-                    ${added
-                      ? 'bg-green-600 hover:bg-green-700 scale-95'
-                      : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02]'}`}
+                    ${
+                      added
+                        ? 'bg-green-600 hover:bg-green-700 scale-95'
+                        : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02]'
+                    }`}
                 >
-                  {added ? 'Added!' : `Add ${quantity} to cart`}
+                  {added ? '✓ Added!' : `Add ${quantity} to cart`}
                 </button>
-
               </div>
             </div>
           </div>

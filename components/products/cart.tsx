@@ -7,7 +7,12 @@ import { XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/lib/cart/context'
 
-export default function Cart() {
+interface CartProps {
+  position?: 'top-right' | 'navbar' | 'custom'
+  customClass?: string
+}
+
+export default function Cart({ position = 'top-right', customClass }: CartProps) {
   const [open, setOpen] = useState(false)
   const [pressed, setPressed] = useState(false)
   const { items, removeFromCart } = useCart()
@@ -15,6 +20,13 @@ export default function Cart() {
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const count = items.reduce((sum, item) => sum + item.quantity, 0)
+
+  // Position classes based on prop
+  const positionClasses = {
+    'top-right': 'absolute top-9 right-14 md:top-9 md:right-32',
+    'navbar': 'relative',
+    'custom': customClass || '',
+  }
 
   function handleCheckout() {
     setPressed(true)
@@ -27,16 +39,16 @@ export default function Cart() {
     <div>
       <button
         onClick={() => setOpen(true)}
-        className="
-          absolute
-          top-9 right-14
-          md:top-9 md:right-32
-          z-50
+        className={`
+          ${positionClasses[position]}
+          z-55
           rounded-md bg-gray-950/5
           p-2
           text-sm font-semibold text-white
           hover:bg-gray-950/10
-        "
+          transition-colors duration-200
+        `}
+        aria-label={`Shopping cart with ${count} items`}
       >
         <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
         {count > 0 && (
@@ -59,6 +71,7 @@ export default function Cart() {
                 className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
               >
                 <div className="flex h-full flex-col overflow-y-auto bg-white shadow-xl">
+                  {/* Header */}
                   <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                     <div className="flex items-start justify-between">
                       <DialogTitle className="text-lg font-medium text-gray-900">
@@ -77,6 +90,7 @@ export default function Cart() {
                       </div>
                     </div>
 
+                    {/* Cart Items */}
                     <div className="mt-8">
                       <div className="flow-root">
                         <ul role="list" className="-my-6 divide-y divide-gray-200">
@@ -113,7 +127,7 @@ export default function Cart() {
                                     <button
                                       type="button"
                                       onClick={() => removeFromCart(product.id)}
-                                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                                      className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
                                     >
                                       Remove
                                     </button>
@@ -127,6 +141,7 @@ export default function Cart() {
                     </div>
                   </div>
 
+                  {/* Checkout Section */}
                   <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div className="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
@@ -139,19 +154,42 @@ export default function Cart() {
                     <button
                       type="button"
                       onClick={handleCheckout}
-                      className={`w-full sm:w-auto flex-1 rounded-md mx-2 my-5
-                        px-6 sm:px-10 lg:px-14 py-3
-                        text-sm sm:text-base font-medium text-white
-                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2
-                        transition transform duration-150
-                        ${pressed
-                          ? 'bg-green-600 hover:bg-green-700 scale-95'
-                          : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02]'}`}
+                      disabled={items.length === 0}
+                      className={`
+                        w-full
+                        rounded-md
+                        px-6
+                        py-3
+                        text-sm
+                        font-medium
+                        text-white
+                        focus-visible:outline-none
+                        focus-visible:ring-2
+                        focus-visible:ring-indigo-500
+                        focus-visible:ring-offset-2
+                        transition
+                        transform
+                        duration-150
+                        mt-6
+                        ${
+                          items.length === 0
+                            ? 'bg-gray-400 cursor-not-allowed'
+                            : pressed
+                              ? 'bg-green-600 hover:bg-green-700 scale-95'
+                              : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02]'
+                        }
+                      `}
                     >
-                      Checkout
+                      {items.length === 0 ? 'Cart is empty' : 'Checkout'}
                     </button>
 
-                    {/* checkout etc... */}
+                    <button
+                      type="button"
+                      onClick={() => setOpen(false)}
+                      className="mt-6 w-full rounded-md border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                    >
+                      Continue Shopping
+                    </button>
                   </div>
                 </div>
               </DialogPanel>
