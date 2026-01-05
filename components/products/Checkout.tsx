@@ -1,3 +1,4 @@
+// components/products/Checkout.tsx
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -27,51 +28,52 @@ export default function Checkout() {
     document.head.appendChild(script)
   }, [])
 
-  const handlePayment = async () => {
-    if (!items.length || total === 0) return
+const handlePayment = async () => {
+  if (!items.length || total === 0) return
 
-    setLoading(true)
-    try {
-      const response = await fetch('/api/razorpay/order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: total }),
-      })
+  setLoading(true)
+  try {
+    const response = await fetch('/api/razorpay/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: total }),
+    })
 
-      if (!response.ok) throw new Error('Order creation failed')
+    if (!response.ok) throw new Error('Order creation failed')
 
-      const order = await response.json()
-      
-      const options = {
-        key: 'rzp_test_RwyVGKH4ptkLHW',
-        name: 'WeebUniverse',
-        description: 'Anime Merch Order',
-        order_id: order.id,
-        amount: order.amount.toString(),
-        currency: order.currency,
-        handler: function(response: any) {
-          alert('✅ SUCCESS! Payment ID: ' + response.razorpay_payment_id)
-          console.log('Payment:', response)
-        },
-        prefill: {
-          name: 'Test Customer',
-          email: 'test@example.com',
-          contact: '9999999999'
-        },
-        theme: {
-          color: '#4f46e5'
-        }
+    const order = await response.json()
+    
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Changed this
+      name: 'WeebUniverse',
+      description: 'Anime Merch Order',
+      order_id: order.id,
+      amount: order.amount.toString(),
+      currency: order.currency,
+      handler: function(response: any) {
+        alert('✅ SUCCESS! Payment ID: ' + response.razorpay_payment_id)
+        console.log('Payment:', response)
+      },
+      prefill: {
+        name: 'Test Customer',
+        email: 'test@example.com',
+        contact: '9999998999'
+      },
+      theme: {
+        color: '#4f46e5'
       }
-
-      const rzp = new (window as any).Razorpay(options)
-      rzp.open()
-    } catch (error) {
-      console.error('Payment error:', error)
-      alert('❌ Payment failed. Try again.')
-    } finally {
-      setLoading(false)
     }
+
+    const rzp = new (window as any).Razorpay(options)
+    rzp.open()
+  } catch (error) {
+    console.error('Payment error:', error)
+    alert('❌ Payment failed. Try again.')
+  } finally {
+    setLoading(false)
   }
+}
+
 
   return (
     <div className="min-h-screen bg-gray-50">
