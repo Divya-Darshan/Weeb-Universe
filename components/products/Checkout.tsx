@@ -56,7 +56,7 @@ const handlePayment = async () => {
       },
       prefill: {
         name: 'Test Customer',
-        email: 'test@example.com',
+        email: 'darshno@example.com',
         contact: '9999998999'
       },
       theme: {
