@@ -62,11 +62,14 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
             p-3 sm:p-6"
           >
             {/* Close button */}
+            {/* Close button - ADJUST HERE FOR DESKTOP */}
+            {/* Mobile: right-2 top-2 | Desktop: right-4 sm:top-4 */}
             <button
               type="button"
               onClick={onClose}
-              className="absolute right-[0.1] top-[0.1] scale-80 text-gray-800 hover:text-gray-500 sm:right-1 sm:top-10"
+              className="absolute right-[0.5] sm:right-4 top-[0.5] sm:top-4 text-gray-700 hover:text-gray-500"
             >
+
               <span className="sr-only">Close</span>
               <XMarkIcon aria-hidden="true" className="size-5 sm:size-6" />
             </button>
@@ -74,14 +77,20 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
             {/* CONTENT - Keep original grid layout */}
             <div className="grid w-full grid-cols-1 items-start gap-y-3 sm:gap-y-8 sm:grid-cols-12 lg:gap-x-8">
               {/* Product Image - Keep square aspect ratio */}
+              {/* Product Image - ADJUST HERE FOR DESKTOP */}
+              {/* Mobile: col-span-1 (full width) | Desktop: col-span-6 (larger) */}
               <img
                 alt={product.name}
                 src={product.image + `?v=${Date.now()}`}
-                className="aspect-square w-full rounded-lg bg-gray-100 object-cover sm:col-span-5 sm:aspect-square"
+                className="aspect-square w-full h-90 rounded-lg bg-gray-100 object-cover sm:col-span-6 sm:aspect-square"
               />
 
+
               {/* Product Details */}
-              <div className="sm:col-span-7 space-y-2 sm:space-y-4">
+              {/* Product Details - ADJUST HERE FOR DESKTOP */}
+              {/* This changes with the image col-span: if image is col-span-6, this should be col-span-6 */}
+              <div className="sm:col-span-6 space-y-2 sm:space-y-4">
+
                 <h2 className="text-base sm:text-2xl font-bold text-gray-900 pr-6 line-clamp-2">
                   {product.name}
                 </h2>
