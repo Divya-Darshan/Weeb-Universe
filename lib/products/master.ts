@@ -6,6 +6,7 @@ export type Product = {
   name: string
   price: number
   image: string
+  back: string
   colors: string[]
   sizes: string[]
   description: string

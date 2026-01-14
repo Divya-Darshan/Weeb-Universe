@@ -16,10 +16,16 @@ type OverViewProps = {
 }
 
 export default function OverView({ open, onClose, product }: OverViewProps) {
+  // 1) add state near other useStates
+  const [imageIndex, setImageIndex] = useState(0)
   const { addToCart, items } = useCart()
   const [added, setAdded] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const [cartOpen, setCartOpen] = useState(false)
+
+  // Check if your product has both images
+
+
 
   if (!product) return null
 
@@ -79,11 +85,61 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
               {/* Product Image - Keep square aspect ratio */}
               {/* Product Image - ADJUST HERE FOR DESKTOP */}
               {/* Mobile: col-span-1 (full width) | Desktop: col-span-6 (larger) */}
-              <img
-                alt={product.name}
-                src={product.image + `?v=${Date.now()}`}
-                className="aspect-square w-full h-90 rounded-lg bg-gray-100 object-cover sm:col-span-6 sm:aspect-square"
-              />
+<div className="relative sm:col-span-6">
+  <img
+    alt={product.name}
+    src={(imageIndex === 0 ? product.image : product.back) + `?v=${Date.now()}`}
+    className="aspect-square w-full h-90 rounded-lg bg-gray-100 object-cover sm:aspect-square"
+  />
+
+  <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-2">
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation()
+        setImageIndex(0)
+      }}
+      className="pointer-events-auto rounded-full bg-black/70 hover:bg-black px-4 py-3 text-3xl text-white transition"
+    >
+      ‹
+    </button>
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation()
+        setImageIndex(1)
+      }}
+      className="pointer-events-auto rounded-full bg-black/70 hover:bg-black px-4 py-3 text-3xl text-white transition"
+    >
+      ›
+    </button>
+  </div>
+
+  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation()
+        setImageIndex(0)
+      }}
+      className={`h-3 w-3 rounded-full transition ${
+        imageIndex === 0 ? 'bg-white' : 'bg-white/50'
+      }`}
+    />
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation()
+        setImageIndex(1)
+      }}
+      className={`h-3 w-3 rounded-full transition ${
+        imageIndex === 1 ? 'bg-white' : 'bg-white/50'
+      }`}
+    />
+  </div>
+</div>
+
+
 
 
               {/* Product Details */}

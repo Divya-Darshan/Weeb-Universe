@@ -20,6 +20,8 @@ export default function Products() {
   const [open, setOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
+
+
   useEffect(() => {
     fetchProducts().then((data) => {
       setProducts(data)
