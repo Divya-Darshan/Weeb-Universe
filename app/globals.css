@@ -3,7 +3,17 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+body{
+ background: url(./bg.png) no-repeat;
+ background-position: center;
+ background-size: cover;
+ height: 100%;
+}
+
+
 @theme inline {
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);

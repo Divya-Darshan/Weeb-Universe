@@ -59,8 +59,8 @@ export default function Products() {
 
   return (
     <>
-      <div className="bg-white">
-        <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+      <div className="bg-transparent">
+        <div className="mx-auto max-w-2xl  px-4  py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
           <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xl:gap-x-6">
             {products.map((product) => (
               <button
@@ -75,8 +75,8 @@ export default function Products() {
                   className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
                 />
                 <div className="mt-4 flex justify-between">
-                  <h3 className="text-sm text-gray-700">{product.name}</h3>
-                  <p className="text-sm font-medium text-gray-900">
+                  <h3 className="text-sm text-white">{product.name}</h3>
+                  <p className="text-sm font-medium text-white">
                     {formatPriceInINR(product.price)}
                   </p>
                 </div>

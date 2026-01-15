@@ -17,7 +17,7 @@ export default function Hero() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <div className="bg-gray-900">
+    <>
       <header className="absolute inset-x-0 top-0 z-10">
         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
           <div className="flex lg:flex-1">
@@ -186,6 +186,6 @@ export default function Hero() {
           />
         </div>
       </div>
-    </div>
+              </>
   )
 }
