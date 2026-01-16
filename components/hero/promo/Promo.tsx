@@ -1,7 +1,5 @@
 export default function Promo() {
 
-  // Simple cache buster function for image URLs in prorom0
-  const cacheBust = () => Date.now()
 
 
 
@@ -32,37 +30,14 @@ export default function Promo() {
                       <div className="h-64 w-44 overflow-hidden rounded-lg sm:opacity-0 lg:opacity-100">
                         <img
                           alt=""
-                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659104/pro-1.png?v=${cacheBust()}` }
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659104/pro-1.png` }
                           className="size-full object-cover"
                         />
                       </div>
                       <div className="h-64 w-44 overflow-hidden rounded-lg">
                         <img
                           alt=""
-                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659104/pro-2.png?v=${cacheBust()}` }
-                          className="size-full object-cover"
-                        />
-                      </div>
-                    </div>
-                    <div className="grid shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
-                      <div className="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          alt=""
-                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659320/pro-3.png?v=${cacheBust()}` }
-                          className="size-full object-cover"
-                        />
-                      </div>
-                      <div className="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          alt=""
-                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659104/pro-4.png?v=${cacheBust()}` }
-                          className="size-full object-cover"
-                        />
-                      </div>
-                      <div className="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          alt=""
-                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659708/pro-5.png?v=${cacheBust()}` }
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659104/pro-2.png` }
                           className="size-full object-cover"
                         />
                       </div>
@@ -71,14 +46,37 @@ export default function Promo() {
                       <div className="h-64 w-44 overflow-hidden rounded-lg">
                         <img
                           alt=""
-                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659864/pro-6.png?v=${cacheBust()}` }
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659320/pro-3.png` }
                           className="size-full object-cover"
                         />
                       </div>
                       <div className="h-64 w-44 overflow-hidden rounded-lg">
                         <img
                           alt=""
-                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659927/pro-7.png?v=${cacheBust()}` }
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659104/pro-4.png` }
+                          className="size-full object-cover"
+                        />
+                      </div>
+                      <div className="h-64 w-44 overflow-hidden rounded-lg">
+                        <img
+                          alt=""
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659708/pro-5.png` }
+                          className="size-full object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
+                      <div className="h-64 w-44 overflow-hidden rounded-lg">
+                        <img
+                          alt=""
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659864/pro-6.png` }
+                          className="size-full object-cover"
+                        />
+                      </div>
+                      <div className="h-64 w-44 overflow-hidden rounded-lg">
+                        <img
+                          alt=""
+                          src= { `https://res.cloudinary.com/dllduppce/image/upload/v1766659927/pro-7.png` }
                           className="size-full object-cover"
                         />
                       </div>

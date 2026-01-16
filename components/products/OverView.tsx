@@ -88,7 +88,7 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
 <div className="relative sm:col-span-6">
   <img
     alt={product.name}
-    src={(imageIndex === 0 ? product.image : product.back) + `?v=${Date.now()}`}
+    src={(imageIndex === 0 ? product.image : product.back)}
     className="aspect-square w-full h-90 rounded-lg bg-gray-100 object-cover sm:aspect-square"
   />
 
