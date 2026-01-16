@@ -11,19 +11,19 @@ const cacheBust = () => Date.now()
 
 const techLogos = [
   {
-    src: `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png?v=${cacheBust()}`,
+    src: `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime1.png`,
 
   },
   {
-    src: `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime2.png?v=${cacheBust()}`,
+    src: `https://res.cloudinary.com/dllduppce/image/upload/v1766401599/anime2.png`,
 
   },
   {
-    src: `https://res.cloudinary.com/dllduppce/image/upload/v1766402083/anime3.png?v=${cacheBust()}`,
+    src: `https://res.cloudinary.com/dllduppce/image/upload/v1766402083/anime3.png`,
 
   },
   {
-    src: `https://res.cloudinary.com/dllduppce/image/upload/v1766402289/anime4.png?v=${cacheBust()}`,
+    src: `https://res.cloudinary.com/dllduppce/image/upload/v1766402289/anime4.png`,
 
   },
 ]
