@@ -3,6 +3,8 @@
 
 import { useState, useEffect } from 'react'
 import { useCart } from '@/lib/cart/context'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 function formatPrice(value: number) {
   return new Intl.NumberFormat('en-IN', {
@@ -16,8 +18,27 @@ export default function Checkout() {
   const { items } = useCart()
   const [loading, setLoading] = useState(false)
 
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const shipping = items.length > 0 ? 30 : 0
+  // Convex mutation
+  const createOrder = useMutation(api.orders.create)
+
+  // Form state
+  const [email, setEmail] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [company, setCompany] = useState('')
+  const [address, setAddress] = useState('')
+  const [apartment, setApartment] = useState('')
+  const [city, setCity] = useState('')
+  const [country, setCountry] = useState('India')
+  const [stateField, setStateField] = useState('')
+  const [postalCode, setPostalCode] = useState('')
+  const [phone, setPhone] = useState('')
+
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  )
+  const shipping = items.length > 0 ? 0 : 0
   const taxes = Math.round(subtotal * 0.18)
   const total = subtotal + shipping + taxes
 
@@ -28,52 +49,79 @@ export default function Checkout() {
     document.head.appendChild(script)
   }, [])
 
-const handlePayment = async () => {
-  if (!items.length || total === 0) return
+  const handlePayment = async () => {
+    if (!items.length || total === 0) return
 
-  setLoading(true)
-  try {
-    const response = await fetch('/api/razorpay/order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: total }),
-    })
+    setLoading(true)
+    try {
+      const response = await fetch('/api/razorpay/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: total }),
+      })
 
-    if (!response.ok) throw new Error('Order creation failed')
+      if (!response.ok) throw new Error('Order creation failed')
 
-    const order = await response.json()
-    
-    const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Changed this
-      name: 'WeebUniverse',
-      description: 'Anime Merch Order',
-      order_id: order.id,
-      amount: order.amount.toString(),
-      currency: order.currency,
-      handler: function(response: any) {
-        alert('✅ SUCCESS! Payment ID: ' + response.razorpay_payment_id)
-        console.log('Payment:', response)
-      },
-      prefill: {
-        name: 'Test Customer',
-        email: 'darshno@example.com',
-        contact: '9999998999'
-      },
-      theme: {
-        color: '#4f46e5'
+      const order = await response.json()
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        name: 'WeebUniverse',
+        description: 'Anime Merch Order',
+        order_id: order.id,
+        amount: order.amount.toString(),
+        currency: order.currency,
+        handler: async function (response: any) {
+          alert('✅ SUCCESS! Payment ID: ' + response.razorpay_payment_id)
+          console.log('Payment:', response)
+
+          try {
+            await createOrder({
+              items: items.map((item) => ({
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+                image: item.image,
+              })),
+              subtotal,
+              shipping,
+              taxes,
+              total,
+              name: `${firstName} ${lastName}`.trim(),
+              email,
+              phone,
+              address: `${address}${apartment ? ', ' + apartment : ''}`,
+              city,
+              state: stateField,
+              postalCode,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+            })
+          } catch (err) {
+            console.error('Order save failed', err)
+          }
+        },
+        prefill: {
+          name: firstName || 'Test Customer',
+          email: email || 'darshno@example.com',
+          contact: phone || '9999998999',
+        },
+        theme: {
+          color: '#4f46e5',
+        },
       }
+
+      const rzp = new (window as any).Razorpay(options)
+      rzp.open()
+    } catch (error) {
+      console.error('Payment error:', error)
+      alert('❌ Payment failed. Try again.')
+    } finally {
+      setLoading(false)
     }
-
-    const rzp = new (window as any).Razorpay(options)
-    rzp.open()
-  } catch (error) {
-    console.error('Payment error:', error)
-    alert('❌ Payment failed. Try again.')
-  } finally {
-    setLoading(false)
   }
-}
-
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -83,13 +131,20 @@ const handlePayment = async () => {
           <section className="space-y-8">
             {/* Contact Info */}
             <div className="rounded-lg bg-white p-6 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900 mb-4">Contact information</h2>
+              <h2 className="text-sm font-semibold text-gray-900 mb-4">
+                Contact information
+              </h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
-                  <input 
-                    type="email" 
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" 
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email address
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    // required
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
               </div>
@@ -97,68 +152,149 @@ const handlePayment = async () => {
 
             {/* Shipping Info */}
             <div className="rounded-lg bg-white p-6 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900 mb-4">Shipping information</h2>
+              <h2 className="text-sm font-semibold text-gray-900 mb-4">
+                Shipping information
+              </h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">First name</label>
-                  <input className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    First name
+                  </label>
+                  <input
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    // required
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Last name</label>
-                  <input className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Last name
+                  </label>
+                  <input
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    // required
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
-                  <input className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Company
+                  </label>
+                  <input
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                  <input className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Address
+                  </label>
+                  <input
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    // required
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Apartment, suite, etc.</label>
-                  <input className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Apartment, suite, etc.
+                  </label>
+                  <input
+                    value={apartment}
+                    onChange={(e) => setApartment(e.target.value)}
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-                  <input className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    City
+                  </label>
+                  <input
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    // required
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
-                  <select className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" defaultValue="India">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Country
+                  </label>
+                  <select
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    // required
+                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  >
                     <option>India</option>
                     <option>United States</option>
                     <option>Other</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">State / Province</label>
-                  <input className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    State / Province
+                  </label>
+                  <input
+                    value={stateField}
+                    onChange={(e) => setStateField(e.target.value)}
+                    // required
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Postal code</label>
-                  <input className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Postal code
+                  </label>
+                  <input
+                    value={postalCode}
+                    onChange={(e) => setPostalCode(e.target.value)}
+                    // required
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input type="tel" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    // required
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
                 </div>
               </div>
             </div>
 
             {/* Delivery Method */}
             <div className="rounded-lg bg-white p-6 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900 mb-4">Delivery method</h2>
+              <h2 className="text-sm font-semibold text-gray-900 mb-4">
+                Delivery method
+              </h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 <button className="flex flex-col items-start rounded-lg border border-indigo-600 bg-indigo-50 p-4 text-left text-sm hover:bg-indigo-100">
                   <span className="font-medium text-gray-900">Standard</span>
-                  <span className="text-xs text-gray-500 mt-1">4–10 business days</span>
-                  <span className="mt-2 text-sm font-medium text-gray-900">{formatPrice(shipping)}</span>
+                  <span className="text-xs text-gray-500 mt-1">
+                    4–10 business days
+                  </span>
+                  <span className="mt-2 text-sm font-medium text-gray-900">
+                    {formatPrice(shipping)}
+                  </span>
                 </button>
                 <button className="flex flex-col items-start rounded-lg border border-gray-200 bg-white p-4 text-left text-sm hover:border-indigo-500 hover:bg-indigo-50">
                   <span className="font-medium text-gray-900">Express</span>
-                  <span className="text-xs text-gray-500 mt-1">2–5 business days</span>
-                  <span className="mt-2 text-sm font-medium text-gray-900">{formatPrice(shipping + 99)}</span>
+                  <span className="text-xs text-gray-500 mt-1">
+                    2–5 business days
+                  </span>
+                  <span className="mt-2 text-sm font-medium text-gray-900">
+                    {formatPrice(shipping + 99)}
+                  </span>
                 </button>
               </div>
             </div>
@@ -167,21 +303,30 @@ const handlePayment = async () => {
           {/* RIGHT: Order Summary */}
           <section className="space-y-4">
             <div className="rounded-lg bg-white p-6 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900 mb-4">Order summary</h2>
-              
+              <h2 className="text-sm font-semibold text-gray-900 mb-4">
+                Order summary
+              </h2>
+
               {/* Items */}
               <div className="space-y-4 mb-6 max-h-80 overflow-y-auto">
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50 p-3">
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50 p-3"
+                  >
                     <div className="flex items-center gap-3">
-                      <img 
-                        src={item.image + `?v=${Date.now()}`} 
+                      <img
+                        src={item.image + `?v=${Date.now()}`}
                         alt={item.name}
-                        className="h-14 w-14 rounded-md object-cover flex-shrink-0"
+                        className="h-14 w-14 rounded-md object-cover "
                       />
                       <div className="space-y-0.5 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                        <p className="text-xs text-gray-500">Qty {item.quantity}</p>
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {item.name}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Qty {item.quantity}
+                        </p>
                       </div>
                     </div>
                     <p className="text-sm font-medium text-gray-900">
@@ -190,7 +335,9 @@ const handlePayment = async () => {
                   </div>
                 ))}
                 {items.length === 0 && (
-                  <p className="text-sm text-gray-500 text-center py-8">Your cart is empty</p>
+                  <p className="text-sm text-gray-500 text-center py-8">
+                    Your cart is empty
+                  </p>
                 )}
               </div>
 
