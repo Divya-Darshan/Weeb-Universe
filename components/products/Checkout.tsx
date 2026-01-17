@@ -72,11 +72,10 @@ export default function Checkout() {
         amount: order.amount.toString(),
         currency: order.currency,
         handler: async function (response: any) {
-          alert('✅ SUCCESS! Payment ID: ' + response.razorpay_payment_id)
-          console.log('Payment:', response)
+          console.log('RAZORPAY HANDLER FIRED', response)
 
           try {
-            await createOrder({
+            const result = await createOrder({
               items: items.map((item) => ({
                 id: item.id,
                 name: item.name,
@@ -99,8 +98,14 @@ export default function Checkout() {
               razorpayPaymentId: response.razorpay_payment_id,
               razorpaySignature: response.razorpay_signature,
             })
+
+            console.log('CONVEX ORDER CREATED', result)
+            alert('✅ SUCCESS! Payment ID: ' + response.razorpay_payment_id)
           } catch (err) {
             console.error('Order save failed', err)
+            alert(
+              '⚠️ Payment captured, but saving the order failed. Check console.'
+            )
           }
         },
         prefill: {
