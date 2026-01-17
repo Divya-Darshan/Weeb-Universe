@@ -3,6 +3,12 @@ import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
 
 export default defineSchema({
+  messages: defineTable({
+    author: v.string(),
+    body: v.string(),
+    createdAt: v.number(),
+  }),
+
   orders: defineTable({
     userId: v.string(),
 
@@ -21,7 +27,7 @@ export default defineSchema({
     taxes: v.number(),
     total: v.number(),
 
-    name: v.string(),       // full name
+    name: v.string(), // full name
     email: v.string(),
     phone: v.string(),
     address: v.string(),
