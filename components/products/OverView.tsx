@@ -6,6 +6,8 @@ import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import type { Product } from '@/lib/products'
 import { useCart } from '@/lib/cart/context'
+import { useRouter } from 'next/navigation'
+import { useUser, useClerk } from '@clerk/nextjs'
 
 const cacheBust = () => Date.now()
 
@@ -16,16 +18,11 @@ type OverViewProps = {
 }
 
 export default function OverView({ open, onClose, product }: OverViewProps) {
-  // 1) add state near other useStates
   const [imageIndex, setImageIndex] = useState(0)
   const { addToCart, items } = useCart()
   const [added, setAdded] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const [cartOpen, setCartOpen] = useState(false)
-
-  // Check if your product has both images
-
-
 
   if (!product) return null
 
@@ -59,94 +56,81 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
           className="fixed inset-0 bg-black/40 duration-200 ease-out data-[closed]:opacity-0"
         />
 
-        {/* Keep original center positioning for both mobile and desktop */}
         <div className="fixed inset-0 z-50 flex w-screen items-center justify-center p-3 sm:p-4">
-          {/* Panel - same max-width for both, just adjust internal padding */}
           <DialogPanel
             transition
             className="relative w-full max-w-lg sm:max-w-2xl rounded-lg bg-white shadow-xl duration-200 ease-out data-[closed]:opacity-0 max-h-[95vh] overflow-y-auto
             p-3 sm:p-6"
           >
             {/* Close button */}
-            {/* Close button - ADJUST HERE FOR DESKTOP */}
-            {/* Mobile: right-2 top-2 | Desktop: right-4 sm:top-4 */}
             <button
               type="button"
               onClick={onClose}
               className="absolute right-[0.5] sm:right-4 top-[0.5] sm:top-4 text-gray-700 hover:text-gray-500"
             >
-
               <span className="sr-only">Close</span>
               <XMarkIcon aria-hidden="true" className="size-5 sm:size-6" />
             </button>
 
-            {/* CONTENT - Keep original grid layout */}
+            {/* CONTENT */}
             <div className="grid w-full grid-cols-1 items-start gap-y-3 sm:gap-y-8 sm:grid-cols-12 lg:gap-x-8">
-              {/* Product Image - Keep square aspect ratio */}
-              {/* Product Image - ADJUST HERE FOR DESKTOP */}
-              {/* Mobile: col-span-1 (full width) | Desktop: col-span-6 (larger) */}
-<div className="relative sm:col-span-6">
-  <img
-    alt={product.name}
-    src={(imageIndex === 0 ? product.image : product.back)}
-    className="aspect-square w-full h-90 rounded-lg bg-gray-100 object-cover sm:aspect-square"
-  />
+              {/* Product Image */}
+              <div className="relative sm:col-span-6">
+                <img
+                  alt={product.name}
+                  src={imageIndex === 0 ? product.image : product.back}
+                  className="aspect-square w-full h-90 rounded-lg bg-gray-100 object-cover sm:aspect-square"
+                />
 
-  <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-2">
-    <button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation()
-        setImageIndex(0)
-      }}
-      className="pointer-events-auto rounded-full bg-black/70 hover:bg-black px-4 py-3 text-3xl text-white transition"
-    >
-      ‹
-    </button>
-    <button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation()
-        setImageIndex(1)
-      }}
-      className="pointer-events-auto rounded-full bg-black/70 hover:bg-black px-4 py-3 text-3xl text-white transition"
-    >
-      ›
-    </button>
-  </div>
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-2">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setImageIndex(0)
+                    }}
+                    className="pointer-events-auto rounded-full bg-black/70 hover:bg-black px-4 py-3 text-3xl text-white transition"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setImageIndex(1)
+                    }}
+                    className="pointer-events-auto rounded-full bg-black/70 hover:bg-black px-4 py-3 text-3xl text-white transition"
+                  >
+                    ›
+                  </button>
+                </div>
 
-  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-    <button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation()
-        setImageIndex(0)
-      }}
-      className={`h-3 w-3 rounded-full transition ${
-        imageIndex === 0 ? 'bg-white' : 'bg-white/50'
-      }`}
-    />
-    <button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation()
-        setImageIndex(1)
-      }}
-      className={`h-3 w-3 rounded-full transition ${
-        imageIndex === 1 ? 'bg-white' : 'bg-white/50'
-      }`}
-    />
-  </div>
-</div>
-
-
-
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setImageIndex(0)
+                    }}
+                    className={`h-3 w-3 rounded-full transition ${
+                      imageIndex === 0 ? 'bg-white' : 'bg-white/50'
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setImageIndex(1)
+                    }}
+                    className={`h-3 w-3 rounded-full transition ${
+                      imageIndex === 1 ? 'bg-white' : 'bg-white/50'
+                    }`}
+                  />
+                </div>
+              </div>
 
               {/* Product Details */}
-              {/* Product Details - ADJUST HERE FOR DESKTOP */}
-              {/* This changes with the image col-span: if image is col-span-6, this should be col-span-6 */}
               <div className="sm:col-span-6 space-y-2 sm:space-y-4">
-
                 <h2 className="text-base sm:text-2xl font-bold text-gray-900 pr-6 line-clamp-2">
                   {product.name}
                 </h2>
@@ -202,7 +186,10 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
                     onClick={handleViewCart}
                     className="relative flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-medium text-gray-900 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 transition"
                   >
-                    <ShoppingCartIcon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
+                    <ShoppingCartIcon
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                      aria-hidden="true"
+                    />
                     <span className="hidden sm:inline">View Cart</span>
 
                     {cartCount > 0 && (
@@ -226,14 +213,25 @@ export default function OverView({ open, onClose, product }: OverViewProps) {
 
 function CartModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, removeFromCart } = useCart()
-  const router = require('next/navigation').useRouter()
+  const router = useRouter()
   const [pressed, setPressed] = useState(false)
+  const { isSignedIn } = useUser()
+  const { openSignIn } = useClerk()
 
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  )
 
   function handleCheckout() {
     setPressed(true)
     setTimeout(() => setPressed(false), 500)
+
+    if (!isSignedIn) {
+      openSignIn({ redirectUrl: '/checkout' })
+      return
+    }
+
     onClose()
     router.push('/checkout')
   }
@@ -255,7 +253,9 @@ function CartModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                 {/* Header */}
                 <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                   <div className="flex items-start justify-between">
-                    <h2 className="text-lg font-medium text-gray-900">Shopping cart</h2>
+                    <h2 className="text-lg font-medium text-gray-900">
+                      Shopping cart
+                    </h2>
                     <button
                       type="button"
                       onClick={onClose}
@@ -345,8 +345,8 @@ function CartModal({ open, onClose }: { open: boolean; onClose: () => void }) {
                         items.length === 0
                           ? 'bg-gray-400 cursor-not-allowed'
                           : pressed
-                            ? 'bg-green-600 hover:bg-green-700 scale-95'
-                            : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02]'
+                          ? 'bg-green-600 hover:bg-green-700 scale-95'
+                          : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02]'
                       }
                     `}
                   >

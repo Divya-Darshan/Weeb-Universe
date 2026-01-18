@@ -2,10 +2,16 @@
 'use client'
 
 import { useState } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/react'
 import { XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/lib/cart/context'
+import { useUser, useClerk } from '@clerk/nextjs'
 
 interface CartProps {
   position?: 'top-right' | 'navbar' | 'custom'
@@ -17,20 +23,36 @@ export default function Cart({ position = 'top-right', customClass }: CartProps)
   const [pressed, setPressed] = useState(false)
   const { items, removeFromCart } = useCart()
   const router = useRouter()
+  const { isSignedIn } = useUser()
+  const { openSignIn } = useClerk()
 
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  )
   const count = items.reduce((sum, item) => sum + item.quantity, 0)
 
   // Position classes based on prop
   const positionClasses = {
     'top-right': 'absolute top-9 right-14 md:top-9 md:right-32',
-    'navbar': 'relative',
-    'custom': customClass || '',
+    navbar: 'relative',
+    custom: customClass || '',
   }
 
-  function handleCheckout() {
+  async function handleCheckout() {
     setPressed(true)
     setTimeout(() => setPressed(false), 500)
+
+    if (!isSignedIn) {
+      // Not logged in → open Clerk sign-in, then return
+      openSignIn({
+        // optional: after sign in, go to checkout
+        redirectUrl: '/checkout',
+      })
+      return
+    }
+
+    // Logged in → go to checkout
     setOpen(false)
     router.push('/checkout')
   }
@@ -175,8 +197,8 @@ export default function Cart({ position = 'top-right', customClass }: CartProps)
                           items.length === 0
                             ? 'bg-gray-400 cursor-not-allowed'
                             : pressed
-                              ? 'bg-green-600 hover:bg-green-700 scale-95'
-                              : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02]'
+                            ? 'bg-green-600 hover:bg-green-700 scale-95'
+                            : 'bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02]'
                         }
                       `}
                     >
