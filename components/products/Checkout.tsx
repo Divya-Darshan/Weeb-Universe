@@ -177,7 +177,9 @@ export default function Checkout() {
                     </label>
                     <input
                       required={true}
-                      type="tel"
+                      type="nubmer"
+                      size={10}
+                      aria-valuemax={10}
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
