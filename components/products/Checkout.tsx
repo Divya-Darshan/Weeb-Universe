@@ -34,12 +34,20 @@ export default function Checkout() {
   const [postalCode, setPostalCode] = useState('')
   const [phone, setPhone] = useState('')
 
+  // Delivery method state
+  const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>(
+    'standard'
+  )
+
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   )
-  const shipping = items.length > 0 ? 0 : 0
-  const taxes = Math.round(subtotal * 0.18)
+
+  const baseShipping = items.length > 0 ? 0 : 0
+  const shipping =
+    shippingMethod === 'standard' ? baseShipping : baseShipping + 99
+  const taxes = subtotal /  12
   const total = subtotal + shipping + taxes
 
   useEffect(() => {
@@ -152,6 +160,20 @@ export default function Checkout() {
                     className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    // required
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
+                </div>
+
               </div>
             </div>
 
@@ -185,7 +207,7 @@ export default function Checkout() {
                 </div>
                 <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Company
+                    Company (optinal)
                   </label>
                   <input
                     value={company}
@@ -236,8 +258,6 @@ export default function Checkout() {
                     className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     <option>India</option>
-                    <option>United States</option>
-                    <option>Other</option>
                   </select>
                 </div>
                 <div>
@@ -262,18 +282,7 @@ export default function Checkout() {
                     className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    // required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
+
               </div>
             </div>
 
@@ -283,22 +292,38 @@ export default function Checkout() {
                 Delivery method
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
-                <button className="flex flex-col items-start rounded-lg border border-indigo-600 bg-indigo-50 p-4 text-left text-sm hover:bg-indigo-100">
+                <button
+                  type="button"
+                  onClick={() => setShippingMethod('standard')}
+                  className={`flex flex-col items-start rounded-lg border p-4 text-left text-sm ${
+                    shippingMethod === 'standard'
+                      ? 'border-indigo-600 bg-indigo-50 hover:bg-indigo-100'
+                      : 'border-gray-200 bg-white hover:border-indigo-500 hover:bg-indigo-50'
+                  }`}
+                >
                   <span className="font-medium text-gray-900">Standard</span>
                   <span className="text-xs text-gray-500 mt-1">
                     4–10 business days
                   </span>
                   <span className="mt-2 text-sm font-medium text-gray-900">
-                    {formatPrice(shipping)}
+                    {formatPrice(baseShipping)}
                   </span>
                 </button>
-                <button className="flex flex-col items-start rounded-lg border border-gray-200 bg-white p-4 text-left text-sm hover:border-indigo-500 hover:bg-indigo-50">
+                <button
+                  type="button"
+                  onClick={() => setShippingMethod('express')}
+                  className={`flex flex-col items-start rounded-lg border p-4 text-left text-sm ${
+                    shippingMethod === 'express'
+                      ? 'border-indigo-600 bg-indigo-50 hover:bg-indigo-100'
+                      : 'border-gray-200 bg-white hover:border-indigo-500 hover:bg-indigo-50'
+                  }`}
+                >
                   <span className="font-medium text-gray-900">Express</span>
                   <span className="text-xs text-gray-500 mt-1">
                     2–5 business days
                   </span>
                   <span className="mt-2 text-sm font-medium text-gray-900">
-                    {formatPrice(shipping + 99)}
+                    {formatPrice(baseShipping + 99)}
                   </span>
                 </button>
               </div>
@@ -358,7 +383,7 @@ export default function Checkout() {
                 </div>
                 <div className="flex justify-between">
                   <dt>Taxes</dt>
-                  <dd>{formatPrice(taxes)}</dd>
+                  <dd>{formatPrice(taxes)} + GST</dd>
                 </div>
                 <div className="h-px bg-gray-200 my-2" />
                 <div className="flex justify-between text-base font-semibold text-gray-900">

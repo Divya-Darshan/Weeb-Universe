@@ -1,3 +1,4 @@
+// app/src/profile/Profile.tsx
 'use client'
 
 import { Authenticated, Unauthenticated } from 'convex/react'
