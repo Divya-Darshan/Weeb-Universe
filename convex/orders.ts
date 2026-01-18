@@ -1,5 +1,5 @@
 // convex/orders.ts
-import { mutation } from './_generated/server'
+import { query, mutation } from './_generated/server'
 import { v } from 'convex/values'
 
 export const create = mutation({
@@ -38,6 +38,31 @@ export const create = mutation({
       userId: user.subject,
       ...args,
       createdAt: Date.now(),
+      status: 'new', // default stage
     })
+  },
+})
+
+// List all orders
+export const list = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query('orders').order('desc').collect()
+  },
+})
+
+// Move order to "processing"
+export const markProcessing = mutation({
+  args: { id: v.id('orders') },
+  handler: async (ctx, { id }) => {
+    await ctx.db.patch(id, { status: 'processing' })
+  },
+})
+
+// Move order to "delivered"
+export const markDelivered = mutation({
+  args: { id: v.id('orders') },
+  handler: async (ctx, { id }) => {
+    await ctx.db.patch(id, { status: 'delivered' })
   },
 })

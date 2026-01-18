@@ -47,7 +47,7 @@ export default function Checkout() {
   const baseShipping = items.length > 0 ? 0 : 0
   const shipping =
     shippingMethod === 'standard' ? baseShipping : baseShipping + 99
-  const taxes = subtotal / 12
+  const taxes = subtotal / 15
   const total = subtotal + shipping + taxes
 
   useEffect(() => {

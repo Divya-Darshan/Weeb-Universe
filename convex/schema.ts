@@ -3,15 +3,28 @@ import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
 
 export default defineSchema({
-  messages: defineTable({
-    author: v.string(),
-    body: v.string(),
-    createdAt: v.number(),
-  }),
-
   orders: defineTable({
+    // Who placed the order (Clerk user ID)
     userId: v.string(),
 
+    // Customer info
+    name: v.string(),
+    email: v.string(),
+    phone: v.string(),
+
+    // Address
+    address: v.string(),
+    city: v.string(),
+    state: v.string(),
+    postalCode: v.string(),
+
+    // Totals
+    subtotal: v.number(),
+    shipping: v.number(),
+    taxes: v.number(),
+    total: v.number(),
+
+    // Items in the order
     items: v.array(
       v.object({
         id: v.string(),
@@ -22,23 +35,13 @@ export default defineSchema({
       })
     ),
 
-    subtotal: v.number(),
-    shipping: v.number(),
-    taxes: v.number(),
-    total: v.number(),
-
-    name: v.string(), // full name
-    email: v.string(),
-    phone: v.string(),
-    address: v.string(),
-    city: v.string(),
-    state: v.string(),
-    postalCode: v.string(),
-
+    // Razorpay info
     razorpayOrderId: v.string(),
     razorpayPaymentId: v.string(),
     razorpaySignature: v.string(),
 
-    createdAt: v.number(),
+    // Timestamps & status
+    createdAt: v.number(), // Date.now()
+    status: v.string(), // "new" | "processing" | "delivered"
   }),
 })
