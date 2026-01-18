@@ -47,7 +47,7 @@ export default function Checkout() {
   const baseShipping = items.length > 0 ? 0 : 0
   const shipping =
     shippingMethod === 'standard' ? baseShipping : baseShipping + 99
-  const taxes = subtotal /  12
+  const taxes = subtotal / 12
   const total = subtotal + shipping + taxes
 
   useEffect(() => {
@@ -137,277 +137,285 @@ export default function Checkout() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.1fr)]">
-          {/* LEFT: Forms */}
-          <section className="space-y-8">
-            {/* Contact Info */}
-            <div className="rounded-lg bg-white p-6 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900 mb-4">
-                Contact information
-              </h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email address
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    // required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    // required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-
-              </div>
-            </div>
-
-            {/* Shipping Info */}
-            <div className="rounded-lg bg-white p-6 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900 mb-4">
-                Shipping information
-              </h2>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    First name
-                  </label>
-                  <input
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    // required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Last name
-                  </label>
-                  <input
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    // required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Company (optinal)
-                  </label>
-                  <input
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Address
-                  </label>
-                  <input
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    // required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Apartment, suite, etc.
-                  </label>
-                  <input
-                    value={apartment}
-                    onChange={(e) => setApartment(e.target.value)}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    City
-                  </label>
-                  <input
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    // required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Country
-                  </label>
-                  <select
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                    // required
-                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  >
-                    <option>India</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    State / Province
-                  </label>
-                  <input
-                    value={stateField}
-                    onChange={(e) => setStateField(e.target.value)}
-                    // required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Postal code
-                  </label>
-                  <input
-                    value={postalCode}
-                    onChange={(e) => setPostalCode(e.target.value)}
-                    // required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-
-              </div>
-            </div>
-
-            {/* Delivery Method */}
-            <div className="rounded-lg bg-white p-6 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900 mb-4">
-                Delivery method
-              </h2>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={() => setShippingMethod('standard')}
-                  className={`flex flex-col items-start rounded-lg border p-4 text-left text-sm ${
-                    shippingMethod === 'standard'
-                      ? 'border-indigo-600 bg-indigo-50 hover:bg-indigo-100'
-                      : 'border-gray-200 bg-white hover:border-indigo-500 hover:bg-indigo-50'
-                  }`}
-                >
-                  <span className="font-medium text-gray-900">Standard</span>
-                  <span className="text-xs text-gray-500 mt-1">
-                    4–10 business days
-                  </span>
-                  <span className="mt-2 text-sm font-medium text-gray-900">
-                    {formatPrice(baseShipping)}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShippingMethod('express')}
-                  className={`flex flex-col items-start rounded-lg border p-4 text-left text-sm ${
-                    shippingMethod === 'express'
-                      ? 'border-indigo-600 bg-indigo-50 hover:bg-indigo-100'
-                      : 'border-gray-200 bg-white hover:border-indigo-500 hover:bg-indigo-50'
-                  }`}
-                >
-                  <span className="font-medium text-gray-900">Express</span>
-                  <span className="text-xs text-gray-500 mt-1">
-                    2–5 business days
-                  </span>
-                  <span className="mt-2 text-sm font-medium text-gray-900">
-                    {formatPrice(baseShipping + 99)}
-                  </span>
-                </button>
-              </div>
-            </div>
-          </section>
-
-          {/* RIGHT: Order Summary */}
-          <section className="space-y-4">
-            <div className="rounded-lg bg-white p-6 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900 mb-4">
-                Order summary
-              </h2>
-
-              {/* Items */}
-              <div className="space-y-4 mb-6 max-h-80 overflow-y-auto">
-                {items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50 p-3"
-                  >
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={item.image + `?v=${Date.now()}`}
-                        alt={item.name}
-                        className="h-14 w-14 rounded-md object-cover "
-                      />
-                      <div className="space-y-0.5 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {item.name}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Qty {item.quantity}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="text-sm font-medium text-gray-900">
-                      {formatPrice(item.price * item.quantity)}
-                    </p>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        const form = e.currentTarget
+        if (!form.reportValidity()) {
+          return
+        }
+        handlePayment()
+      }}
+    >
+      <div className="min-h-screen bg-gray-50">
+        <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.1fr)]">
+            {/* LEFT: Forms */}
+            <section className="space-y-8">
+              {/* Contact Info */}
+              <div className="rounded-lg bg-white p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-gray-900 mb-4">
+                  Contact information
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Email address
+                    </label>
+                    <input
+                      required={true}
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
                   </div>
-                ))}
-                {items.length === 0 && (
-                  <p className="text-sm text-gray-500 text-center py-8">
-                    Your cart is empty
-                  </p>
-                )}
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Phone
+                    </label>
+                    <input
+                      required={true}
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                </div>
               </div>
 
-              {/* Totals */}
-              <dl className="space-y-2 text-sm text-gray-700 mb-6">
-                <div className="flex justify-between">
-                  <dt>Subtotal</dt>
-                  <dd>{formatPrice(subtotal)}</dd>
+              {/* Shipping Info */}
+              <div className="rounded-lg bg-white p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-gray-900 mb-4">
+                  Shipping information
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      First name
+                    </label>
+                    <input
+                      required={true}
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Last name
+                    </label>
+                    <input
+                      required={true}
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Company (optinal)
+                    </label>
+                    <input
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Address
+                    </label>
+                    <input
+                      required={true}
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Apartment, suite, etc.
+                    </label>
+                    <input
+                      value={apartment}
+                      onChange={(e) => setApartment(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      City
+                    </label>
+                    <input
+                      required={true}
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Country
+                    </label>
+                    <select
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    >
+                      <option>India</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      State / Province
+                    </label>
+                    <input
+                      required={true}
+                      value={stateField}
+                      onChange={(e) => setStateField(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Postal code
+                    </label>
+                    <input
+                      required={true}
+                      value={postalCode}
+                      onChange={(e) => setPostalCode(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <dt>Shipping</dt>
-                  <dd>{formatPrice(shipping)}</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt>Taxes</dt>
-                  <dd>{formatPrice(taxes)} + GST</dd>
-                </div>
-                <div className="h-px bg-gray-200 my-2" />
-                <div className="flex justify-between text-base font-semibold text-gray-900">
-                  <dt>Total</dt>
-                  <dd>{formatPrice(total)}</dd>
-                </div>
-              </dl>
+              </div>
 
-              {/* Pay Button */}
-              <button
-                onClick={handlePayment}
-                disabled={loading || items.length === 0}
-                className={`w-full rounded-md px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
-                  loading || items.length === 0
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-indigo-600 hover:bg-indigo-700'
-                }`}
-              >
-                {loading ? 'Processing Payment...' : 'Confirm order'}
-              </button>
-            </div>
-          </section>
-        </div>
-      </main>
-    </div>
+              {/* Delivery Method */}
+              <div className="rounded-lg bg-white p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-gray-900 mb-4">
+                  Delivery method
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => setShippingMethod('standard')}
+                    className={`flex flex-col items-start rounded-lg border p-4 text-left text-sm ${
+                      shippingMethod === 'standard'
+                        ? 'border-indigo-600 bg-indigo-50 hover:bg-indigo-100'
+                        : 'border-gray-200 bg-white hover:border-indigo-500 hover:bg-indigo-50'
+                    }`}
+                  >
+                    <span className="font-medium text-gray-900">Standard</span>
+                    <span className="text-xs text-gray-500 mt-1">
+                      4–10 business days
+                    </span>
+                    <span className="mt-2 text-sm font-medium text-gray-900">
+                      {formatPrice(baseShipping)}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShippingMethod('express')}
+                    className={`flex flex-col items-start rounded-lg border p-4 text-left text-sm ${
+                      shippingMethod === 'express'
+                        ? 'border-indigo-600 bg-indigo-50 hover:bg-indigo-100'
+                        : 'border-gray-200 bg-white hover:border-indigo-500 hover:bg-indigo-50'
+                    }`}
+                  >
+                    <span className="font-medium text-gray-900">Express</span>
+                    <span className="text-xs text-gray-500 mt-1">
+                      2–5 business days
+                    </span>
+                    <span className="mt-2 text-sm font-medium text-gray-900">
+                      {formatPrice(baseShipping + 99)}
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* RIGHT: Order Summary */}
+            <section className="space-y-4">
+              <div className="rounded-lg bg-white p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-gray-900 mb-4">
+                  Order summary
+                </h2>
+
+                {/* Items */}
+                <div className="space-y-4 mb-6 max-h-80 overflow-y-auto">
+                  {items.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50 p-3"
+                    >
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={item.image + `?v=${Date.now()}`}
+                          alt={item.name}
+                          className="h-14 w-14 rounded-md object-cover "
+                        />
+                        <div className="space-y-0.5 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {item.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Qty {item.quantity}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-sm font-medium text-gray-900">
+                        {formatPrice(item.price * item.quantity)}
+                      </p>
+                    </div>
+                  ))}
+                  {items.length === 0 && (
+                    <p className="text-sm text-gray-500 text-center py-8">
+                      Your cart is empty
+                    </p>
+                  )}
+                </div>
+
+                {/* Totals */}
+                <dl className="space-y-2 text-sm text-gray-700 mb-6">
+                  <div className="flex justify-between">
+                    <dt>Subtotal</dt>
+                    <dd>{formatPrice(subtotal)}</dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt>Shipping</dt>
+                    <dd>{formatPrice(shipping)}</dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt>Taxes</dt>
+                    <dd>{formatPrice(taxes)} + GST</dd>
+                  </div>
+                  <div className="h-px bg-gray-200 my-2" />
+                  <div className="flex justify-between text-base font-semibold text-gray-900">
+                    <dt>Total</dt>
+                    <dd>{formatPrice(total)}</dd>
+                  </div>
+                </dl>
+
+                {/* Pay Button */}
+                <button
+                  type="submit"
+                  disabled={loading || items.length === 0}
+                  className={`w-full rounded-md px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+                    loading || items.length === 0
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-indigo-600 hover:bg-indigo-700'
+                  }`}
+                >
+                  {loading ? 'Processing Payment...' : 'Confirm order'}
+                </button>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </form>
   )
 }
