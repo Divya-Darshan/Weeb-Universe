@@ -4,6 +4,7 @@
 'use client'
 
 import LogoLoop from '@/components/hero/logoloop/LogoLoop'
+import Carousel from '@/components/hero/carousel/Carousel'
 
 
 // logo loop data (image src + version)
@@ -28,8 +29,6 @@ const techLogos = [
   },
 ]
 
-
-
 import './globals.css'
 import Hero from '@/components/hero/Hero'
 import Products from '@/components/products/Products'
@@ -45,10 +44,56 @@ export default function Home() {
       
 
       <Hero />
+
+      <Carousel
+          items={[
+                          {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          href: '/collections/naruto',
+          },
+                        {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          href: '/collections/naruto',
+          },
+                        {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          href: '/collections/naruto',
+          },
+                        {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          href: '/collections/naruto',
+          },
+                        {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          href: '/collections/naruto',
+          },
+                        {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          href: '/collections/naruto',
+          },
+                        {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          href: '/collections/naruto',
+          },
+                        {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          href: '/collections/naruto',
+          },
+          {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          href: '/collections/naruto',
+          },
+          {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          href: '/collections/one-piece',
+          },
+          ]}
+      />
+      
       <Products />
 
       <div>
-        {/* Basic horizontal loop */}
+      
         <LogoLoop 
           logos={techLogos}
           speed={110}
@@ -61,12 +106,13 @@ export default function Home() {
           fadeOutColor="#ffffff"
           ariaLabel="Anime Characters Logo Loop"
         />
+
       </div>
 
       <Promo />
       <Footer />
 
-      {/* other commented sections unchanged */}
+   
     </>
   )
 }

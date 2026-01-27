@@ -5,7 +5,7 @@ import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/re
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Profile from '@/app/src/profile/Profile'
 import Cart from '@/components/products/cart'
-
+import Carousel from '@/components/hero/carousel/Carousel'
 const navigation = [
   { name: 'Home', href: '#' },
   { name: 'Limited Drops', href: '#' },
@@ -30,6 +30,8 @@ export default function Hero() {
             </a>
           </div>
             <Cart />
+
+
           <div className="flex lg:hidden">
             
             <button
