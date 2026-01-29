@@ -41,9 +41,11 @@ import { Radius } from 'lucide-react'
 
 export default function Home() {
     const [loading, setLoading] = useState(true)
+    const [timestamp, setTimestamp] = useState(0)
 
   useEffect(() => {
     // Simulate loading (remove for real data)
+    setTimestamp(Date.now())
     const timer = setTimeout(() => setLoading(false), 1500)
     return () => clearTimeout(timer)
   }, [])
@@ -59,45 +61,19 @@ export default function Home() {
       <Carousel
           items={[
                           {
-          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1769688191/anBn_futvrt.jpg' + `?v=${timestamp}`,
           href: '/collections/naruto',
           },
                         {
-          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1769688191/anBn_futvrt.jpg'  + `?v=${timestamp}`,
           href: '/collections/naruto',
           },
-                        {
-          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
+
+                                  {
+          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1769688191/anBn_futvrt.jpg'  + `?v=${timestamp}`,
           href: '/collections/naruto',
           },
-                        {
-          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
-          href: '/collections/naruto',
-          },
-                        {
-          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
-          href: '/collections/naruto',
-          },
-                        {
-          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
-          href: '/collections/naruto',
-          },
-                        {
-          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
-          href: '/collections/naruto',
-          },
-                        {
-          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
-          href: '/collections/naruto',
-          },
-          {
-          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
-          href: '/collections/naruto',
-          },
-          {
-          image: 'https://res.cloudinary.com/dllduppce/image/upload/v1767072820/file_00000000caec7206840882f3220454d6_xy5ynw.png',
-          href: '/collections/one-piece',
-          },
+ 
           ]}
       />
       

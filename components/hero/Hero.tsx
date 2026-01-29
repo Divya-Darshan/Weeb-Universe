@@ -1,6 +1,7 @@
 'use client'
 
 import { Fragment, useState } from 'react'
+import Image from 'next/image'
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Profile from '@/app/src/profile/Profile'
@@ -22,9 +23,11 @@ export default function Hero() {
         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 mt-[-40] p-1.5">
-              <img
+              <Image
                 alt="Logo"
                 src="/favicon.png"
+                width={100}
+                height={100}
                 className="h-25 w-auto drop-shadow-[0px_0px_5px_#754fb0]"
               />
             </a>
@@ -90,9 +93,11 @@ export default function Hero() {
                 <div className="flex items-center justify-between">
                   <a href="#" className="-m-1.5 mt-[-40] p-1.5">
                     <span className="sr-only"> Weeb Universe</span>
-                    <img
+                    <Image
                       alt="logo mobile"
                       src="/favicon.png"
+                      width={100}
+                      height={100}
                       className="h-25 w-auto drop-shadow-[0px_0px_5px_#754fb0]"
                     />
                   </a>

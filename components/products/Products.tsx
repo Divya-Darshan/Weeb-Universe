@@ -2,6 +2,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { fetchProducts, fetchProductById } from '@/lib/products/supabase'
 import type { Product } from '@/lib/products/master'
 import OverView from './OverView'
@@ -69,9 +70,11 @@ export default function Products() {
                 onClick={() => handleOpen(product.id)}
                 className="group relative text-left"
               >
-                <img
+                <Image
                   alt={product.name}
                   src={product.image}
+                  width={400}
+                  height={400}
                   className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
                 />
                 <div className="mt-4 flex justify-between">
