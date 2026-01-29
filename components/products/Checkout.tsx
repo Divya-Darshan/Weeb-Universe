@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react'
 import { useCart } from '@/lib/cart/context'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import Loading from '@/components/Loading'
+
 
 function formatPrice(value: number) {
   return new Intl.NumberFormat('en-IN', {
@@ -17,7 +19,7 @@ function formatPrice(value: number) {
 export default function Checkout() {
   const { items } = useCart()
   const [loading, setLoading] = useState(false)
-
+  const [loadingPage, setLoadingPage] = useState(true)
   // Convex mutation
   const createOrder = useMutation(api.orders.create)
 
@@ -33,6 +35,7 @@ export default function Checkout() {
   const [stateField, setStateField] = useState('')
   const [postalCode, setPostalCode] = useState('')
   const [phone, setPhone] = useState('')
+  
 
   // Delivery method state
   const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>(
@@ -118,7 +121,7 @@ export default function Checkout() {
         },
         prefill: {
           name: firstName || 'Test Customer',
-          email: email || 'darshno@example.com',
+          email: email || 'test@example.com',
           contact: phone || '9999998999',
         },
         theme: {
@@ -135,6 +138,16 @@ export default function Checkout() {
       setLoading(false)
     }
   }
+
+
+
+  useEffect(() => {
+    // Simulate loading (remove for real data)
+    const timer = setTimeout(() => setLoadingPage(false), 1500)
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (loadingPage) return <Loading />
 
   return (
     <form
@@ -177,9 +190,8 @@ export default function Checkout() {
                     </label>
                     <input
                       required={true}
-                      type="nubmer"
-                      size={10}
-                      aria-valuemax={10}
+                      type="tel"
+                      maxLength={10}
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"

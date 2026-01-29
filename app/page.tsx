@@ -5,10 +5,11 @@
 
 import LogoLoop from '@/components/hero/logoloop/LogoLoop'
 import Carousel from '@/components/hero/carousel/Carousel'
+import { useState, useEffect } from 'react'
+import Loading from '@/components/Loading'
 
 
-// logo loop data (image src + version)
-const cacheBust = () => Date.now()
+
 
 const techLogos = [
   {
@@ -39,6 +40,16 @@ import { Radius } from 'lucide-react'
 // import MagicBento from './src/hero/magicbento/MagicBento'
 
 export default function Home() {
+    const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate loading (remove for real data)
+    const timer = setTimeout(() => setLoading(false), 1500)
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (loading) return <Loading />
+
   return (
     <>
       
