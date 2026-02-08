@@ -19,8 +19,8 @@ export default function Home() {
   )
 }
 
-//base clerk and convex setup from main
-
+//main: base clerk and convex setup from main
+//maintenance: yes it works!
 function Content() {
   const messages = useQuery(api.messages.getForCurrentUser)
 }
