@@ -1,10 +1,18 @@
-// components/product/productover.tsx
 'use client'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { StarIcon } from '@heroicons/react/20/solid'
 import { Image, ImageKitProvider } from '@imagekit/next'
+
+// Global Cart Context Type
+declare global {
+  interface Window {
+    cartContext: {
+      cartItems: any[]
+      addToCart: (product: any, quantity: number) => void
+    }
+  }
+}
 
 interface Product {
   id: number
@@ -14,7 +22,6 @@ interface Product {
   image_name_back: string
   category?: string
   description?: string
-  rating?: number 
 }
 
 interface ProductOverviewProps {
@@ -29,6 +36,9 @@ function classNames(...classes: (string | null | undefined | false)[]) {
 
 export default function ProductOverview({ product, open, onClose }: ProductOverviewProps) {
   const [currentImage, setCurrentImage] = useState(0)
+  const [quantity, setQuantity] = useState(1)
+  const [added, setAdded] = useState(false)
+  
   const images = [
     { src: product.image_name_front, alt: `${product.name} - Front` },
     { src: product.image_name_back, alt: `${product.name} - Back` }
@@ -36,6 +46,19 @@ export default function ProductOverview({ product, open, onClose }: ProductOverv
 
   const goToPrevious = () => setCurrentImage((prev) => (prev === 0 ? images.length - 1 : prev - 1))
   const goToNext = () => setCurrentImage((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+
+  const incrementQuantity = () => setQuantity(prev => Math.min(prev + 1, 10))
+  const decrementQuantity = () => setQuantity(prev => Math.max(prev - 1, 1))
+
+  const handleAddToCart = () => {
+    // Add to global cart (accessible by cart.tsx)
+    if (window.cartContext) {
+      window.cartContext.addToCart(product, quantity)
+    }
+    
+    setAdded(true)
+    setTimeout(() => setAdded(false), 2000)
+  }
 
   return (
     <ImageKitProvider urlEndpoint="https://ik.imagekit.io/weeb/">
@@ -62,7 +85,7 @@ export default function ProductOverview({ product, open, onClose }: ProductOverv
                 </button>
 
                 <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
-                  {/* Image Slider */}
+                  {/* Image Slider - UNCHANGED */}
                   <div className="sm:col-span-4 lg:col-span-5">
                     <div className="aspect-[2/3] rounded-lg bg-gray-100 overflow-hidden relative">
                       <Image
@@ -73,23 +96,21 @@ export default function ProductOverview({ product, open, onClose }: ProductOverv
                         className="w-full h-full object-cover"
                       />
                       
-                      {/* DESKTOP + MOBILE Navigation */}
                       <div className="absolute inset-0 flex items-center justify-between px-2 pointer-events-none">
                         <button
                           onClick={goToPrevious}
-                          className="w-12 h-12  hover:bg-white rounded-full flex items-center justify-center backdrop-blur-sm pointer-events-auto shadow-lg border transition-all hover:scale-110 md:ml-2"
+                          className="w-12 h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center backdrop-blur-sm pointer-events-auto shadow-lg border transition-all hover:scale-110 md:ml-2"
                         >
                           ←
                         </button>
                         <button
                           onClick={goToNext}
-                          className="w-12 h-12  hover:bg-white rounded-full flex items-center justify-center backdrop-blur-sm pointer-events-auto shadow-lg border transition-all hover:scale-110 md:mr-2"
+                          className="w-12 h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center backdrop-blur-sm pointer-events-auto shadow-lg border transition-all hover:scale-110 md:mr-2"
                         >
                           →
                         </button>
                       </div>
 
-                      {/* Thumbnails */}
                       <div className="flex gap-2 mt-4 overflow-x-auto pb-2 -mx-2 px-2">
                         {images.map((img, idx) => (
                           <button
@@ -115,7 +136,7 @@ export default function ProductOverview({ product, open, onClose }: ProductOverv
                     </div>
                   </div>
 
-                  {/* Product Info */}
+                  {/* Product Info - NO RATING */}
                   <div className="sm:col-span-8 lg:col-span-7">
                     <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{product.name}</h2>
                     
@@ -123,25 +144,24 @@ export default function ProductOverview({ product, open, onClose }: ProductOverv
                       <h3 id="information-heading" className="sr-only">Product information</h3>
                       <p className="text-3xl font-bold text-gray-900">₹{product.price}</p>
                       
-                      {/* ⭐ SIMPLE FIXED RATING - NO ERRORS */}
-                      <div className="mt-6 flex items-center">
-                        <div className="flex items-center">
-                          {[0, 1, 2, 3, 4].map((rating) => (
-                            <StarIcon
-                              key={rating}
-                              aria-hidden="true"
-                              className={classNames(
-                                rating < 4 
-                                  ? 'text-yellow-400' 
-                                  : 'text-gray-300',
-                                'size-5 shrink-0'
-                              )}
-                            />
-                          ))}
+                      {/* QUANTITY SELECTOR */}
+                      <div className="mt-6 flex items-center space-x-4">
+                        <span className="text-sm font-medium text-gray-500">Qty</span>
+                        <div className="flex items-center border border-gray-300 rounded-lg p-1">
+                          <button
+                            onClick={decrementQuantity}
+                            className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-all"
+                          >
+                            -
+                          </button>
+                          <span className="px-4 py-2 font-semibold text-lg min-w-[2.5rem] text-center">{quantity}</span>
+                          <button
+                            onClick={incrementQuantity}
+                            className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-all"
+                          >
+                            +
+                          </button>
                         </div>
-                        <a href="#" className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                          117 reviews
-                        </a>
                       </div>
 
                       {product.description && (
@@ -150,8 +170,16 @@ export default function ProductOverview({ product, open, onClose }: ProductOverv
                     </section>
 
                     <section className="mt-10">
-                      <button className="w-full rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none transition-all shadow-lg hover:shadow-xl">
-                        Add to bag
+                      <button 
+                        onClick={handleAddToCart}
+                        className={classNames(
+                          "w-full rounded-md border border-transparent px-8 py-3 text-base font-medium text-white focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none transition-all shadow-lg",
+                          added 
+                            ? "bg-green-600 hover:bg-green-700 animate-pulse" 
+                            : "bg-indigo-600 hover:bg-indigo-700"
+                        )}
+                      >
+                        {added ? '✅ Added to Cart!' : `Add ${quantity} to Cart`}
                       </button>
                     </section>
                   </div>
