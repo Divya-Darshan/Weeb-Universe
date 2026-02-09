@@ -77,13 +77,13 @@ export default function ProductOverview({ product, open, onClose }: ProductOverv
                       <div className="absolute inset-0 flex items-center justify-between px-2 pointer-events-none">
                         <button
                           onClick={goToPrevious}
-                          className="w-12 h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center backdrop-blur-sm pointer-events-auto shadow-lg border transition-all hover:scale-110 md:ml-2"
+                          className="w-12 h-12  hover:bg-white rounded-full flex items-center justify-center backdrop-blur-sm pointer-events-auto shadow-lg border transition-all hover:scale-110 md:ml-2"
                         >
                           ←
                         </button>
                         <button
                           onClick={goToNext}
-                          className="w-12 h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center backdrop-blur-sm pointer-events-auto shadow-lg border transition-all hover:scale-110 md:mr-2"
+                          className="w-12 h-12  hover:bg-white rounded-full flex items-center justify-center backdrop-blur-sm pointer-events-auto shadow-lg border transition-all hover:scale-110 md:mr-2"
                         >
                           →
                         </button>
