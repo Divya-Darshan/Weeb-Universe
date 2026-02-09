@@ -1,10 +1,11 @@
 import Image from "next/image";
-import Profile from '@/components/profile/profile'
+import Bg from '@/components/ui/bg'
 export default function Home() {
   return (
           <>
-          
-          <Profile/>
+          <Bg/>
+
+
 
           
           </>
