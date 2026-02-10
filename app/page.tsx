@@ -5,7 +5,7 @@ import Products  from '@/components/product/product'
 import ProductOver from '@/components/product/productover'
 import Drop from '@/components/product/drop'
 import Foot from '@/components/footer/footer'
-import Checkout from '@/components/product/Checkout'
+
 
 export default function Home() {
   return (
