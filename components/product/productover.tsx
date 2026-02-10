@@ -3,6 +3,7 @@ import { useState, useContext } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Image, ImageKitProvider } from '@imagekit/next'
+import Cart from '@/components/product/cart'
 
 // Global Cart Context Type
 declare global {
@@ -169,7 +170,7 @@ export default function ProductOverview({ product, open, onClose }: ProductOverv
                       )}
                     </section>
 
-                    <section className="mt-10">
+                    <section className="mt-10 flex items-center gap-x-3">
                       <button 
                         onClick={handleAddToCart}
                         className={classNames(
@@ -179,8 +180,9 @@ export default function ProductOverview({ product, open, onClose }: ProductOverv
                             : "bg-indigo-600 hover:bg-indigo-700"
                         )}
                       >
-                        {added ? '✅ Added to Cart!' : `Add ${quantity} to Cart`}
+                        {added ? 'Added to Cart!' : `Add ${quantity} to Cart`}
                       </button>
+                      < Cart /> 
                     </section>
                   </div>
                 </div>
