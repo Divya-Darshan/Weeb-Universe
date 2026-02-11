@@ -1,3 +1,6 @@
+// components/product/cart.tsx
+//hello from payment gateway integration branch
+
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
