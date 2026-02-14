@@ -1,6 +1,6 @@
 // components/product/cart.tsx
 //hello from payment gateway integration branch
-//didi nothing today
+// Defender disabled reinstall git
 
 'use client'
 import { useState, useEffect, useCallback } from 'react'
