@@ -58,7 +58,7 @@ export default function Razorpay({
         disabled={isLoading}
         className="w-full h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50"
       >
-        {isLoading ? 'Loading...' : 'Pay Now 💳'}
+        {isLoading ? 'Loading...' : 'Pay Now'}
       </button>
     </div>
   )
