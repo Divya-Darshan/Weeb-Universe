@@ -43,7 +43,7 @@ export default function Drop() {
                   src={callout.imageSrc}
                   className="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square"
                 />
-                <p className="text-base font-semibold text-gray-900">{callout.description}</p>
+              
               </div>
             ))}
           </div>
