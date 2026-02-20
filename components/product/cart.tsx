@@ -91,7 +91,7 @@ export default function CartComponent() {
   const taxes = Math.round(subtotal * 0.18)
   const grandTotal = subtotal + shipping + taxes
 
-  // 🔥 NEW: Razorpay Success Handler
+  //  NEW: Razorpay Success Handler
   const handlePaymentSuccess = (response: any) => {
     console.log('✅ Payment Success:', response)
     
@@ -138,7 +138,7 @@ export default function CartComponent() {
     })
   }
 
-  // 🔥 Form validation
+  //  Form validation
   const isFormValid = formData.email && 
                      formData.firstName && 
                      formData.phone && 
@@ -253,7 +253,7 @@ export default function CartComponent() {
                       </div>
                     </div>
 
-                    {/* 🔥 PRODUCTION CHECKOUT SYSTEM */}
+                    {/*  PRODUCTION CHECKOUT SYSTEM */}
                     {cartItems.length > 0 && (
                       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                         {tab === 'cart' ? (
@@ -274,7 +274,7 @@ export default function CartComponent() {
                             </div>
                           </>
                         ) : (
-                          // 🔥 CHECKOUT FORM + RAZORPAY
+                          //  CHECKOUT FORM + RAZORPAY
                           <div className="space-y-6">
                             {/* Shipping Info */}
                             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
@@ -342,7 +342,35 @@ export default function CartComponent() {
                               </div>
                             </div>
 
-                            {/* 🔥 RAZORPAY PAYMENT - REPLACES SUMMARY + BUTTON */}
+                            {/* Order Summary */}
+                            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100 shadow-sm">
+                              <h4 className="text-xl font-bold mb-6 text-gray-900 flex items-center gap-2">
+                                Order Summary
+                              </h4>
+                              <div className="space-y-3 mb-6">
+                                <div className="flex justify-between py-2 px-4 bg-white/70 rounded-xl border">
+                                  <span className="text-gray-900 font-medium">Subtotal ({cartCount} items)</span>
+                                  <span className="font-bold text-gray-900">₹{subtotal.toLocaleString('en-IN')}</span>
+                                </div>
+                                <div className="flex justify-between py-2 px-4 bg-white/70 rounded-xl border">
+                                  <span className="text-gray-900 font-medium">🛒 Shipping</span>
+                                  <span className="font-bold text-gray-900">₹{shipping.toLocaleString('en-IN')}</span>
+                                </div>
+                                <div className="flex justify-between py-2 px-4 bg-white/70 rounded-xl border">
+                                  <span className="text-gray-900 font-medium">💰 GST+ Taxes</span>
+                                  <span className="font-bold text-gray-900">₹{taxes.toLocaleString('en-IN')}</span>
+                                </div>
+                                <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-4" />
+                                <div className="flex justify-between items-center p-4 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl border-2 border-indigo-200 shadow-lg">
+                                  <span className="text-xl font-black text-gray-900">Grand Total</span>
+                                  <span className="text-2xl font-black text-gray-900">₹{grandTotal.toLocaleString('en-IN')}</span>
+                                </div>
+                              </div>
+                            </div>
+
+
+
+                            {/*  RAZORPAY PAYMENT - REPLACES SUMMARY + BUTTON */}
                             {isFormValid ? (
                               <Razorpay
                                 amount={grandTotal * 100}  // Paise!
