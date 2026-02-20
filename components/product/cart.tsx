@@ -1,12 +1,9 @@
-// components/product/cart.tsx
-//hello from payment gateway integration branch "in the branch"
-
-
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon, ShoppingBagIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Image, ImageKitProvider } from '@imagekit/next'
+import Razorpay from '@/components/payment/razorpay' 
 
 interface CartItem {
   id: number
@@ -67,7 +64,6 @@ export default function CartComponent() {
     paymentMethod: 'card'
   })
 
-
   const updateCartItems = useCallback(() => {
     const savedCart = localStorage.getItem('weeb_cart')
     if (savedCart) {
@@ -95,6 +91,20 @@ export default function CartComponent() {
   const taxes = Math.round(subtotal * 0.18)
   const grandTotal = subtotal + shipping + taxes
 
+  // 🔥 NEW: Razorpay Success Handler
+  const handlePaymentSuccess = (response: any) => {
+    console.log('✅ Payment Success:', response)
+    
+    // Clear cart
+    localStorage.removeItem('weeb_cart')
+    window.cartContext.cartItems = []
+    setCartItems([])
+    setTab('cart')
+    setOpen(false)
+    
+    alert(`✅ Paid ₹${grandTotal.toLocaleString('en-IN')}\nPayment ID: ${response.razorpay_payment_id}`)
+  }
+
   const removeItem = (id: number) => {
     const newItems = cartItems.filter(item => item.id !== id)
     setCartItems(newItems)
@@ -121,25 +131,19 @@ export default function CartComponent() {
     }
   }
 
-const handleConfirmOrder = () => {
-  if (formData.email && formData.firstName && formData.phone && formData.pincode && formData.state) {
-    alert(`Order confirmed! Total: ₹${grandTotal.toLocaleString('en-IN')}\nEmail: ${formData.email}`)
-    localStorage.removeItem('weeb_cart')
-    window.cartContext.cartItems = []
-    setCartItems([])
-    setTab('cart')
-    setFormData({ email: '', firstName: '', lastName: '', address: '', city: '', pincode: '', state: '', phone: '', paymentMethod: 'card' })
-  } else {
-    alert('Please fill required fields: Email, Name, Phone, Pincode, State')
-  }
-}
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
   }
+
+  // 🔥 Form validation
+  const isFormValid = formData.email && 
+                     formData.firstName && 
+                     formData.phone && 
+                     formData.pincode && 
+                     formData.state
 
   return (
     <div className="relative z-50">
@@ -270,120 +274,95 @@ const handleConfirmOrder = () => {
                             </div>
                           </>
                         ) : (
+                          // 🔥 CHECKOUT FORM + RAZORPAY
+                          <div className="space-y-6">
+                            {/* Shipping Info */}
+                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                              <h3 className="text-lg font-bold mb-6 text-gray-900">Shipping Address & Information</h3>
+                              <div className="grid grid-cols-2 gap-4 mb-4">
+                                <input 
+                                  name="firstName"
+                                  placeholder="First name *"
+                                  value={formData.firstName}
+                                  onChange={handleInputChange}
+                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
+                                />
+                                <input 
+                                  name="lastName"
+                                  placeholder="Last name"
+                                  value={formData.lastName}
+                                  onChange={handleInputChange}
+                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
+                                />
+                              </div>
+                              <input 
+                                name="email"
+                                placeholder="Email address *"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                className="w-full h-12 mb-4 px-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
+                              />
+                              <input 
+                                name="address"
+                                placeholder="Street address"
+                                value={formData.address}
+                                onChange={handleInputChange}
+                                className="w-full h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500 mb-4"
+                              />
+                              <div className="grid grid-cols-2 gap-4">
+                                <input 
+                                  name="state"
+                                  placeholder="State *"
+                                  value={formData.state}
+                                  onChange={handleInputChange}
+                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
+                                />
+                                <input 
+                                  name="city"
+                                  placeholder="City"
+                                  value={formData.city}
+                                  onChange={handleInputChange}
+                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
+                                />
+                                <input 
+                                  name="pincode"
+                                  placeholder="Pincode *"
+                                  value={formData.pincode}
+                                  onChange={handleInputChange}
+                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
+                                />
+                                <input 
+                                  name="phone"
+                                  placeholder="Phone *"
+                                  value={formData.phone}
+                                  type="tel"
+                                  onChange={handleInputChange}
+                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
+                                />
+                              </div>
+                            </div>
 
-                          //checkout form section
-                          
-<div className="space-y-6">
-
-
-  {/* Shipping Info */}
-  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-    <h3 className="text-lg font-bold mb-6 text-gray-900">Shipping Address & Information</h3>
-    <div className="grid grid-cols-2 gap-4 mb-4">
-      <input 
-        name="firstName"
-        placeholder="First name *"
-        value={formData.firstName}
-        onChange={handleInputChange}
-        className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-      />
-      <input 
-        name="lastName"
-        placeholder="Last name"
-        value={formData.lastName}
-        onChange={handleInputChange}
-        className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-      />
-    </div>
-     <input 
-        name="email"
-        placeholder="Email address *"
-        value={formData.email}
-        onChange={handleInputChange}
-        className="w-full h-12 mb-4 px-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-      />
-     
-    <input 
-      name="address"
-      placeholder="Street address"
-      value={formData.address}
-      onChange={handleInputChange}
-      className="w-full h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500 mb-4"
-    />
-    <div className="grid grid-cols-2 gap-4">
-
-      <input 
-        name="state"
-        placeholder="State *"
-        value={formData.state}
-        onChange={handleInputChange}
-        className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-      />
-
-
-      <input 
-        name="city"
-        placeholder="City *"
-        value={formData.city}
-        onChange={handleInputChange}
-        className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-      />
-      <input 
-        name="pincode"
-        placeholder="Pincode *"                    
-        value={formData.pincode}
-        onChange={handleInputChange}
-        className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-      />
-      <input 
-        name="phone"
-        placeholder="Phone *"
-        value={formData.phone}
-        type='phone'
-        onChange={handleInputChange}
-        className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-      />
-    </div>
-  </div>
-
-  {/* Order Summary + Pay */}
-  <div className=" rounded-2xl p-6 shadow-lg border-2 ">
-    <h4 className="text-xl font-bold mb-6 text-gray-900">Order Summary</h4>
-    <div className="space-y-3 text-sm mb-8">
-      <div className="flex justify-between text-gray-900 py-2 px-4 bg-white/50 rounded-xl border border-gray-200">
-        <span>Subtotal</span>
-        <span className="font-semibold">₹{subtotal.toLocaleString('en-IN')}</span>
-      </div>
-      <div className="flex justify-between text-gray-900 py-2 px-4 bg-white/50 rounded-xl border border-gray-200">
-        <span>Shipping</span>
-        <span className="font-semibold">₹{shipping.toLocaleString('en-IN')}</span>
-      </div>
-      <div className="flex justify-between py-2 text-gray-900 px-4 bg-white/50 rounded-xl border border-gray-200">
-        <span>Tax + GST</span>
-        <span className="font-semibold">₹{taxes.toLocaleString('en-IN')}</span>
-      </div>
-      <div className="h-px bg-gray-300 my-3" />
-      <div className="flex justify-between items-center p-4 bg-white rounded-xl border-2 border-gray-200 shadow-sm">
-        <span className="text-1xl font-bold text-gray-900">Total</span>
-        <span className="text-1xl font-black text-gray-900">₹{grandTotal.toLocaleString('en-IN')}</span>
-      </div>
-    </div>
-    
-    <button 
-      onClick={handleConfirmOrder}
-      disabled={!formData.email || !formData.firstName || !formData.phone}
-      className="w-full h-14 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white py-4 px-8 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl duration-200 disabled:cursor-not-allowed"
-    >
-       Pay ₹{grandTotal.toLocaleString('en-IN')}
-    </button>
-    
-    <div className="text-xs text-center text-gray-500 mt-4 font-medium">
-      Secure checkout. Supports all cards & UPI.
-    </div>
-  </div>
-</div>
-
-
+                            {/* 🔥 RAZORPAY PAYMENT - REPLACES SUMMARY + BUTTON */}
+                            {isFormValid ? (
+                              <Razorpay
+                                amount={grandTotal * 100}  // Paise!
+                                customer={formData}
+                                cartItems={cartItems}
+                                onSuccess={handlePaymentSuccess}
+                              />
+                            ) : (
+                              <div className="rounded-2xl p-6 shadow-lg border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100">
+                                <h4 className="text-xl font-bold mb-6 text-gray-900 text-center">Complete form to pay</h4>
+                                <div className="text-center text-sm text-gray-500 mb-6">
+                                  Please fill: Email, Name, Phone, Pincode, State
+                                </div>
+                                <div className="flex justify-between text-sm mb-4">
+                                  <span>Est. Total:</span>
+                                  <span className="font-bold text-lg">₹{grandTotal.toLocaleString('en-IN')}</span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         )}
                       </div>
                     )}
