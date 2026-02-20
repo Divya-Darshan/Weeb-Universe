@@ -1,9 +1,12 @@
+// components/product/cart.tsx
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon, ShoppingBagIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Image, ImageKitProvider } from '@imagekit/next'
-import Razorpay from '@/components/payment/razorpay' 
+import Razorpay from '@/components/payment/razorpay'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 interface CartItem {
   id: number
@@ -87,13 +90,34 @@ export default function CartComponent() {
   const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
   const subtotal = total
-  const shipping = cartItems.length > 0 ? 30 : 0
+  const shipping = cartItems.length > 0 ? 0.50 : 0
   const taxes = Math.round(subtotal * 0.18)
   const grandTotal = subtotal + shipping + taxes
+  const createOrder = useMutation(api.razor.orders.createOrder)
+
+
 
   //  NEW: Razorpay Success Handler
-  const handlePaymentSuccess = (response: any) => {
+  const handlePaymentSuccess = async (response: any) => {
     console.log('✅ Payment Success:', response)
+    
+    try {
+      // 🔥 SAVE TO CONVEX
+      await createOrder({
+        paymentId: response.razorpay_payment_id,
+        orderId: response.razorpay_order_id,
+        customer: formData,
+        items: cartItems,
+        subtotal,
+        shipping,
+        taxes,
+        grandTotal
+      })
+      
+      console.log('✅ Saved to Convex!')
+    } catch (error) {
+      console.error('Failed to save order:', error)
+    }
     
     // Clear cart
     localStorage.removeItem('weeb_cart')
@@ -102,7 +126,7 @@ export default function CartComponent() {
     setTab('cart')
     setOpen(false)
     
-    alert(`✅ Paid ₹${grandTotal.toLocaleString('en-IN')}\nPayment ID: ${response.razorpay_payment_id}`)
+    alert(`✅ Order confirmed!\nPayment ID: ${response.razorpay_payment_id}`)
   }
 
   const removeItem = (id: number) => {
