@@ -15,20 +15,22 @@ export default defineSchema({
       city: v.string(),
       state: v.string(),
       pincode: v.string(),
-      paymentMethod: v.string()  
+      paymentMethod: v.string()
     }),
     items: v.array(v.object({
       id: v.number(),
       name: v.string(),
       price: v.number(),
       quantity: v.number(),
-      image_name_front: v.string()  
+      image_name_front: v.string()
     })),
     subtotal: v.number(),
     shipping: v.number(),
     taxes: v.number(),
     grandTotal: v.number(),
-    status: v.string()
+    status: v.union(v.literal("new"), v.literal("processing"), v.literal("delivered"), v.literal("cancelled")) // ✅ Fixed statuses
   })
   .index("by_paymentId", ["paymentId"])
+  .index("by_status", ["status"])
+  .index("by_created", ["_creationTime"])
 })
