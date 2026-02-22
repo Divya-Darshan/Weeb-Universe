@@ -21,6 +21,7 @@ export default function CartComponent() {
   const [open, setOpen] = useState(false)
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [tab, setTab] = useState<'cart' | 'checkout'>('cart')
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -35,22 +36,39 @@ export default function CartComponent() {
 
   const createOrder = useMutation(api.razor.orders.createOrder)
 
-  // Load cart from localStorage
+  // Load cart from localStorage + LISTEN FOR CHANGES
   const updateCartItems = useCallback(() => {
     if (typeof window !== 'undefined') {
       const savedCart = localStorage.getItem('weeb_cart')
       if (savedCart) {
-        const parsedItems = JSON.parse(savedCart)
+        const parsedItems = JSON.parse(savedCart) as CartItem[]
         setCartItems(parsedItems)
+        console.log('✅ Cart loaded:', parsedItems.length, 'items')
+      } else {
+        setCartItems([])
       }
     }
   }, [])
 
+  // Listen for ALL cart changes (local + global events)
   useEffect(() => {
-    updateCartItems()
+    updateCartItems() // Load initial cart
+
     if (typeof window !== 'undefined') {
+      // Listen for localStorage changes (different tabs)
       window.addEventListener('storage', updateCartItems)
-      return () => window.removeEventListener('storage', updateCartItems)
+      
+      // Listen for add-to-cart events from product pages
+      window.addEventListener('cartUpdated', updateCartItems)
+      
+      // Poll every 500ms for real-time updates
+      const interval = setInterval(updateCartItems, 500)
+      
+      return () => {
+        window.removeEventListener('storage', updateCartItems)
+        window.removeEventListener('cartUpdated', updateCartItems)
+        clearInterval(interval)
+      }
     }
   }, [updateCartItems])
 
@@ -61,9 +79,10 @@ export default function CartComponent() {
   const grandTotal = subtotal + shipping + taxes
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
-  // ✅ FIXED Payment Success Handler - NO ERRORS
+  // Payment Success Handler
   const handlePaymentSuccess = async (response: any) => {
     console.log('✅ Razorpay Response:', response)
+    setIsLoading(true)
     
     try {
       const orderId = response.razorpay_order_id || `order_${Date.now()}`
@@ -90,8 +109,9 @@ export default function CartComponent() {
       
     } catch (error) {
       console.error('❌ Order save failed:', error)
-      // Payment succeeded, just show success page
       router.push(`/success?payment=${response.razorpay_payment_id}`)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -129,6 +149,7 @@ export default function CartComponent() {
   const isFormValid = formData.email && 
                      formData.firstName && 
                      formData.phone && 
+                     formData.address && 
                      formData.pincode && 
                      formData.state
 
@@ -287,35 +308,28 @@ export default function CartComponent() {
                                 placeholder="Email address *"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className="w-full h-12 mb-4 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white"
+                                className="h-12 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white w-full mb-4"
                               />
                               <input 
                                 name="phone"
                                 type="tel"
-                                placeholder="Phone *"
+                                placeholder="Phone number *"
                                 value={formData.phone}
                                 onChange={handleInputChange}
-                                className="w-full h-12 mb-4 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white"
+                                className="h-12 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white w-full mb-4"
                               />
                               <input 
                                 name="address"
-                                placeholder="Street address"
+                                placeholder="Address *"
                                 value={formData.address}
                                 onChange={handleInputChange}
-                                className="w-full h-12 mb-4 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white"
+                                className="h-12 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white w-full mb-4 col-span-2"
                               />
                               <div className="grid grid-cols-2 gap-4">
                                 <input 
                                   name="city"
                                   placeholder="City"
                                   value={formData.city}
-                                  onChange={handleInputChange}
-                                  className="h-12 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white"
-                                />
-                                <input 
-                                  name="state"
-                                  placeholder="State *"
-                                  value={formData.state}
                                   onChange={handleInputChange}
                                   className="h-12 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white"
                                 />
@@ -327,45 +341,63 @@ export default function CartComponent() {
                                   className="h-12 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white"
                                 />
                               </div>
+                              <div className="flex gap-4 mt-4">
+                                <input 
+                                  name="state"
+                                  placeholder="State *"
+                                  value={formData.state}
+                                  onChange={handleInputChange}
+                                  className="h-12 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white flex-1"
+                                />
+                                <select 
+                                  name="paymentMethod"
+                                  value={formData.paymentMethod}
+                                  onChange={handleInputChange}
+                                  className="h-12 px-4 border border-gray-200 rounded-xl bg-gray-50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white"
+                                >
+                                  <option value="card">Credit/Debit Card</option>
+                                  <option value="upi">UPI</option>
+                                  <option value="netbanking">Net Banking</option>
+                                </select>
+                              </div>
                             </div>
 
                             {/* Order Summary */}
-                            <div className="bg-gray-50 rounded-2xl p-6 border">
-                              <h4 className="text-xl font-bold mb-6 text-gray-900">Order Summary</h4>
-                              <div className="space-y-3 mb-6">
-                                <div className="flex justify-between py-2">
+                            <div className="bg-gray-50 rounded-2xl p-6">
+                              <h3 className="text-lg font-bold mb-4 text-gray-900">Order Summary</h3>
+                              <div className="space-y-2 mb-6">
+                                <div className="flex justify-between">
                                   <span>Subtotal ({cartCount} items)</span>
                                   <span>₹{subtotal.toLocaleString('en-IN')}</span>
                                 </div>
-                                <div className="flex justify-between py-2">
+                                <div className="flex justify-between">
                                   <span>Shipping</span>
                                   <span>₹{shipping.toLocaleString('en-IN')}</span>
                                 </div>
-                                <div className="flex justify-between py-2">
-                                  <span>GST + Taxes</span>
+                                <div className="flex justify-between">
+                                  <span>Tax (18%)</span>
                                   <span>₹{taxes.toLocaleString('en-IN')}</span>
                                 </div>
-                                <div className="h-px bg-gray-300 my-4" />
-                                <div className="flex justify-between items-center p-4 bg-indigo-50 rounded-xl border">
-                                  <span className="text-xl font-bold">Grand Total</span>
-                                  <span className="text-2xl font-bold text-indigo-600">₹{grandTotal.toLocaleString('en-IN')}</span>
+                              </div>
+                              <div className="border-t pt-4">
+                                <div className="flex justify-between text-xl font-bold text-gray-900">
+                                  <span>Total</span>
+                                  <span>₹{grandTotal.toLocaleString('en-IN')}</span>
                                 </div>
                               </div>
                             </div>
 
-                            {/* Razorpay Payment */}
-                            {isFormValid ? (
-                              <Razorpay
-                                amount={grandTotal * 100} // Convert to paise
-                                customer={formData}
-                                cartItems={cartItems}
-                                onSuccess={handlePaymentSuccess}
-                              />
-                            ) : (
-                              <div className="text-center py-12 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-4">Complete your details</h3>
-                                <p className="text-gray-500 mb-6">Fill required fields: Email, Name, Phone, Pincode, State</p>
-                                <div className="text-2xl font-bold text-gray-900">₹{grandTotal.toLocaleString('en-IN')}</div>
+                            {/* Payment Button */}
+                            <Razorpay
+                              amount={grandTotal * 100} // Amount in paise
+                              customer={formData}
+                              cartItems={cartItems}
+                              onSuccess={handlePaymentSuccess}
+                            />
+
+                            {!isFormValid && (
+                              <div className="text-center text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl p-4">
+                                Please fill all required fields marked with *
                               </div>
                             )}
                           </div>
