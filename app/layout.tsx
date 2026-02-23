@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Weeb Store - Anime Merch',
+  title: 'Weeb Store',
   description: 'Premium anime merchandise',
 }
 
