@@ -9,6 +9,7 @@
  */
 
 import type * as messages from "../messages.js";
+import type * as orders from "../orders.js";
 import type * as razor_orders from "../razor/orders.js";
 
 import type {
@@ -19,6 +20,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   messages: typeof messages;
+  orders: typeof orders;
   "razor/orders": typeof razor_orders;
 }>;
 

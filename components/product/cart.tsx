@@ -1,4 +1,3 @@
-// components/product/cart.tsx
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
@@ -14,6 +13,15 @@ interface CartItem {
   price: number
   image_name_front: string
   quantity: number
+}
+
+declare global {
+  interface Window {
+    cartContext: {
+      cartItems: CartItem[]
+      addToCart: (product: any, quantity: number) => void
+    }
+  }
 }
 
 // FIXED: Global cart context - LIVE SYNC
@@ -64,7 +72,7 @@ export default function CartComponent() {
     pincode: '',
     state: '',
     phone: '',
-    paymentMethod: 'card'
+    paymentMethod: 'razorpay' // default/payment provider
   })
 
   const updateCartItems = useCallback(() => {
@@ -95,18 +103,26 @@ export default function CartComponent() {
   const grandTotal = subtotal + shipping + taxes
   const createOrder = useMutation(api.razor.orders.createOrder)
 
-
-
-  //  NEW: Razorpay Success Handler
+  // ✅ FIXED: Razorpay Success Handler - Exact Convex match
   const handlePaymentSuccess = async (response: any) => {
     console.log('✅ Payment Success:', response)
     
     try {
-      // 🔥 SAVE TO CONVEX
+      // 🔥 SAVE TO CONVEX - EXACT schema match
       await createOrder({
         paymentId: response.razorpay_payment_id,
-        orderId: response.razorpay_order_id,
-        customer: formData,
+        orderId: response.razorpay_order_id || response.razorpay_payment_id, // Use payment_id if no order_id
+        customer: {
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName || '',
+          address: formData.address || '',
+          city: formData.city || '',
+          pincode: formData.pincode || '',
+          state: formData.state,
+          phone: formData.phone,
+          paymentMethod: formData.paymentMethod || 'razorpay'
+        },
         items: cartItems,
         subtotal,
         shipping,
@@ -116,12 +132,14 @@ export default function CartComponent() {
       
       console.log('✅ Saved to Convex!')
     } catch (error) {
-      console.error('Failed to save order:', error)
+      console.error('❌ Failed to save order:', error)
     }
     
     // Clear cart
     localStorage.removeItem('weeb_cart')
-    window.cartContext.cartItems = []
+    if ((window as any).cartContext) {
+      (window as any).cartContext.cartItems = []
+    }
     setCartItems([])
     setTab('cart')
     setOpen(false)
@@ -133,7 +151,9 @@ export default function CartComponent() {
     const newItems = cartItems.filter(item => item.id !== id)
     setCartItems(newItems)
     localStorage.setItem('weeb_cart', JSON.stringify(newItems))
-    window.cartContext.cartItems = newItems
+    if ((window as any).cartContext) {
+      (window as any).cartContext.cartItems = newItems
+    }
   }
 
   const updateQuantity = (id: number, newQuantity: number) => {
@@ -146,7 +166,9 @@ export default function CartComponent() {
     )
     setCartItems(newItems)
     localStorage.setItem('weeb_cart', JSON.stringify(newItems))
-    window.cartContext.cartItems = newItems
+    if ((window as any).cartContext) {
+      (window as any).cartContext.cartItems = newItems
+    }
   }
 
   const handleCheckout = () => {
@@ -162,7 +184,7 @@ export default function CartComponent() {
     })
   }
 
-  //  Form validation
+  // Form validation
   const isFormValid = formData.email && 
                      formData.firstName && 
                      formData.phone && 
@@ -277,7 +299,7 @@ export default function CartComponent() {
                       </div>
                     </div>
 
-                    {/*  PRODUCTION CHECKOUT SYSTEM */}
+                    {/* PRODUCTION CHECKOUT SYSTEM */}
                     {cartItems.length > 0 && (
                       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                         {tab === 'cart' ? (
@@ -298,7 +320,7 @@ export default function CartComponent() {
                             </div>
                           </>
                         ) : (
-                          //  CHECKOUT FORM + RAZORPAY
+                          // CHECKOUT FORM + RAZORPAY
                           <div className="space-y-6">
                             {/* Shipping Info */}
                             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
@@ -331,7 +353,7 @@ export default function CartComponent() {
                                 placeholder="Street address"
                                 value={formData.address}
                                 onChange={handleInputChange}
-                                className="w-full h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500 mb-4"
+                                className="w-full h-12 px-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500 mb-4"
                               />
                               <div className="grid grid-cols-2 gap-4">
                                 <input 
@@ -392,9 +414,7 @@ export default function CartComponent() {
                               </div>
                             </div>
 
-
-
-                            {/*  RAZORPAY PAYMENT - REPLACES SUMMARY + BUTTON */}
+                            {/* RAZORPAY PAYMENT - REPLACES SUMMARY + BUTTON */}
                             {isFormValid ? (
                               <Razorpay
                                 amount={grandTotal * 100}  // Paise!
@@ -428,3 +448,4 @@ export default function CartComponent() {
     </div>
   )
 }
+
