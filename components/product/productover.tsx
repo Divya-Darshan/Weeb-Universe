@@ -5,15 +5,6 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Image, ImageKitProvider } from '@imagekit/next'
 import Cart from '@/components/product/cart'
 
-// Global Cart Context Type
-declare global {
-  interface Window {
-    cartContext: {
-      cartItems: any[]
-      addToCart: (product: any, quantity: number) => void
-    }
-  }
-}
 
 interface Product {
   id: number
