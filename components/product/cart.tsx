@@ -390,7 +390,7 @@ export default function CartComponent() {
 
                             {/* Order Summary */}
                             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100 shadow-sm">
-                              <h4 className="text-xl font-bold mb-6 text-gray-900 flex items-center gap-2">
+                              <h4 className="text-xl font-bold mb-6 text-gray-900 flex items-center">
                                 Order Summary
                               </h4>
                               <div className="space-y-3 mb-6">
