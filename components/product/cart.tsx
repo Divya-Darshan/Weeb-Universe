@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { XMarkIcon, ShoppingBagIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, ShoppingBagIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { Image, ImageKitProvider } from '@imagekit/next'
 import Razorpay from '@/components/payment/razorpay'
 import { useMutation } from 'convex/react'
@@ -24,7 +24,6 @@ declare global {
   }
 }
 
-// FIXED: Global cart context - LIVE SYNC
 if (typeof window !== 'undefined') {
   if (!window.cartContext) {
     window.cartContext = {
@@ -52,7 +51,6 @@ if (typeof window !== 'undefined') {
         
         localStorage.setItem('weeb_cart', JSON.stringify(newItems))
         window.cartContext.cartItems = newItems
-        
         window.dispatchEvent(new CustomEvent('cartUpdated'))
       }
     }
@@ -72,26 +70,23 @@ export default function CartComponent() {
     pincode: '',
     state: '',
     phone: '',
-    paymentMethod: 'razorpay' // default/payment provider
+    paymentMethod: 'razorpay'
   })
 
   const updateCartItems = useCallback(() => {
     const savedCart = localStorage.getItem('weeb_cart')
     if (savedCart) {
-      const parsedItems = JSON.parse(savedCart)
-      setCartItems(parsedItems)
+      setCartItems(JSON.parse(savedCart))
     }
   }, [])
 
   useEffect(() => {
     updateCartItems()
     window.addEventListener('cartUpdated', updateCartItems)
-    const handleStorageChange = () => updateCartItems()
-    window.addEventListener('storage', handleStorageChange)
-    
+    window.addEventListener('storage', updateCartItems)
     return () => {
       window.removeEventListener('cartUpdated', updateCartItems)
-      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('storage', updateCartItems)
     }
   }, [updateCartItems])
 
@@ -103,15 +98,11 @@ export default function CartComponent() {
   const grandTotal = subtotal + shipping + taxes
   const createOrder = useMutation(api.razor.orders.createOrder)
 
-  // ✅ FIXED: Razorpay Success Handler - Exact Convex match
   const handlePaymentSuccess = async (response: any) => {
-    console.log('✅ Payment Success:', response)
-    
     try {
-      // 🔥 SAVE TO CONVEX - EXACT schema match
       await createOrder({
         paymentId: response.razorpay_payment_id,
-        orderId: response.razorpay_order_id || response.razorpay_payment_id, // Use payment_id if no order_id
+        orderId: response.razorpay_order_id || response.razorpay_payment_id,
         customer: {
           email: formData.email,
           firstName: formData.firstName,
@@ -121,7 +112,7 @@ export default function CartComponent() {
           pincode: formData.pincode || '',
           state: formData.state,
           phone: formData.phone,
-          paymentMethod: formData.paymentMethod || 'razorpay'
+          paymentMethod: 'razorpay'
         },
         items: cartItems,
         subtotal,
@@ -129,13 +120,10 @@ export default function CartComponent() {
         taxes,
         grandTotal
       })
-      
-      console.log('✅ Saved to Convex!')
     } catch (error) {
-      console.error('❌ Failed to save order:', error)
+      console.error('Failed to save order:', error)
     }
     
-    // Clear cart
     localStorage.removeItem('weeb_cart')
     if ((window as any).cartContext) {
       (window as any).cartContext.cartItems = []
@@ -143,7 +131,6 @@ export default function CartComponent() {
     setCartItems([])
     setTab('cart')
     setOpen(false)
-    
     alert(`✅ Order confirmed!\nPayment ID: ${response.razorpay_payment_id}`)
   }
 
@@ -171,31 +158,17 @@ export default function CartComponent() {
     }
   }
 
-  const handleCheckout = () => {
-    if (cartItems.length > 0) {
-      setTab('checkout')
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  // Form validation
-  const isFormValid = formData.email && 
-                     formData.firstName && 
-                     formData.phone && 
-                     formData.pincode && 
-                     formData.state
+  const isFormValid = formData.email && formData.firstName && formData.phone && formData.pincode && formData.state
 
   return (
     <div className="relative z-50">
       <button
         onClick={() => setOpen(true)}
-        className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 flex items-center gap-1 relative"
+        className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all flex items-center gap-1 relative"
         title="Shopping cart"
       >
         <ShoppingBagIcon className="size-6" />
@@ -204,242 +177,209 @@ export default function CartComponent() {
             {cartCount}
           </span>
         )}
-        <span className="sr-only">Open cart ({cartCount} items)</span>
       </button>
       
       <ImageKitProvider urlEndpoint="https://ik.imagekit.io/weeb/">
         <Dialog open={open} onClose={setOpen} className="relative z-50">
-          <DialogBackdrop
-            transition
-            className="fixed inset-0 bg-black/50 transition-opacity duration-500 ease-in-out data-closed:opacity-0"
-          />
-          <div className="fixed inset-0 overflow-hidden z-50">
-            <div className="absolute inset-0 overflow-hidden z-50">
-              <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16 z-50">
-                <DialogPanel
-                  transition
-                  className="pointer-events-auto w-screen max-w-md h-screen transform transition-all duration-500 ease-in-out data-closed:translate-x-full sm:duration-700 shadow-2xl z-50"
-                >
-                  <div className="flex h-full flex-col bg-white shadow-2xl z-50">
-                    {/* Header - Fixed at top */}
-                    <div className="flex-shrink-0 flex items-start justify-between px-4 py-6 sm:px-6 border-b border-gray-200">
-                      <DialogTitle className="text-lg font-medium text-gray-900">
-                        {tab === 'cart' ? `Shopping cart (${cartCount} items)` : 'Checkout'}
-                      </DialogTitle>
-                      <button
-                        type="button"
-                        onClick={() => tab === 'checkout' ? setTab('cart') : setOpen(false)}
-                        className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                      >
-                        <span className="sr-only">{tab === 'checkout' ? 'Back to cart' : 'Close panel'}</span>
-                        <XMarkIcon className="size-6" />
-                      </button>
-                    </div>
+          <DialogBackdrop className="fixed inset-0 bg-black/50 z-40" />
+          <div className="fixed inset-0 z-50 overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-4 sm:pl-10 z-50">
+                <DialogPanel className="pointer-events-auto w-screen sm:w-96 h-screen bg-white flex flex-col shadow-xl">
+                  {/* Header */}
+                  <div className="flex-shrink-0 flex items-center justify-between px-4 py-4 sm:px-5 border-b border-gray-200">
+                    <DialogTitle className="text-base sm:text-lg font-bold text-gray-900">
+                      {tab === 'cart' ? `Cart (${cartCount})` : 'Checkout'}
+                    </DialogTitle>
+                    <button
+                      onClick={() => tab === 'checkout' ? setTab('cart') : setOpen(false)}
+                      className="p-2 hover:bg-gray-100 rounded-lg text-gray-400"
+                    >
+                      <XMarkIcon className="size-5" />
+                    </button>
+                  </div>
 
-                    {/* Content - Scrollable */}
-                    <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 pb-10">
-                      <div className="mt-0">
-                        {cartItems.length === 0 ? (
-                          <div className="text-center py-12">
-                            <ShoppingBagIcon className="mx-auto h-12 w-12 text-gray-400" />
-                            <h3 className="mt-2 text-sm font-medium text-gray-900">Your cart is empty</h3>
-                            <p className="mt-1 text-sm text-gray-500">Add items to get started.</p>
-                          </div>
-                        ) : (
-                          tab === 'cart' && (
-                            <div className="flow-root">
-                              <ul role="list" className="-my-6 divide-y divide-gray-200">
-                                {cartItems.map((product) => (
-                                  <li key={product.id} className="flex py-6">
-                                    <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                      <Image 
-                                        src={product.image_name_front}
-                                        width={96}
-                                        height={96}
-                                        alt={product.name}
-                                        className="size-full object-cover object-center"
-                                      />
-                                    </div>
-                                    <div className="ml-4 flex flex-1 flex-col">
-                                      <div>
-                                        <div className="flex justify-between text-base font-medium text-gray-900">
-                                          <h3>{product.name}</h3>
-                                          <p className="ml-4">₹{product.price}</p>
-                                        </div>
-                                      </div>
-                                      <div className="flex flex-1 items-end justify-between text-sm">
-                                        <div className="flex items-center space-x-2">
-                                          <button
-                                            onClick={() => updateQuantity(product.id, product.quantity - 1)}
-                                            className="p-1 text-gray-500 hover:text-gray-700"
-                                          >
-                                            <MinusIcon className="size-5" />
-                                          </button>
-                                          <span className="w-8 text-center font-semibold">{product.quantity}</span>
-                                          <button
-                                            onClick={() => updateQuantity(product.id, product.quantity + 1)}
-                                            className="p-1 text-gray-500 hover:text-gray-700"
-                                          >
-                                            <PlusIcon className="size-5" />
-                                          </button>
-                                        </div>
-                                        <button
-                                          onClick={() => removeItem(product.id)}
-                                          className="font-medium text-red-600 hover:text-red-500 flex items-center gap-1"
-                                        >
-                                          <TrashIcon className="size-4" />
-                                          Remove
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )
-                        )}
+                  {/* Content */}
+                  <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-5">
+                    {cartItems.length === 0 ? (
+                      <div className="text-center py-8">
+                        <ShoppingBagIcon className="mx-auto h-10 w-10 text-gray-300" />
+                        <h3 className="mt-2 text-sm font-medium text-gray-900">Empty cart</h3>
+                        <p className="mt-1 text-xs text-gray-500">Add items to continue</p>
                       </div>
+                    ) : tab === 'cart' ? (
+                      <div className="space-y-4">
+                        <ul role="list" className="divide-y divide-gray-100">
+                          {cartItems.map((product) => (
+                            <li key={product.id} className="py-3 flex gap-3">
+                              <div className="h-16 w-16 flex-shrink-0 rounded-md border border-gray-200 overflow-hidden">
+                                <Image 
+                                  src={product.image_name_front}
+                                  width={64}
+                                  height={64}
+                                  alt={product.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <div className="flex-1 flex flex-col">
+                                <h4 className="text-xs font-medium text-gray-900 line-clamp-2">{product.name}</h4>
+                                <p className="text-xs text-gray-500 mt-1">₹{product.price}</p>
+                                <div className="flex items-center justify-between mt-auto">
+                                  <div className="flex items-center gap-1">
+                                    <button
+                                      onClick={() => updateQuantity(product.id, product.quantity - 1)}
+                                      className="p-1 hover:bg-gray-100 rounded text-gray-500 text-xs"
+                                    >
+                                      <MinusIcon className="size-3" />
+                                    </button>
+                                    <span className="w-5 text-center text-xs font-semibold">{product.quantity}</span>
+                                    <button
+                                      onClick={() => updateQuantity(product.id, product.quantity + 1)}
+                                      className="p-1 hover:bg-gray-100 rounded text-gray-500 text-xs"
+                                    >
+                                      <PlusIcon className="size-3" />
+                                    </button>
+                                  </div>
+                                  <button
+                                    onClick={() => removeItem(product.id)}
+                                    className="text-xs text-red-600 hover:text-red-700 font-medium"
+                                  >
+                                    Remove
+                                  </button>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                        
+                        <div className="border-t border-gray-200 pt-3 mt-2">
+                          <div className="flex justify-between text-xs font-medium text-gray-900 mb-2">
+                            <span>Subtotal</span>
+                            <span>₹{total.toLocaleString('en-IN')}</span>
+                          </div>
+                          <p className="text-xs text-gray-500 mb-3">Taxes & shipping at checkout</p>
+                          <button 
+                            onClick={() => setTab('checkout')}
+                            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-3 rounded-lg font-bold text-xs shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all active:scale-95"
+                          >
+                            Checkout
+                          </button>
+                          <button 
+                            onClick={() => setOpen(false)} 
+                            className="w-full mt-2 text-indigo-600 hover:text-indigo-700 text-xs font-medium py-2"
+                          >
+                            Continue Shopping
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {/* Shipping */}
+                        <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                          <h3 className="text-xs font-bold mb-2 text-gray-900">Shipping</h3>
+                          <div className="grid grid-cols-2 gap-2 mb-2">
+                            <input 
+                              name="firstName"
+                              placeholder="First name *"
+                              value={formData.firstName}
+                              onChange={handleInputChange}
+                              className="h-8 text-black px-2 py-1 text-xs border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                            />
+                            <input 
+                              name="lastName"
+                              placeholder="Last name"
+                              value={formData.lastName}
+                              onChange={handleInputChange}
+                              className="h-8 text-black px-2 py-1 text-xs border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                            />
+                          </div>
+                          <input 
+                            name="email"
+                            placeholder="Email *"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="w-full h-8 text-black mb-2 px-2 py-1 text-xs border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                          />
+                          <input 
+                            name="address"
+                            placeholder="Address"
+                            value={formData.address}
+                            onChange={handleInputChange}
+                            className="w-full h-8 text-black px-2 py-1 text-xs border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 mb-2"
+                          />
+                          <div className="grid grid-cols-2 gap-2 mb-2">
+                            <input 
+                              name="state"
+                              placeholder="State *"
+                              value={formData.state}
+                              onChange={handleInputChange}
+                              className="h-8 text-black px-2 py-1 text-xs border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                            />
+                            <input 
+                              name="city"
+                              placeholder="City"
+                              value={formData.city}
+                              onChange={handleInputChange}
+                              className="h-8 text-black px-2 py-1 text-xs border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <input 
+                              name="pincode"
+                              placeholder="Pincode *"
+                              value={formData.pincode}
+                              onChange={handleInputChange}
+                              className="h-8 text-black px-2 py-1 text-xs border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                            />
+                            <input 
+                              name="phone"
+                              placeholder="Phone *"
+                              value={formData.phone}
+                              type="tel"
+                              onChange={handleInputChange}
+                              className="h-8 text-black px-2 py-1 text-xs  border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                            />
+                          </div>
+                        </div>
 
-                      {/* PRODUCTION CHECKOUT SYSTEM */}
-                      {cartItems.length > 0 && (
-                        <div className="border-t border-gray-200 mt-8 pt-6">
-                        {tab === 'cart' ? (
-                          <>
-                            <div className="flex justify-between text-base font-medium text-gray-900 mb-2">
-                              <p>Subtotal</p>
-                              <p>₹{total.toLocaleString('en-IN')}</p>
+                        {/* Summary */}
+                        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-3 border border-indigo-100">
+                          <h4 className="text-xs font-bold mb-2 text-black">Order Summary</h4>
+                          <div className="space-y-1 text-xs">
+                            <div className="flex justify-between">
+                              <span className="text-black">Subtotal</span>
+                              <span className="font-semibold text-black ">₹{subtotal.toLocaleString()}</span>
                             </div>
-                            <div className="text-sm text-gray-500 mb-6">Shipping and taxes calculated at checkout.</div>
-                            <button 
-                              onClick={handleCheckout}
-                              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 px-6 rounded-xl font-bold text-lg shadow-xl hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-[1.02] mb-4"
-                            >
-                              Proceed to Checkout
-                            </button>
-                            <div className="flex justify-center text-center text-sm text-gray-500">
-                              <p>or <button onClick={() => setOpen(false)} className="font-medium text-indigo-600 hover:text-indigo-500 ml-1">Continue Shopping →</button></p>
+                            <div className="flex justify-between">
+                              <span className="text-black">Shipping</span>
+                              <span className="font-semibold text-black ">₹{shipping.toLocaleString()}</span>
                             </div>
-                          </>
+                            <div className="flex justify-between">
+                              <span className="text-black">Tax</span>
+                              <span className="font-semibold text-black ">₹{taxes.toLocaleString()}</span>
+                            </div>
+                            <div className="h-px bg-black my-1" />
+                            <div className="flex justify-between">
+                              <span className="font-bold text-gray-900">Total</span>
+                              <span className="font-black text-indigo-600">₹{grandTotal.toLocaleString()}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {isFormValid ? (
+                          <Razorpay
+                            amount={grandTotal * 100}
+                            customer={formData}
+                            cartItems={cartItems}
+                            onSuccess={handlePaymentSuccess}
+                          />
                         ) : (
-                          // CHECKOUT FORM + RAZORPAY
-                          <div className="space-y-6">
-                            {/* Shipping Info */}
-                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                              <h3 className="text-lg font-bold mb-6 text-gray-900">Shipping Address & Information</h3>
-                              <div className="grid grid-cols-2 gap-4 mb-4">
-                                <input 
-                                  name="firstName"
-                                  placeholder="First name *"
-                                  value={formData.firstName}
-                                  onChange={handleInputChange}
-                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-                                />
-                                <input 
-                                  name="lastName"
-                                  placeholder="Last name"
-                                  value={formData.lastName}
-                                  onChange={handleInputChange}
-                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-                                />
-                              </div>
-                              <input 
-                                name="email"
-                                placeholder="Email address *"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                className="w-full h-12 mb-4 px-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-                              />
-                              <input 
-                                name="address"
-                                placeholder="Street address"
-                                value={formData.address}
-                                onChange={handleInputChange}
-                                className="w-full h-12 px-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500 mb-4"
-                              />
-                              <div className="grid grid-cols-2 gap-4">
-                                <input 
-                                  name="state"
-                                  placeholder="State *"
-                                  value={formData.state}
-                                  onChange={handleInputChange}
-                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-                                />
-                                <input 
-                                  name="city"
-                                  placeholder="City"
-                                  value={formData.city}
-                                  onChange={handleInputChange}
-                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-                                />
-                                <input 
-                                  name="pincode"
-                                  placeholder="Pincode *"
-                                  value={formData.pincode}
-                                  onChange={handleInputChange}
-                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-                                />
-                                <input 
-                                  name="phone"
-                                  placeholder="Phone *"
-                                  value={formData.phone}
-                                  type="tel"
-                                  onChange={handleInputChange}
-                                  className="h-12 px-4 py-3 border-2 text-gray-900 border-gray-200 rounded-xl bg-gray-50/50 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:bg-white transition-all duration-200 text-sm font-medium placeholder-gray-500"
-                                />
-                              </div>
-                            </div>
-
-                            {/* Order Summary */}
-                            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100 shadow-sm">
-                              <h4 className="text-xl font-bold mb-6 text-gray-900 flex items-center gap-2">
-                                Order Summary
-                              </h4>
-                              <div className="space-y-3 mb-6">
-                                <div className="flex justify-between py-2 px-4 bg-white/70 rounded-xl border">
-                                  <span className="text-gray-900 font-medium">Subtotal ({cartCount} items)</span>
-                                  <span className="font-bold text-gray-900">₹{subtotal.toLocaleString('en-IN')}</span>
-                                </div>
-                                <div className="flex justify-between py-2 px-4 bg-white/70 rounded-xl border">
-                                  <span className="text-gray-900 font-medium">🛒 Shipping</span>
-                                  <span className="font-bold text-gray-900">₹{shipping.toLocaleString('en-IN')}</span>
-                                </div>
-                                <div className="flex justify-between py-2 px-4 bg-white/70 rounded-xl border">
-                                  <span className="text-gray-900 font-medium">💰 GST+ Taxes</span>
-                                  <span className="font-bold text-gray-900">₹{taxes.toLocaleString('en-IN')}</span>
-                                </div>
-                                <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-4" />
-                                <div className="flex justify-between items-center p-4 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl border-2 border-indigo-200 shadow-lg">
-                                  <span className="text-xl font-black text-gray-900">Grand Total</span>
-                                  <span className="text-2xl font-black text-gray-900">₹{grandTotal.toLocaleString('en-IN')}</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* RAZORPAY PAYMENT - REPLACES SUMMARY + BUTTON */}
-                            {isFormValid ? (
-                              <Razorpay
-                                amount={grandTotal * 100}  // Paise!
-                                customer={formData}
-                                cartItems={cartItems}
-                                onSuccess={handlePaymentSuccess}
-                              />
-                            ) : (
-                              <div className="rounded-2xl p-6 shadow-lg border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100">
-                                <h4 className="text-xl font-bold mb-6 text-gray-900 text-center">Complete form to pay</h4>
-                                <div className="text-center text-sm text-gray-500 mb-6">
-                                  Please fill: Email, Name, Phone, Pincode, State
-                                </div>
-                                <div className="flex justify-between text-sm mb-4">
-                                  <span>Est. Total:</span>
-                                  <span className="font-bold text-lg">₹{grandTotal.toLocaleString('en-IN')}</span>
-                                </div>
-                              </div>
-                            )}
+                          <div className="rounded-lg p-3 border border-gray-300 bg-gray-50 text-center">
+                            <p className="text-xs text-gray-600">Complete form to pay</p>
                           </div>
                         )}
                       </div>
                     )}
-                    </div>
                   </div>
                 </DialogPanel>
               </div>
@@ -450,4 +390,3 @@ export default function CartComponent() {
     </div>
   )
 }
-
