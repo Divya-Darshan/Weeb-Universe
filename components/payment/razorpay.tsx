@@ -46,7 +46,7 @@ export default function Razorpay({
   }
 
   return (
-    <div className="p-6 bg-white rounded-2xl shadow-lg">
+    <div >
       <div className="text-center mb-6">
         <div className="text-2xl font-bold text-gray-900 mb-2">
           ₹{(amount/100).toLocaleString('en-IN')}
