@@ -8,13 +8,14 @@ import { api } from '../../convex/_generated/api'
 export default function Home() {
   return (
     <>
-      <Authenticated>
-        <UserButton />
-   
-      </Authenticated>
-      <Unauthenticated>
-        <SignInButton />
-      </Unauthenticated>
+      <div className="z-index:100">
+        <Authenticated>
+          <UserButton />
+        </Authenticated>
+        <Unauthenticated>
+          <SignInButton />
+        </Unauthenticated>
+      </div>
     </>
   )
 }
