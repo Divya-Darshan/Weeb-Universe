@@ -1,6 +1,8 @@
-// @/components/payment/razorpay.tsx
+// @/components/payment/razorpay.tsx - ONLY auth check added
 'use client'
 import { useRazorpay } from 'react-razorpay'
+import { Authenticated, Unauthenticated } from 'convex/react'
+import { SignInButton } from '@clerk/nextjs'
 
 export default function Razorpay({ 
   amount, 
@@ -18,11 +20,11 @@ export default function Razorpay({
   const handlePayment = () => {
     const options: any = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-      amount: amount,  // paise
+      amount: amount,
       currency: 'INR',
       name: 'Weeb Store',
       description: `${cartItems.length} items`,
-      order_id: '', // TODO: Generate order_id on server for security
+      order_id: '',
       prefill: {
         name: `${customer.firstName} ${customer.lastName}`,
         email: customer.email,
@@ -52,14 +54,23 @@ export default function Razorpay({
         <div className="text-sm text-gray-500">Final Amount</div>
       </div>
       
-      {/* ONE BUTTON - Does EVERYTHING */}
-      <button
-        onClick={handlePayment}
-        disabled={isLoading}
-        className="w-full h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50"
-      >
-        {isLoading ? 'Loading...' : 'Pay Now'}
-      </button>
+      <Authenticated>
+        <button
+          onClick={handlePayment}
+          disabled={isLoading}
+          className="w-full h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50"
+        >
+          {isLoading ? 'Loading...' : 'Pay Now'}
+        </button>
+      </Authenticated>
+      
+      <Unauthenticated>
+        <SignInButton mode="modal">
+          <button className="w-full h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all hover:scale-[1.02]">
+            Pay Now
+          </button>
+        </SignInButton>
+      </Unauthenticated>
     </div>
   )
 }
