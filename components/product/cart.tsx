@@ -220,23 +220,25 @@ export default function CartComponent() {
                   transition
                   className="pointer-events-auto w-screen max-w-md h-screen transform transition-all duration-500 ease-in-out data-closed:translate-x-full sm:duration-700 shadow-2xl z-50"
                 >
-                  <div className="flex h-full flex-col overflow-y-auto bg-white shadow-2xl z-50">
-                    <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-                      <div className="flex items-start justify-between">
-                        <DialogTitle className="text-lg font-medium text-gray-900">
-                          {tab === 'cart' ? `Shopping cart (${cartCount} items)` : 'Checkout'}
-                        </DialogTitle>
-                        <button
-                          type="button"
-                          onClick={() => tab === 'checkout' ? setTab('cart') : setOpen(false)}
-                          className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                        >
-                          <span className="sr-only">{tab === 'checkout' ? 'Back to cart' : 'Close panel'}</span>
-                          <XMarkIcon className="size-6" />
-                        </button>
-                      </div>
+                  <div className="flex h-full flex-col bg-white shadow-2xl z-50">
+                    {/* Header - Fixed at top */}
+                    <div className="flex-shrink-0 flex items-start justify-between px-4 py-6 sm:px-6 border-b border-gray-200">
+                      <DialogTitle className="text-lg font-medium text-gray-900">
+                        {tab === 'cart' ? `Shopping cart (${cartCount} items)` : 'Checkout'}
+                      </DialogTitle>
+                      <button
+                        type="button"
+                        onClick={() => tab === 'checkout' ? setTab('cart') : setOpen(false)}
+                        className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
+                      >
+                        <span className="sr-only">{tab === 'checkout' ? 'Back to cart' : 'Close panel'}</span>
+                        <XMarkIcon className="size-6" />
+                      </button>
+                    </div>
 
-                      <div className="mt-8">
+                    {/* Content - Scrollable */}
+                    <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 pb-10">
+                      <div className="mt-0">
                         {cartItems.length === 0 ? (
                           <div className="text-center py-12">
                             <ShoppingBagIcon className="mx-auto h-12 w-12 text-gray-400" />
@@ -297,11 +299,10 @@ export default function CartComponent() {
                           )
                         )}
                       </div>
-                    </div>
 
-                    {/* PRODUCTION CHECKOUT SYSTEM */}
-                    {cartItems.length > 0 && (
-                      <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+                      {/* PRODUCTION CHECKOUT SYSTEM */}
+                      {cartItems.length > 0 && (
+                        <div className="border-t border-gray-200 mt-8 pt-6">
                         {tab === 'cart' ? (
                           <>
                             <div className="flex justify-between text-base font-medium text-gray-900 mb-2">
@@ -390,7 +391,7 @@ export default function CartComponent() {
 
                             {/* Order Summary */}
                             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100 shadow-sm">
-                              <h4 className="text-xl font-bold mb-6 text-gray-900 flex items-center">
+                              <h4 className="text-xl font-bold mb-6 text-gray-900 flex items-center gap-2">
                                 Order Summary
                               </h4>
                               <div className="space-y-3 mb-6">
@@ -438,6 +439,7 @@ export default function CartComponent() {
                         )}
                       </div>
                     )}
+                    </div>
                   </div>
                 </DialogPanel>
               </div>
