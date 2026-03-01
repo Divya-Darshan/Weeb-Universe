@@ -46,7 +46,7 @@ export default function Razorpay({
   }
 
   return (
-    <div >
+    <div className="w-full">
       <div className="text-center mb-6">
         <div className="text-2xl font-bold text-gray-900 mb-2">
           ₹{(amount/100).toLocaleString('en-IN')}
@@ -58,7 +58,7 @@ export default function Razorpay({
         <button
           onClick={handlePayment}
           disabled={isLoading}
-          className="w-full h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50"
+          className="w-full h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50 active:scale-95 touch-none"
         >
           {isLoading ? 'Loading...' : 'Pay Now'}
         </button>
@@ -66,7 +66,7 @@ export default function Razorpay({
       
       <Unauthenticated>
         <SignInButton mode="modal">
-          <button className="w-full h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all hover:scale-[1.02]">
+          <button className="w-full h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95 touch-none">
             Pay Now
           </button>
         </SignInButton>
