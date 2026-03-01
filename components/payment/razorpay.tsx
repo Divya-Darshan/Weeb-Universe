@@ -46,27 +46,27 @@ export default function Razorpay({
   }
 
   return (
-    <div className="w-full">
-      <div className="text-center mb-6">
-        <div className="text-2xl font-bold text-gray-900 mb-2">
+    <div className="w-full space-y-3">
+      <div className="text-center">
+        <div className="text-lg sm:text-xl font-black text-gray-900 mb-1">
           ₹{(amount/100).toLocaleString('en-IN')}
         </div>
-        <div className="text-sm text-gray-500">Final Amount</div>
+        <div className="text-xs text-gray-500">Final Amount to Pay</div>
       </div>
       
       <Authenticated>
         <button
           onClick={handlePayment}
           disabled={isLoading}
-          className="w-full h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50 active:scale-95 touch-none"
+          className="w-full h-11 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-bold text-sm hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 touch-none"
         >
-          {isLoading ? 'Loading...' : 'Pay Now'}
+          {isLoading ? 'Processing...' : 'Pay Now'}
         </button>
       </Authenticated>
       
       <Unauthenticated>
         <SignInButton mode="modal">
-          <button className="w-full h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95 touch-none">
+          <button className="w-full h-11 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-bold text-sm hover:shadow-lg transition-all active:scale-95 touch-none">
             Pay Now
           </button>
         </SignInButton>
