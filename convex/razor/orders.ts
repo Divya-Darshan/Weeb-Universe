@@ -31,6 +31,7 @@ export const createOrder = mutation({
   },
   handler: async (ctx, args) => {
     // Similar mapping to main createOrder above
+    const now = Date.now()
     return await ctx.db.insert("orders", {
       razorpayOrderId: args.orderId || "",
       razorpayPaymentId: args.paymentId,
@@ -43,8 +44,9 @@ export const createOrder = mutation({
       customerPhone: args.customer.phone,
       products: args.items,
       totalAmount: args.grandTotal,
-      orderStatus: "confirmed",
-      createdAt: Date.now()
+      orderStatus: "new_order" as const,
+      createdAt: now,
+      updatedAt: now
     })
   }
 })

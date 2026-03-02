@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server"
 import { v } from "convex/values"
+
 // Match your cart structure exactly
 export const createOrder = mutation({
   args: {
@@ -29,6 +30,7 @@ export const createOrder = mutation({
   },
   handler: async (ctx, args) => {
     // Convert incoming arguments to the schema expected by the orders table.
+    const now = Date.now();
     const order = {
       // Payment identifiers from Razorpay
       razorpayOrderId: args.orderId,
@@ -49,9 +51,67 @@ export const createOrder = mutation({
       
       // totals
       totalAmount: args.grandTotal,
-      orderStatus: "confirmed",
-      createdAt: Date.now()
+      orderStatus: "new_order" as const,
+      createdAt: now,
+      updatedAt: now
     }
     return await ctx.db.insert("orders", order)
   }
 })
+
+// Query to fetch all orders
+export const getAllOrders = query({
+  args: {},
+  handler: async (ctx) => {
+    const orders = await ctx.db
+      .query("orders")
+      .order("desc")
+      .collect()
+    return orders
+  }
+})
+
+// Query to fetch orders by status
+export const getOrdersByStatus = query({
+  args: {
+    status: v.union(
+      v.literal("new_order"),
+      v.literal("pending"),
+      v.literal("delivered")
+    )
+  },
+  handler: async (ctx, args) => {
+    const orders = await ctx.db
+      .query("orders")
+      .filter((q) => q.eq(q.field("orderStatus"), args.status))
+      .order("desc")
+      .collect()
+    return orders
+  }
+})
+
+// Mutation to update order status
+export const updateOrderStatus = mutation({
+  args: {
+    orderId: v.id("orders"),
+    newStatus: v.union(
+      v.literal("new_order"),
+      v.literal("pending"),
+      v.literal("delivered")
+    )
+  },
+  handler: async (ctx, args) => {
+    const order = await ctx.db.get(args.orderId)
+    if (!order) {
+      throw new Error("Order not found")
+    }
+    
+    await ctx.db.patch(args.orderId, {
+      orderStatus: args.newStatus,
+      updatedAt: Date.now()
+    })
+    
+    return await ctx.db.get(args.orderId)
+  }
+})
+
