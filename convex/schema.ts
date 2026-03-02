@@ -34,10 +34,15 @@ export default defineSchema({
     
     // Order Details
     totalAmount: v.number(),          // ₹100, ₹200
-    orderStatus: v.string(),          // "pending", "confirmed", "shipped"
+    orderStatus: v.union(
+      v.literal("new_order"),
+      v.literal("pending"),
+      v.literal("delivered")
+    ),                                // Status workflow
     createdAt: v.number(),            // Timestamp
+    updatedAt: v.number(),            // Last updated timestamp
     
-    // Tracking (future)
+    // Tracking
     trackingId: v.optional(v.string()),
     shippedAt: v.optional(v.number())
   })
