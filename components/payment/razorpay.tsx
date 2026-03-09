@@ -1,8 +1,6 @@
-// @/components/payment/razorpay.tsx - ONLY auth check added
+// @/components/payment/razorpay.tsx
 'use client'
 import { useRazorpay } from 'react-razorpay'
-import { Authenticated, Unauthenticated } from 'convex/react'
-import { SignInButton } from '@clerk/nextjs'
 
 export default function Razorpay({ 
   amount, 
@@ -54,23 +52,13 @@ export default function Razorpay({
         <div className="text-xs text-gray-500">Final Amount to Pay</div>
       </div>
       
-      <Authenticated>
-        <button
-          onClick={handlePayment}
-          disabled={isLoading}
-          className="w-full h-11 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-bold text-sm hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 touch-none"
-        >
-          {isLoading ? 'Processing...' : 'Pay Now'}
-        </button>
-      </Authenticated>
-      
-      <Unauthenticated>
-        <SignInButton mode="modal">
-          <button className="w-full h-11 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-bold text-sm hover:shadow-lg transition-all active:scale-95 touch-none">
-            Pay Now
-          </button>
-        </SignInButton>
-      </Unauthenticated>
+      <button
+        onClick={handlePayment}
+        disabled={isLoading}
+        className="w-full h-11 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-bold text-sm hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 touch-none"
+      >
+        {isLoading ? 'Processing...' : 'Pay Now'}
+      </button>
     </div>
   )
 }

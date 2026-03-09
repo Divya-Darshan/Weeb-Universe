@@ -6,6 +6,9 @@ import { Image, ImageKitProvider } from '@imagekit/next'
 import Razorpay from '@/components/payment/razorpay'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import { Unauthenticated } from 'convex/react'
+import { SignInButton } from '@clerk/nextjs'
+import { useUser } from '@clerk/nextjs'
 
 interface CartItem {
   id: number
@@ -60,7 +63,8 @@ if (typeof window !== 'undefined') {
 export default function CartComponent() {
   const [open, setOpen] = useState(false)
   const [cartItems, setCartItems] = useState<CartItem[]>([])
-  const [tab, setTab] = useState<'cart' | 'checkout'>('cart')
+  const [tab, setTab] = useState<'cart' | 'checkout' | 'login'>('cart')
+  const { user } = useUser()
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -164,6 +168,14 @@ export default function CartComponent() {
 
   const isFormValid = formData.email && formData.firstName && formData.phone && formData.pincode && formData.state
 
+  const handleCheckoutClick = () => {
+    if (!user) {
+      setTab('login')
+    } else {
+      setTab('checkout')
+    }
+  }
+
   return (
     <div className="relative z-50">
       <button
@@ -189,10 +201,14 @@ export default function CartComponent() {
                   {/* Header */}
                   <div className="flex-shrink-0 flex items-center justify-between px-4 py-4 sm:px-5 border-b border-gray-200">
                     <DialogTitle className="text-base sm:text-lg font-bold text-gray-900">
-                      {tab === 'cart' ? `Cart (${cartCount})` : 'Checkout'}
+                      {tab === 'cart' ? `Cart (${cartCount})` : tab === 'login' ? 'Sign In' : 'Checkout'}
                     </DialogTitle>
                     <button
-                      onClick={() => tab === 'checkout' ? setTab('cart') : setOpen(false)}
+                      onClick={() => {
+                        if (tab === 'checkout') setTab('cart')
+                        else if (tab === 'login') setTab('cart')
+                        else setOpen(false)
+                      }}
                       className="p-2 hover:bg-gray-100 rounded-lg text-gray-400"
                     >
                       <XMarkIcon className="size-5" />
@@ -259,7 +275,7 @@ export default function CartComponent() {
                           </div>
                           <p className="text-xs text-gray-500 mb-3">Taxes & shipping at checkout</p>
                           <button 
-                            onClick={() => setTab('checkout')}
+                            onClick={handleCheckoutClick}
                             className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-3 rounded-lg font-bold text-xs shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all active:scale-95"
                           >
                             Checkout
@@ -271,6 +287,20 @@ export default function CartComponent() {
                             Continue Shopping
                           </button>
                         </div>
+                      </div>
+                    ) : tab === 'login' ? (
+                      <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                        <div className="text-center">
+                          <h3 className="text-base font-bold text-gray-900 mb-2">Sign in to continue</h3>
+                          <p className="text-xs text-gray-600">You need to be signed in to complete your purchase</p>
+                        </div>
+                        <Unauthenticated>
+                          <SignInButton mode="modal">
+                            <button className="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-bold text-xs hover:shadow-lg transition-all active:scale-95">
+                              Sign In
+                            </button>
+                          </SignInButton>
+                        </Unauthenticated>
                       </div>
                     ) : (
                       <div className="space-y-3">
