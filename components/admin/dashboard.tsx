@@ -44,79 +44,76 @@ const OrdersDashboard = () => {
     delivered: localOrders.filter((o) => o.orderStatus === 'delivered')
   }
 
+  // Calculate total revenue
+  const totalRevenue = localOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0)
+
   const OrderCard = ({ order }: { order: any }) => (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 p-6 mb-4">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <p className="font-semibold text-gray-900 text-lg">{order.customerName}</p>
-          <p className="text-sm text-gray-500 mt-1">{order.customerEmail}</p>
+    <div className="bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors duration-150">
+      {/* Header with customer and amount */}
+      <div className="flex justify-between items-start mb-3 pb-3 border-b border-gray-100">
+        <div className="flex-1">
+          <p className="font-medium text-gray-900 text-sm">{order.customerName}</p>
+          <p className="text-xs text-gray-500 mt-1">{order.customerEmail}</p>
         </div>
-        <p className="text-2xl font-bold text-gray-900 bg-gradient-to-r from-gray-900 to-gray-800 bg-clip-text text-transparent">
-          ₹{order.totalAmount?.toLocaleString('en-IN')}
-        </p>
+        <p className="text-lg font-semibold text-gray-900 ml-2">₹{order.totalAmount?.toLocaleString('en-IN')}</p>
       </div>
 
       {/* Products */}
-      <div className="mb-6">
-        <p className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Products</p>
-        <div className="bg-gray-50/50 rounded-xl p-4 border border-gray-100">
+      <div className="mb-3">
+        <p className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">Items</p>
+        <div className="space-y-1">
           {order.products.map((product: any, index: number) => (
-            <div key={index} className="text-sm text-gray-700 flex justify-between items-center mb-2 last:mb-0">
-              <span className="font-medium">{product.name}</span>
-              <span className="flex items-center gap-2">
-                <span className="text-xs bg-gray-200 px-2 py-1 rounded-full">x{product.quantity}</span>
-                <span className="font-semibold">₹{product.price.toLocaleString('en-IN')}</span>
-              </span>
+            <div key={index} className="text-xs text-gray-700 flex justify-between items-center">
+              <span className="truncate flex-1">{product.name}</span>
+              <span className="text-gray-500 ml-2">x{product.quantity}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Order ID and Date */}
-      <div className="grid grid-cols-2 gap-4 mb-6 text-sm text-gray-500">
-        <div>
-          <p className="font-semibold text-gray-700 mb-1">Order ID</p>
-          <p className="font-mono bg-gray-100 px-3 py-1 rounded-lg text-xs">{order.razorpayOrderId}</p>
+      {/* Order details */}
+      <div className="mb-3 pb-3 border-t border-gray-100 pt-3 space-y-1">
+        <div className="flex justify-between items-center text-xs">
+          <span className="text-gray-500">Order ID</span>
+          <span className="font-mono text-gray-700 text-xs truncate ml-2">{order.razorpayOrderId}</span>
         </div>
-        <div>
-          <p className="font-semibold text-gray-700 mb-1">Phone</p>
-          <p className="font-mono">{order.customerPhone}</p>
+        <div className="flex justify-between items-center text-xs">
+          <span className="text-gray-500">Phone</span>
+          <span className="text-gray-700">{order.customerPhone}</span>
         </div>
-        <div className="col-span-2">
-          <p className="font-semibold text-gray-700 mb-1">Ordered</p>
-          <p className="text-gray-500">
+        <div className="flex justify-between items-center text-xs">
+          <span className="text-gray-500">Ordered</span>
+          <span className="text-gray-700">
             {new Date(order.createdAt).toLocaleDateString('en-IN', {
               day: 'numeric',
               month: 'short',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
+              year: 'numeric'
             })}
-          </p>
+          </span>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3 pt-4 border-t border-gray-100">
+      <div className="pt-3 border-t border-gray-100">
         {order.orderStatus === 'new_order' && (
           <button
             onClick={() => handleStatusChange(order._id, 'pending')}
-            className="flex-1 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white py-3 px-4 rounded-xl text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-amber-400/30 backdrop-blur-sm"
+            className="w-full bg-blue-50 hover:bg-blue-100 text-blue-700 py-2 px-3 rounded-md text-xs font-medium transition-colors duration-150 border border-blue-200"
           >
-            → Move to Pending
+            Move to Pending
           </button>
         )}
         {order.orderStatus === 'pending' && (
           <button
             onClick={() => handleStatusChange(order._id, 'delivered')}
-            className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-3 px-4 rounded-xl text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-emerald-400/30 backdrop-blur-sm"
+            className="w-full bg-green-50 hover:bg-green-100 text-green-700 py-2 px-3 rounded-md text-xs font-medium transition-colors duration-150 border border-green-200"
           >
-            → Mark Delivered
+            Mark Delivered
           </button>
         )}
         {order.orderStatus === 'delivered' && (
-          <div className="flex-1 bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 py-3 px-4 rounded-xl text-sm font-semibold text-center shadow-inner border border-emerald-200/50 backdrop-blur-sm">
-            ✓ Order Completed
+          <div className="w-full bg-gray-50 text-gray-600 py-2 px-3 rounded-md text-xs font-medium text-center border border-gray-200">
+            ✓ Completed
           </div>
         )}
       </div>
@@ -127,42 +124,31 @@ const OrdersDashboard = () => {
     title,
     status,
     count,
-    color
+    bgColor,
+    textColor,
+    borderColor
   }: {
     title: string
     status: OrderStatus
     count: number
-    color: string
+    bgColor: string
+    textColor: string
+    borderColor: string
   }) => {
-    const colorClasses = {
-      blue: 'from-blue-50 to-indigo-50 border-blue-100 text-blue-900',
-      yellow: 'from-amber-50 to-yellow-50 border-amber-100 text-amber-900',
-      green: 'from-emerald-50 to-teal-50 border-emerald-100 text-emerald-900'
-    }
-
     return (
-      <div className={`flex-1 bg-gradient-to-br ${colorClasses[color as keyof typeof colorClasses]} rounded-2xl p-6 shadow-sm border border-opacity-50 shadow-lg backdrop-blur-sm`}>
-       
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-black bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-            {title}
-          </h2>
-          <span className={`bg-gradient-to-r ${color === 'blue' ? 'from-blue-500 to-indigo-600' : 
-                                      color === 'yellow' ? 'from-amber-500 to-yellow-600' : 
-                                      'from-emerald-500 to-teal-600'} text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg`}>
-            {count}
-          </span>
+      <div className="flex flex-col h-full">
+        {/* Column Header */}
+        <div className={`${bgColor} ${borderColor} border rounded-lg p-4 mb-4 flex items-center justify-between`}>
+          <h2 className={`text-sm font-semibold ${textColor}`}>{title}</h2>
+          <span className={`${textColor} text-xl font-bold`}>{count}</span>
         </div>
 
-        <div className="space-y-4 max-h-[70vh] overflow-y-auto">
+        {/* Orders Container */}
+        <div className="flex-1 overflow-y-auto space-y-3 pr-2">
           {ordersByStatus[status].length === 0 ? (
-            <div className="text-center py-12">
-              <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-r ${color === 'blue' ? 'from-blue-200 to-indigo-200' : 
-                                                                    color === 'yellow' ? 'from-amber-200 to-yellow-200' : 
-                                                                    'from-emerald-200 to-teal-200'} rounded-2xl flex items-center justify-center shadow-lg`}>
-                📦
-              </div>
-              <p className="text-lg font-semibold text-gray-500">No orders</p>
+            <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+              <div className="text-3xl mb-2">📦</div>
+              <p className="text-sm text-gray-500 font-medium">No orders</p>
             </div>
           ) : (
             ordersByStatus[status].map((order) => <OrderCard key={order._id} order={order} />)
@@ -174,60 +160,88 @@ const OrdersDashboard = () => {
 
   if (fetchedOrders === undefined) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="text-center p-12">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-500 mx-auto mb-6 shadow-xl"></div>
-          <p className="text-xl font-semibold text-gray-600 backdrop-blur-sm bg-white/60 px-8 py-4 rounded-2xl shadow-lg">
-            Loading orders...
-          </p>
+      <div className="flex items-center justify-center min-h-screen bg-white">
+        <div className="text-center p-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-300 border-t-gray-900 mx-auto mb-4"></div>
+          <p className="text-sm font-medium text-gray-600">Loading</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50 p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Orders</h1>
+        </div>
+
+        {/* Summary Section - AT THE TOP */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+          {/* Total Orders */}
+          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
+            <p className="text-xs sm:text-sm text-gray-600 font-medium mb-2">Total Orders</p>
+            <p className="text-2xl sm:text-3xl font-bold text-gray-900">{localOrders.length}</p>
+            <p className="text-xs text-gray-400 mt-2">All time</p>
+          </div>
+
+          {/* New Orders */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6">
+            <p className="text-xs sm:text-sm text-blue-700 font-medium mb-2">New Orders</p>
+            <p className="text-2xl sm:text-3xl font-bold text-blue-900">{ordersByStatus.new_order.length}</p>
+            <p className="text-xs text-blue-600 mt-2">Awaiting</p>
+          </div>
+
+          {/* Pending Orders */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 sm:p-6">
+            <p className="text-xs sm:text-sm text-amber-700 font-medium mb-2">Pending</p>
+            <p className="text-2xl sm:text-3xl font-bold text-amber-900">{ordersByStatus.pending.length}</p>
+            <p className="text-xs text-amber-600 mt-2">In progress</p>
+          </div>
+
+          {/* Delivered Orders */}
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 sm:p-6">
+            <p className="text-xs sm:text-sm text-green-700 font-medium mb-2">Delivered</p>
+            <p className="text-2xl sm:text-3xl font-bold text-green-900">{ordersByStatus.delivered.length}</p>
+            <p className="text-xs text-green-600 mt-2">Completed</p>
+          </div>
+
+          {/* Total Revenue - spans full width on mobile, fits naturally on desktop */}
+          <div className="col-span-2 lg:col-span-4 bg-gray-50 border border-gray-200 rounded-lg p-4 sm:p-6">
+            <p className="text-xs sm:text-sm text-gray-600 font-medium mb-2">Total Revenue</p>
+            <p className="text-2xl sm:text-3xl font-bold text-gray-900">₹{totalRevenue.toLocaleString('en-IN')}</p>
+            <p className="text-xs text-gray-400 mt-2">Combined order value</p>
+          </div>
+        </div>
 
         {/* Kanban Board */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" style={{ minHeight: '60vh' }}>
           <Column
             title="New"
             status="new_order"
             count={ordersByStatus.new_order.length}
-            color="blue"
+            bgColor="bg-blue-50"
+            textColor="text-blue-900"
+            borderColor="border-blue-200"
           />
           <Column
-            title="⏳ Pending"
+            title="Pending"
             status="pending"
             count={ordersByStatus.pending.length}
-            color="yellow"
+            bgColor="bg-amber-50"
+            textColor="text-amber-900"
+            borderColor="border-amber-200"
           />
           <Column
-            title="✓ Delivered"
+            title="Delivered"
             status="delivered"
             count={ordersByStatus.delivered.length}
-            color="green"
+            bgColor="bg-green-50"
+            textColor="text-green-900"
+            borderColor="border-green-200"
           />
-        </div>
-
-        {/* Summary */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/50">
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group text-center p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <p className="text-4xl font-black text-blue-600 mb-2">{ordersByStatus.new_order.length}</p>
-              <p className="text-lg font-semibold text-gray-700">New Orders</p>
-            </div>
-            <div className="group text-center p-8 rounded-2xl bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <p className="text-4xl font-black text-amber-600 mb-2">{ordersByStatus.pending.length}</p>
-              <p className="text-lg font-semibold text-gray-700">Pending Orders</p>
-            </div>
-            <div className="group text-center p-8 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <p className="text-4xl font-black text-emerald-600 mb-2">{ordersByStatus.delivered.length}</p>
-              <p className="text-lg font-semibold text-gray-700">Delivered Orders</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
