@@ -362,6 +362,8 @@ const OrdersDashboard = () => {
                 <p className="text-xs text-green-600 mt-2">Completed</p>
               </div>
 
+              <div id='revenue-section' className=' hidden grid grid-cols-1 md:grid-cols-2 gap-4' >
+
               {/* Total Revenue - spans full width on mobile, fits naturally on desktop */}
               <div className="col-span-2 lg:col-span-4 bg-gray-50 border border-gray-200 rounded-lg p-4 sm:p-6 hover:border-gray-300 transition-colors duration-150">
                 <p className="text-xs sm:text-sm text-gray-600 font-medium mb-2">Total Revenue</p>
@@ -381,6 +383,9 @@ const OrdersDashboard = () => {
                 <p className="text-xl sm:text-2xl font-bold text-green-900">₹{deliveredRevenue.toLocaleString('en-IN')}</p>
                 <p className="text-xs text-green-600 mt-2">Completed</p>
               </div>
+
+              </div>
+
             </div>
           </div>
         )}
