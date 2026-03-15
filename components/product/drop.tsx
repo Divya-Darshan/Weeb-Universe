@@ -33,12 +33,8 @@ export default function Drop() {
           <div className="py-12 sm:py-16 lg:py-20">
             <div className="text-center mb-8">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-                Premium Anime Collections
+              Anime Collections
               </h1>
-              <p className="text-gray-700 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
-                Discover our exclusive range of premium anime merchandise. From collectible figures to stylish apparel, 
-                we bring your favorite anime characters and universes to life with authentic, high-quality products.
-              </p>
             </div>
 
             {/* Featured Categories */}
