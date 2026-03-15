@@ -1,8 +1,8 @@
 'use client'
 import Profile from '@/components/profile/profile'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import Cart from '@/components/product/cart'
 
 const navigation = [
@@ -12,8 +12,28 @@ const navigation = [
   { name: 'Company', href: '#' },
 ]
 
+const sliderImages = [
+  'https://static.getimg.ai/media/getimg_ai_img-eEUBXVbYBAAMq4uuiVme3.webp',
+  'https://static.getimg.ai/media/getimg_ai_img-YNZFXURZzeJX6aKEeCy2z (1)-1.webp',
+  'https://static.getimg.ai/media/getimg_ai_img-NVx2DfFXPRx9PzMCyDRmb (1).webp',
+  'https://static.getimg.ai/media/getimg_ai_img-4dRQmdqK4Gqjp1hyt62ty.webp',
+]
+
 export default function Example() {
+  
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [currentSlide, setCurrentSlide] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % sliderImages.length)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const goToSlide = (index: number) => setCurrentSlide(index)
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % sliderImages.length)
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + sliderImages.length) % sliderImages.length)
 
   return (
     <div className="bg-gray-900">
@@ -115,55 +135,61 @@ export default function Example() {
         </Dialog>
       </header>
 
-      {/* Hero content */}
-      <div className="relative isolate px-6 pt-14 lg:px-8">
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-        >
-          <div
-            style={{
-              clipPath:
-                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-            }}
-            className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.75rem]"
-          />
-        </div>
-
-        <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-          <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-     
-          </div>
-          <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Data to enrich your online business
-            </h1>
-            <p className="mt-6 text-xl leading-8 text-gray-300">
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-              fugiat veniam occaecat.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="#"
-                className="rounded-xl bg-indigo-600 px-4 py-3 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Get started
-              </a>
+      {/* Image Slider */}
+      <div className="relative w-full pt-20 bg-gray-900">
+        {/* Slider container */}
+        <div className="relative h-96 sm:h-screen max-h-[600px] w-full overflow-hidden rounded-2xl mx-auto max-w-6xl mt-8">
+          {/* Images */}
+          {sliderImages.map((image, index) => (
+            <div
+              key={index}
+              className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <img
+                src={image}
+                alt={`Slide ${index + 1}`}
+                className="w-full h-full object-cover rounded-2xl"
+              />
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-black/20 rounded-2xl" />
             </div>
+          ))}
+
+          {/* Navigation Arrows */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full backdrop-blur-sm transition"
+          >
+            <ChevronLeftIcon className="w-6 h-6" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full backdrop-blur-sm transition"
+          >
+            <ChevronRightIcon className="w-6 h-6" />
+          </button>
+
+          {/* Dots Navigation */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 flex gap-3">
+            {sliderImages.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all ${
+                  index === currentSlide
+                    ? 'bg-white w-8'
+                    : 'bg-white/50 hover:bg-white/70'
+                }`}
+              />
+            ))}
           </div>
         </div>
 
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-        >
-          <div
-            style={{
-              clipPath:
-                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-            }}
-            className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.75rem]"
-          />
+        {/* Content below slider */}
+        <div className="mx-auto max-w-6xl px-6 py-16 text-center">
+          <p className="text-gray-400 text-sm tracking-wide mb-4 uppercase">Latest Collections</p>
         </div>
       </div>
     </div>
