@@ -1,55 +1,88 @@
 import { ImageKitProvider, Image } from '@imagekit/next'
-const callouts = [
+
+const collections = [
   {
-    name: '1',
-    description: 'Work from home accessories',
+    id: 'figures',
+    name: 'Anime Figures',
+    description: 'Highly detailed collectible figures from your favorite anime series. Premium quality with stunning craftsmanship.',
     imageSrc: 'a',
-    imageAlt: 'Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug.',
-
+    imageAlt: 'Collection of premium anime figures with detailed sculpting',
   },
-    {
-    name: '2',
-    description: 'Work from home accessories',
+  {
+    id: 'clothing',
+    name: 'Clothing & Apparel',
+    description: 'Comfortable and stylish anime-themed t-shirts, hoodies, and merchandise wear. Express your passion with quality fabric.',
     imageSrc: 'a',
-    imageAlt: 'Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug.',
-
+    imageAlt: 'Anime themed clothing and apparel collection',
   },
-    {
-    name: '3',
-    description: 'Work from home accessories',
+  {
+    id: 'accessories',
+    name: 'Accessories & Gear',
+    description: 'Functional accessories including bags, keychains, and wearables. Perfect for everyday anime enthusiasts.',
     imageSrc: 'a',
-    imageAlt: 'Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug.',
-
+    imageAlt: 'Anime accessories and gear collection',
   },
-  
-
 ]
 
 export default function Drop() {
   return (
     <ImageKitProvider urlEndpoint="https://ik.imagekit.io/weeb/">
-    <div className="bg-gray-100">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-32">
-          <h2 className="text-2xl font-bold text-gray-900">Collections</h2>
+      <div className="min-h-screen bg-gray-100">
+        {/* Header Section */}
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="py-12 sm:py-16 lg:py-20">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                Premium Anime Collections
+              </h1>
+              <p className="text-gray-700 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
+                Discover our exclusive range of premium anime merchandise. From collectible figures to stylish apparel, 
+                we bring your favorite anime characters and universes to life with authentic, high-quality products.
+              </p>
+            </div>
 
-          <div className="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:space-y-0 lg:gap-x-6">
-            {callouts.map((callout) => (
-              <div key={callout.name} className="group relative">
-                <Image
-                  width={400}
-                  height={400}
-                  alt={callout.imageAlt}
-                  src={callout.imageSrc}
-                  className="w-full rounded-lg bg-white object-cover group-hover:opacity-75 max-sm:h-80 sm:aspect-2/1 lg:aspect-square"
-                />
-              
+            {/* Featured Categories */}
+            <div className="mt-12 sm:mt-16">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                {collections.map((collection) => (
+                  <div
+                    key={collection.id}
+                    className="group cursor-pointer transform transition-all duration-300 hover:scale-105"
+                  >
+                    {/* Image Container */}
+                    <div className="relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-lg transition-shadow duration-300">
+                      <Image
+                        width={500}
+                        height={500}
+                        alt={collection.imageAlt}
+                        src={collection.imageSrc}
+                        className="w-full aspect-square object-cover group-hover:brightness-110 transition-all duration-300"
+                      />
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="mt-4 px-1">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors">
+                        {collection.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                        {collection.description}
+                      </p>
+                      <button className="mt-4 inline-block px-4 py-2 text-sm font-semibold text-gray-900 border-2 border-gray-900 rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-300">
+                        Explore Now →
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+ 
           </div>
         </div>
       </div>
-    </div>
     </ImageKitProvider>
   )
 }

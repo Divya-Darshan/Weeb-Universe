@@ -4,15 +4,32 @@ import { time } from 'console'
 import { FaFacebookF, FaInstagram, FaXTwitter, FaGithub, FaYoutube } from 'react-icons/fa6'
 
 const navigation = {
-  solutions: ['Marketing', 'Analytics', 'Automation', 'Commerce', 'Insights'],
-  support: ['Submit ticket', 'Documentation', 'Guides'],
-  company: ['About', 'Blog', 'Jobs', 'Press'],
+  support: ['9092659556', 'weebstore.help @gmail.com', 'Instagram'],
+  company: ['About', 'Instagram', 'weebstore.help @gmail.com', 'Press'],
   legal: ['Terms of service', 'Privacy policy', 'License'],
+}
+
+// Helper function to detect and format links
+function getLinkHref(item: string): string {
+  const cleanItem = item.trim()
+  
+  // Check if it's a phone number (contains only digits, +, -, or spaces)
+  if (/^[\d\s+()-]+$/.test(cleanItem)) {
+    return `tel:${cleanItem.replace(/\s/g, '')}`
+  }
+  
+  // Check if it's an email (contains @)
+  if (cleanItem.includes('@')) {
+    return `mailto:${cleanItem}`
+  }
+  
+  // Otherwise it's a regular link
+  return '#'
 }
 
 export default function Footer() {
 
-  const date = new Date();// Outputs: "12/25/2025, 12:00:00 AM" (example format)   
+  const date = new Date();  
 
 
   return (
@@ -51,25 +68,14 @@ export default function Footer() {
 
           {/* right columns */}
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-white">Solutions</h3>
-              <ul className="space-y-2 text-sm">
-                {navigation.solutions.map((item) => (
-                  <li key={item}>
-                    <a href="#" className="hover:text-white transition">
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+
 
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-white">Support</h3>
               <ul className="space-y-2 text-sm">
                 {navigation.support.map((item) => (
                   <li key={item}>
-                    <a href="#" className="hover:text-white transition">
+                    <a href={getLinkHref(item)} className="hover:text-white transition">
                       {item}
                     </a>
                   </li>
@@ -82,7 +88,7 @@ export default function Footer() {
               <ul className="space-y-2 text-sm">
                 {navigation.company.map((item) => (
                   <li key={item}>
-                    <a href="#" className="hover:text-white transition">
+                    <a href={getLinkHref(item)} className="hover:text-white transition">
                       {item}
                     </a>
                   </li>
@@ -108,7 +114,7 @@ export default function Footer() {
         {/* divider */}
         <div className="mt-10 border-t border-white/10 pt-6">
           <p className="text-xs text-gray-500">
-            © { date.getFullYear() } Weeb Universe , Inc. All rights reserved.
+            © { date.getFullYear() } Weeb Store , Inc. All rights reserved.
           </p>
         </div>
       </div>
