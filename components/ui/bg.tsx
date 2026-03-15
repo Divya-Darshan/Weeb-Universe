@@ -136,9 +136,9 @@ export default function Example() {
       </header>
 
       {/* Image Slider */}
-      <div className="relative w-full pt-20 bg-gray-900">
+      <div className="relative w-full pt-20 bg-gray-900 px-4 sm:px-0">
         {/* Slider container */}
-        <div className="relative h-96 sm:h-screen max-h-[600px] w-full overflow-hidden rounded-2xl mx-auto max-w-6xl mt-8">
+        <div className="relative h-96 sm:h-screen max-h-[600px] overflow-hidden rounded-2xl mx-auto max-w-6xl mt-8">
           {/* Images */}
           {sliderImages.map((image, index) => (
             <div
@@ -156,20 +156,6 @@ export default function Example() {
               <div className="absolute inset-0 bg-black/20 rounded-2xl" />
             </div>
           ))}
-
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full backdrop-blur-sm transition"
-          >
-            <ChevronLeftIcon className="w-6 h-6" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full backdrop-blur-sm transition"
-          >
-            <ChevronRightIcon className="w-6 h-6" />
-          </button>
 
           {/* Dots Navigation */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 flex gap-3">
