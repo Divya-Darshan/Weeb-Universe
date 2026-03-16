@@ -47,7 +47,6 @@ export default function AdminPage() {
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center bg-white p-8 rounded-lg shadow-lg max-w-md">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600 mb-6">You need to be logged in to access this page.</p>
           <a
             href="/sign-in"
             className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition"
@@ -64,8 +63,6 @@ export default function AdminPage() {
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center bg-white p-8 rounded-lg shadow-lg max-w-md">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">❌ Unauthorized</h1>
-          <p className="text-gray-600 mb-2">You do not have access to this dashboard.</p>
-          <p className="text-sm text-gray-500 mb-6">Contact the administrator if you think this is an error.</p>
           <a
             href="/"
             className="inline-block bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-lg transition"
