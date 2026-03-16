@@ -20,7 +20,7 @@ export default function Loading() {
             <img 
               src="/anime.gif"
               alt="Anime loading"
-              className="w-70 h-60 drop-shadow-2xl animate-pulse rounded-lg object-cover"
+              className="w-50 h-40 drop-shadow-2xl animate-pulse rounded-lg object-cover"
             />
           </div>
 
