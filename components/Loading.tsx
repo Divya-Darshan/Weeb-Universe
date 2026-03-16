@@ -16,7 +16,7 @@ export default function Loading() {
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="flex flex-col items-center gap-6">
           {/* Anime GIF - Perfectly Centered */}
-          <div className="w-45 h-45 flex items-center justify-center p-4 bg-black/20 rounded-2xl backdrop-blur-sm border border-white/30">
+          <div className="w-45 h-50 flex items-center justify-center p-4 bg-black/20 rounded-2xl backdrop-blur-sm border border-white/30">
             <img 
               src="/anime.gif"
               alt="Anime loading"
