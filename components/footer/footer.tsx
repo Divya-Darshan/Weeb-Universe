@@ -4,8 +4,8 @@ import { time } from 'console'
 import { FaFacebookF, FaInstagram, FaXTwitter, FaGithub, FaYoutube } from 'react-icons/fa6'
 
 const navigation = {
-  support: ['+91 9092659556', 'weebstore.help @gmail.com', 'Instagram'],
-  company: ['About', 'Instagram', 'weebstore.help @gmail.com', 'Press'],
+  support: ['+91 9092659556', 'weebstore.help@gmail.com', 'Instagram'],
+  company: ['About', 'Instagram', 'weebstore.help@gmail.com', 'Press'],
   legal: ['Terms of service', 'Privacy policy', 'License'],
 }
 
