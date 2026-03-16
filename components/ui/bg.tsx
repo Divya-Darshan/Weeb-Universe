@@ -6,10 +6,10 @@ import { Bars3Icon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroic
 import Cart from '@/components/product/cart'
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
+  { name: 'Drops', href: '#' },
+  { name: 'Collection', href: '#' },
   { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
+  { name: 'About US', href: '#' },
 ]
 
 const sliderImages = [
