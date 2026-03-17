@@ -175,7 +175,7 @@ export default function Example() {
 
         {/* Content below slider */}
         <div className="  max-w-6xl px-6 py-16 text-center">
-          <p className="text-gray-400 text-sm tracking-wide mb-4 uppercase">New Collections</p>
+          <p className="text-gray-400 text-sm tracking-wide mb-4 uppercase">Latest Collections</p>
         </div>
       </div>
     </div>
