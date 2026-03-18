@@ -68,7 +68,7 @@ export async function getFeaturedProducts() {
   return { data: data || [], error }
 }
 
-// // Test Jiobase proxy
+// 
 // fetch('https://nsfuyglfocaxzvycnnhu.supabase.co/rest/v1/orders?select=*', {
 //   headers: {'apikey': 'sb_publishable_tEUCvPyKtS5j6eSuj7SIOg_t1cakOmP'}
 // }).then(r=>r.json()).then(console.log)
