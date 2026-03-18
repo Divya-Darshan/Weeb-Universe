@@ -1,16 +1,17 @@
+// lib/supabase.ts
 import { createClient } from '@supabase/supabase-js'
 
-// 🔥 Environment variables only
+// 🔥 Direct Supabase connection only
 export const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 export const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 export const imageKitUrl = 'https://ik.imagekit.io/weeb/'
 
 export const supabase = createClient(supabaseUrl, supabaseKey)
 
-// 🛒 Get ALL Products (orders table via Jiobase proxy)
+// 🛒 Get ALL Products (from PRODUCTS table)
 export async function getProducts() {
   const { data, error } = await supabase
-    .from('products')
+    .from('products')  // ✅ Fixed: products table
     .select('*')
     .order('created_at', { ascending: false })
   return { data: data || [], error }
@@ -19,7 +20,7 @@ export async function getProducts() {
 // 🏷️ Get Products by Category
 export async function getProductsByCategory(category: string) {
   const { data, error } = await supabase
-    .from('orders')
+    .from('products')  // ✅ Fixed: products table
     .select('*')
     .eq('category', category)
     .order('created_at', { ascending: false })
@@ -29,7 +30,7 @@ export async function getProductsByCategory(category: string) {
 // 📦 Get Single Product
 export async function getProduct(id: number) {
   const { data, error } = await supabase
-    .from('orders')
+    .from('products')  // ✅ Fixed: products table
     .select('*')
     .eq('id', id)
     .single()
@@ -39,17 +40,16 @@ export async function getProduct(id: number) {
 // 🔍 Search Products
 export async function searchProducts(query: string) {
   const { data, error } = await supabase
-    .from('orders')
+    .from('products')  // ✅ Fixed: products table
     .select('*')
-    .ilike('name', `%${query}%`)
-    .or(`name.ilike.%${query}%,category.ilike.%${query}%`)
+    .textSearch('name', query, { type: 'plain' })  // ✅ Better search
   return { data: data || [], error }
 }
 
 // 🏷️ Get Categories
 export async function getCategories() {
   const { data, error } = await supabase
-    .from('orders')
+    .from('products')  // ✅ Fixed: products table
     .select('category')
     .not('category', 'is', null)
   return { 
@@ -61,14 +61,9 @@ export async function getCategories() {
 // 📊 Get Featured Products (Top 8)
 export async function getFeaturedProducts() {
   const { data, error } = await supabase
-    .from('orders')
+    .from('products')  // ✅ Fixed: products table
     .select('*')
     .order('created_at', { ascending: false })
     .limit(8)
   return { data: data || [], error }
 }
-
-// 
-// fetch('https://nsfuyglfocaxzvycnnhu.supabase.co/rest/v1/orders?select=*', {
-//   headers: {'apikey': 'sb_publishable_tEUCvPyKtS5j6eSuj7SIOg_t1cakOmP'}
-// }).then(r=>r.json()).then(console.log)
