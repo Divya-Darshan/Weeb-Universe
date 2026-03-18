@@ -174,9 +174,14 @@ export default function Example() {
         </div>
 
         {/* Content below slider */}
-        <div className="max-w-6xl px-6 py-16 text-center">
-          <p className="max-10 text-gray-400 text-sm tracking-wide mb-4 uppercase">Latest Collections</p>
+        <div className="w-full max-w-6xl mx-auto px-6 py-16 flex flex-col items-center justify-center text-center">
+          <p className="text-gray-400 text-sm tracking-wide mb-4 uppercase">
+            Latest Collections
+          </p>
         </div>
+
+
+
       </div>
     </div>
   )
