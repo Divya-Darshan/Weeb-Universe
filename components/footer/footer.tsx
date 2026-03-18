@@ -1,11 +1,11 @@
 // src/components/Footer.tsx
+'use client'
 
-import { time } from 'console'
 import { FaFacebookF, FaInstagram, FaXTwitter, FaGithub, FaYoutube } from 'react-icons/fa6'
 
 const navigation = {
-  support: ['+91 9092659556', 'Email', 'Instagram'],
-  company: ['About', 'Instagram', 'Email', 'Press'],
+  support: ['+91 9092659556', 'hello@weebstore.com', 'Instagram'], 
+  company: ['About', 'Instagram', 'hello@weebstore.com', 'Press'],   
   legal: ['Terms of service', 'Privacy policy', 'License'],
 }
 
@@ -13,35 +13,31 @@ const navigation = {
 function getLinkHref(item: string): string {
   const cleanItem = item.trim()
   
-  // Check if it's a phone number (contains only digits, +, -, or spaces)
+  // Phone number
   if (/^[\d\s+()-]+$/.test(cleanItem)) {
     return `tel:${cleanItem.replace(/\s/g, '')}`
   }
   
-  // Check if it's an email (contains @)
+  // Email
   if (cleanItem.includes('@')) {
     return `mailto:${cleanItem}`
   }
   
-  // Otherwise it's a regular link
   return '#'
 }
 
 export default function Footer() {
-
-  const date = new Date();  
-
+  const date = new Date()
 
   return (
     <footer className="bg-[#020617] text-gray-400">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
-        {/* top section */}
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        {/* Top section */}
         <div className="grid gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
-          {/* left block */}
+          {/* Left block - Logo + Description + Social */}
           <div className="space-y-6">
-            {/* logo */}
+            {/* Logo */}
             <div className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500">
-              {/* simple Tailwind-like logo mark */}
               <span className="text-2xl font-bold text-white">~</span>
             </div>
 
@@ -49,33 +45,39 @@ export default function Footer() {
               Making the world a better place through constructing elegant hierarchies.
             </p>
 
-            {/* social icons */}
+            {/* Social icons */}
             <div className="flex items-center gap-4 text-gray-400">
-              <button className="rounded-full p-2 hover:text-white hover:bg-white/5 transition">
-                <FaFacebookF  className="h-4 w-4" />
-              </button>
-              <button className="rounded-full p-2 hover:text-white hover:bg-white/5 transition">
-                <FaInstagram className="h-4 w-4" />
-              </button>
-              <button className="rounded-full p-2 hover:text-white hover:bg-white/5 transition">
-                <FaXTwitter className="h-4 w-4" />
-              </button>
-              <button className="rounded-full p-2 hover:text-white hover:bg-white/5 transition">
-                <FaYoutube className="h-4 w-4" />
-              </button>
+              <a href="#" className="group rounded-full p-2 hover:text-white hover:bg-white/10 transition-all duration-200">
+                <FaFacebookF className="h-4 w-4 group-hover:scale-110" />
+              </a>
+              <a href="#" className="group rounded-full p-2 hover:text-white hover:bg-white/10 transition-all duration-200">
+                <FaInstagram className="h-4 w-4 group-hover:scale-110" />
+              </a>
+              <a href="#" className="group rounded-full p-2 hover:text-white hover:bg-white/10 transition-all duration-200">
+                <FaXTwitter className="h-4 w-4 group-hover:scale-110" />
+              </a>
+              <a href="#" className="group rounded-full p-2 hover:text-white hover:bg-white/10 transition-all duration-200">
+                <FaYoutube className="h-4 w-4 group-hover:scale-110" />
+              </a>
+              <a href="#" className="group rounded-full p-2 hover:text-white hover:bg-white/10 transition-all duration-200">
+                <FaGithub className="h-4 w-4 group-hover:scale-110" />
+              </a>
             </div>
           </div>
 
-          {/* right columns */}
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-
-
+          {/* Right columns - FIXED RESPONSIVE LAYOUT */}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Support Column */}
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-white">Support</h3>
               <ul className="space-y-2 text-sm">
-                {navigation.support.map((item) => (
+                {navigation.support.map((item, index) => (
                   <li key={item}>
-                    <a href={getLinkHref(item)} className="hover:text-white transition">
+                    <a 
+                      href={getLinkHref(item)} 
+                      className="block max-w-[200px] truncate hover:text-white transition-colors duration-200 text-gray-300 hover:underline"
+                      title={item} // Full email on hover
+                    >
                       {item}
                     </a>
                   </li>
@@ -83,12 +85,17 @@ export default function Footer() {
               </ul>
             </div>
 
+            {/* Company Column */}
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-white">Company</h3>
               <ul className="space-y-2 text-sm">
                 {navigation.company.map((item) => (
                   <li key={item}>
-                    <a href={getLinkHref(item)} className="hover:text-white transition">
+                    <a 
+                      href={getLinkHref(item)} 
+                      className="block max-w-[200px] truncate hover:text-white transition-colors duration-200 text-gray-300 hover:underline"
+                      title={item}
+                    >
                       {item}
                     </a>
                   </li>
@@ -96,12 +103,16 @@ export default function Footer() {
               </ul>
             </div>
 
+            {/* Legal Column */}
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-white">Legal</h3>
               <ul className="space-y-2 text-sm">
                 {navigation.legal.map((item) => (
                   <li key={item}>
-                    <a href="#" className="hover:text-white transition">
+                    <a 
+                      href="#" 
+                      className="block hover:text-white transition-colors duration-200 text-gray-300 hover:underline"
+                    >
                       {item}
                     </a>
                   </li>
@@ -111,16 +122,13 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* divider */}
-        <div className="mt-10 border-t border-white/10 pt-6">
-          <p className="text-xs text-gray-500">
-            © { date.getFullYear() } Weeb Store , Inc. All rights reserved.
+        {/* Bottom divider + Copyright */}
+        <div className="mt-12 border-t border-white/10 pt-8">
+          <p className="text-xs text-gray-500 sm:text-center">
+            © {date.getFullYear()} Weeb Store, Inc. All rights reserved.
           </p>
         </div>
       </div>
     </footer>
   )
-
-  
-
 }
