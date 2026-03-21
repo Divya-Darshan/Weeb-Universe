@@ -11,19 +11,28 @@ const navigation = {
 }
 
 const TERMS_CONTENT = [
-  'No refunds on custom anime merch',
-  '7-10 day delivery across India', 
-  'Contact +91 9092659556 for issues',
-  "Weeb Store - 3 friends building anime dreams 🇯🇵"
+  `All sales of custom-designed anime merchandise, including but not limited to apparel, figures, posters, and related collectibles, are final upon dispatch from our fulfillment center and are expressly understood to be non-refundable under any circumstances including but not limited to change of mind, incorrect size selection, or dissatisfaction with product quality post-receipt.`,
+  
+  `Delivery timelines for orders placed through Weeb Store are estimated at 7-10 business days from date of confirmed payment processing and order fulfillment commencement, covering all major metropolitan areas and urban centers across the Republic of India via partnered courier services including but not limited to standard ground shipping methods, with potential variances due to regional distribution logistics, public holidays, or unforeseen carrier delays.`,
+  
+  `For any order-related inquiries, discrepancies, shipping concerns, or customer service matters, customers are required to contact our support team via the registered mobile number +91 9092659556 during standard business hours (10 AM - 7 PM IST, Monday through Saturday) providing complete order reference details including but not limited to Order ID, date of purchase, and registered delivery address for verification and resolution.`,
+
+  `Weeb Store represents an independent initiative operated by three individuals collaboratively developing an anime merchandise platform. By engaging with our services, customers acknowledge and accept these operational terms as presented.`
 ]
 
+
 const PRIVACY_CONTENT = [
-  'We collect email/phone only for orders',
-  'Razorpay handles payments (we see nothing)',
-  'Email hello@weebstore.com to delete data',
-  'No selling your info to anyone',
-  "Last updated March 2026"
+  `Weeb Store, in the course of facilitating customer transactions for anime merchandise including but not limited to apparel, collectibles, and related products through its e-commerce platform, collects and processes certain personal data comprising electronic mail addresses and mobile telephone numbers strictly for the purpose of order fulfillment, shipment coordination, and transactional communication as required under applicable e-commerce operational protocols.`,
+
+  `All payment processing transactions conducted through the Weeb Store platform are exclusively handled by Razorpay Payment Gateway Services Pvt. Ltd., a Reserve Bank of India licensed entity, operating under PCI-DSS Level 1 compliance standards, wherein Weeb Store maintains no access to, storage of, or visibility into customer payment instrument details including but not limited to credit/debit card numbers, CVV codes, or banking credentials at any stage of the transaction lifecycle.`,
+
+  `Customers exercising rights under applicable data protection regulations including but not limited to Information Technology Act, 2000 as amended and associated rules may submit formal requests for access, rectification, or erasure of their personal data maintained by Weeb Store by directing electronic correspondence to hello@weebstore.com containing complete identification details, order reference numbers where applicable, and specific nature of data subject request for processing within statutory timelines.`,
+
+  `Weeb Store does not engage in the sale, transfer, disclosure, or commercial exploitation of customer personal data to any third party entities, marketing networks, data aggregation services, or commercial partners under any circumstances beyond what is contractually required for order fulfillment and service delivery through authorized payment processors and logistics partners.`,
+
+  `This Privacy Notice was last amended and published during March 2026 and reflects current data handling practices of Weeb Store operating as an unregistered partnership of three individuals based in Tamil Nadu, India engaged in anime merchandise retail activities.`
 ]
+
 
 function getLinkHref(item: string): string {
   const cleanItem = item.trim()
