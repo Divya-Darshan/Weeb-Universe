@@ -90,7 +90,8 @@ export default function Drop({ selectedCategory, onCategorySelect }: DropProps) 
           <div className="mb-8">
 
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
-              CATEGORIES
+              Collection
+
             </h2>
 
           </div>
