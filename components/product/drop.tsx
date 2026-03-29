@@ -5,45 +5,34 @@ import { useEffect, useRef, useState } from 'react'
 
 const categories = [
   {
-    id: 'onepiece',
-    name: 'ONE PIECE',
-    imageSrc: 'Category/1.png',
-  
-  },
-  {
     id: 'naruto',
     name: 'NARUTO',
-    imageSrc: 'Category/1.png',
-  
+    imageSrc: 'Category/naruto',
   },
   {
     id: 'dragonball',
     name: 'DRAGON BALL',
-    imageSrc: 'Category/1.png',
-  
+    imageSrc: 'Category/dragonball',
   },
   {
     id: 'jujutsu',
     name: 'JUJUTSU KAISEN',
-    imageSrc: 'Category/1.png',
-  
+    imageSrc: 'Category/jujutsu',
   },
   {
     id: 'demonslayer',
     name: 'DEMON SLAYER',
-    imageSrc: 'Category/1.png',
-  
+    imageSrc: 'Category/demonslayer',
   },
   {
     id: 'retro',
     name: 'RETRO FAVOURITES',
-    imageSrc: 'Category/1.png',
-    },
+    imageSrc: 'Category/retro',
+  },
   {
     id: 'katanas',
     name: 'KATANAS & SWORDS',
-    imageSrc: 'Category/1.png',
-  
+    imageSrc: 'Category/katanas',
   },
 ]
 
