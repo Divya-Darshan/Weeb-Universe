@@ -29,11 +29,6 @@ const categories = [
     name: 'RETRO FAVOURITES',
     imageSrc: 'Category/retro',
   },
-  {
-    id: 'katanas',
-    name: 'KATANAS & SWORDS',
-    imageSrc: 'Category/katanas',
-  },
 ]
 
 interface DropProps {
@@ -73,7 +68,7 @@ export default function Drop({ selectedCategory, onCategorySelect }: DropProps) 
 
   return (
     <ImageKitProvider urlEndpoint="https://ik.imagekit.io/weeb/">
-      <div className="w-full bg-[#020617]/95 py-12 sm:py-16">
+      <div className="w-full bg-[#101828]/95 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
