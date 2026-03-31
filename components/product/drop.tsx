@@ -7,7 +7,7 @@ const categories = [
   {
     id: 'naruto',
     name: 'NARUTO',
-    imageSrc: 'Category/naruto',
+    imageSrc: 'Category/naruto.png',
   },
   {
     id: 'dragonball',
