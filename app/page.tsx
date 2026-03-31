@@ -18,6 +18,7 @@ export default function Home() {
       <Drop selectedCategory={selectedCategory} onCategorySelect={setSelectedCategory} />
 
       <Products selectedCategory={selectedCategory} />
+      <Drop selectedCategory={selectedCategory} onCategorySelect={setSelectedCategory} />
       <Foot/>
     </>
   );
