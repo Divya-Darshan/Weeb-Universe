@@ -3,35 +3,37 @@
 import { ImageKitProvider, Image } from '@imagekit/next'
 import { useEffect, useRef, useState } from 'react'
 
+
 const categories = [
   {
-    id: 'naruto',
-    name: 'NARUTO',
+    id: 'marvel',
+    name: 'Marvel',
     imageSrc: 'Category/naruto',
   },
   {
-    id: 'dragonball',
-    name: 'DRAGON BALL',
+    id: 'dc',
+    name: 'DC',
     imageSrc: 'Category/dragonball',
   },
   {
-    id: 'jujutsu',
-    name: 'JUJUTSU KAISEN',
+    id: 'anime',
+    name: 'Anime',
     imageSrc: 'Category/jujutsu',
   },
   {
-    id: 'demonslayer',
-    name: 'DEMON SLAYER',
+    id: 'poster',
+    name: 'Poster',
     imageSrc: 'Category/demonslayer',
   },
   {
-    id: 'retro',
-    name: 'RETRO FAVOURITES',
+    id: 'style',
+    name: 'Style accessories',
     imageSrc: 'Category/retro',
   },
 ]
 
 interface DropProps {
+
   selectedCategory?: string | null
   onCategorySelect?: (categoryId: string) => void
 }
@@ -39,6 +41,11 @@ interface DropProps {
 export default function Drop({ selectedCategory, onCategorySelect }: DropProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [isHovering, setIsHovering] = useState(false)
+  const [cacheBuster, setCacheBuster] = useState<string | null>(null)
+
+  useEffect(() => {
+    setCacheBuster(Date.now().toString())
+  }, [])
 
   useEffect(() => {
     const container = scrollContainerRef.current
@@ -112,12 +119,16 @@ export default function Drop({ selectedCategory, onCategorySelect }: DropProps) 
                         : 'border-2 '
                     }`}>
                       <Image
-                        width={300}
-                        height={300}
-                        alt={category.name}
-                        src={category.imageSrc}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      />
+                          width={300}
+                          height={300}
+                          alt={category.name}
+                          src={
+                            cacheBuster
+                              ? `${category.imageSrc}?v=${cacheBuster}`
+                              : category.imageSrc
+                          }
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
                     </div>
                   </div>
 
