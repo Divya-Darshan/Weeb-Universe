@@ -22,7 +22,12 @@ interface ProductsProps {
 export default function Products({ selectedCategory }: ProductsProps) {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null) // Modal state
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null) 
+  const [cacheBuster, setCacheBuster] = useState<string | null>(null)
+
+  useEffect(() => {
+    setCacheBuster(Date.now().toString())
+  }, [])
 
   useEffect(() => {
     getProducts().then(({ data }) => {
@@ -68,7 +73,11 @@ export default function Products({ selectedCategory }: ProductsProps) {
                    {/* ImageKit Image - JUST image name! */}
                    <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
                      <Image
-                       src={product.image_name_front}
+                       src={
+                        cacheBuster
+                          ? `${product.image_name_front}?v=${cacheBuster}`
+                          : product.image_name_front
+                      }
                        width={400}
                        height={400}
                        alt={product.name}
