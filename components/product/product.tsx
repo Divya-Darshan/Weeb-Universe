@@ -49,7 +49,7 @@ export default function Products({ selectedCategory }: ProductsProps) {
     <>
       {/* Product Grid */}
       <ImageKitProvider urlEndpoint="https://ik.imagekit.io/weeb/">
-        <div className="bg-white py-8">
+        <div id='Drops' className="bg-white py-8">
          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
            {selectedCategory && (
              <div className="mb-6">
