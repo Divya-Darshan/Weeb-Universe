@@ -307,37 +307,128 @@ const OrdersDashboard = () => {
 
         {/* Expanded view */}
         {isExpanded && (
-          <div className="border-t border-gray-100 p-4 space-y-4 bg-gray-50">
-            {/* Order details */}
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-gray-500 text-xs">Order ID</p>
-                <p className="font-mono text-gray-900">{order.razorpayOrderId}</p>
-              </div>
-              <div>
-                <p className="text-gray-500 text-xs">Phone</p>
-                <p className="text-gray-900">{order.customerPhone}</p>
-              </div>
-              <div>
-                <p className="text-gray-500 text-xs">Status</p>
-                <p className="text-gray-900 font-medium">{STATE_WORKFLOW[order.orderStatus].label}</p>
-              </div>
-              <div>
-                <p className="text-gray-500 text-xs">Payment</p>
-                <p className="text-gray-900 capitalize">{order.paymentStatus}</p>
+          <div className="border-t border-gray-100 p-5 space-y-5 bg-gray-50">
+            {/* Customer Information Section */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">Customer Information</h3>
+              <div className="bg-white rounded-lg border border-gray-200 p-3 space-y-3">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs font-semibold text-gray-600 mb-1">First Name</p>
+                    <p className="text-sm text-gray-900">{order.customerName?.split(' ')[0] || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-gray-600 mb-1">Last Name</p>
+                    <p className="text-sm text-gray-900">{order.customerName?.split(' ').slice(1).join(' ') || 'N/A'}</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <p className="text-xs font-semibold text-gray-600 mb-1">Email</p>
+                  <p className="text-sm text-gray-900 break-all">{order.customerEmail}</p>
+                </div>
+                
+                <div>
+                  <p className="text-xs font-semibold text-gray-600 mb-1">Phone</p>
+                  <p className="text-sm text-gray-900">{order.customerPhone}</p>
+                </div>
+
+                {order.customerAddress && (
+                  <>
+                    <div className="border-t border-gray-100 pt-3">
+                      <p className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3">Delivery Address</p>
+                      <div className="space-y-3">
+                        <div>
+                          <p className="text-xs font-semibold text-gray-600 mb-1">Street Address</p>
+                          <p className="text-sm text-gray-900">{order.customerAddress.street || 'N/A'}</p>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-xs font-semibold text-gray-600 mb-1">City</p>
+                            <p className="text-sm text-gray-900">{order.customerAddress.city || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-semibold text-gray-600 mb-1">State</p>
+                            <p className="text-sm text-gray-900">{order.customerAddress.state || 'N/A'}</p>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <p className="text-xs font-semibold text-gray-600 mb-1">Pincode</p>
+                          <p className="text-sm text-gray-900">{order.customerAddress.pincode || 'N/A'}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
-            {/* Products */}
-            <div>
-              <p className="text-xs font-semibold text-gray-600 mb-2">Items</p>
-              <div className="space-y-1 bg-white p-2 rounded border border-gray-200">
-                {order.products.map((p: any, i: number) => (
-                  <div key={i} className="text-xs text-gray-700 flex justify-between">
-                    <span className="truncate">{p.name}</span>
-                    <span className="text-gray-500">x{p.quantity}</span>
-                  </div>
-                ))}
+            {/* Order Details Section */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">Order Details</h3>
+              <div className="bg-white rounded-lg border border-gray-200 p-3 grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs font-semibold text-gray-600 mb-1">Order ID</p>
+                  <p className="font-mono text-sm text-gray-900 break-all">{order.razorpayOrderId}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-gray-600 mb-1">Total Amount</p>
+                  <p className="text-sm font-semibold text-gray-900">₹{order.totalAmount?.toLocaleString('en-IN')}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-gray-600 mb-1">Order Status</p>
+                  <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${
+                    order.orderStatus === 'new_order' ? 'bg-blue-100 text-blue-700' :
+                    order.orderStatus === 'confirmed' ? 'bg-purple-100 text-purple-700' :
+                    order.orderStatus === 'processing' ? 'bg-orange-100 text-orange-700' :
+                    order.orderStatus === 'shipped' ? 'bg-amber-100 text-amber-700' :
+                    order.orderStatus === 'delivered' ? 'bg-green-100 text-green-700' :
+                    'bg-gray-100 text-gray-700'
+                  }`}>
+                    {STATE_WORKFLOW[order.orderStatus].label}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-gray-600 mb-1">Payment Status</p>
+                  <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${
+                    order.paymentStatus === 'captured' ? 'bg-green-100 text-green-700' :
+                    order.paymentStatus === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-gray-100 text-gray-700'
+                  }`}>
+                    {order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1)}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-gray-600 mb-1">Order Date</p>
+                  <p className="text-sm text-gray-900">{new Date(order.createdAt).toLocaleDateString('en-IN')}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Products Section */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">Items Ordered</h3>
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div className="divide-y">
+                  {order.products?.map((p: any, i: number) => (
+                    <div key={i} className="p-3 flex items-start gap-3 hover:bg-gray-50 transition-colors">
+                      {p.image_name_front && (
+                        <img 
+                          src={p.image_name_front} 
+                          alt={p.name} 
+                          className="w-12 h-12 rounded border border-gray-200 object-cover flex-shrink-0"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">{p.name}</p>
+                        <p className="text-xs text-gray-500 mt-1">₹{p.price?.toLocaleString('en-IN')} × {p.quantity}</p>
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900 flex-shrink-0">₹{(p.price * p.quantity)?.toLocaleString('en-IN')}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -352,15 +443,15 @@ const OrdersDashboard = () => {
                   }
                 }}
                 disabled={isUpdating}
-                className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-md text-sm font-medium transition-colors"
+                className="w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg text-sm font-semibold transition-colors shadow-sm"
               >
-                {isUpdating ? '⏳ Updating...' : `→ ${STATE_WORKFLOW[nextStatus].label}`}
+                {isUpdating ? '⏳ Updating...' : `→ Move to ${STATE_WORKFLOW[nextStatus].label}`}
               </button>
             )}
 
             {isLocked && (
-              <div className="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-md text-sm font-medium text-center">
-                ✓ Order Locked
+              <div className="w-full px-4 py-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm font-semibold text-center">
+                ✓ Order Locked - Cannot be modified
               </div>
             )}
           </div>
@@ -541,7 +632,7 @@ const OrdersDashboard = () => {
                 <p className="text-xs sm:text-sm text-amber-700 font-medium mb-2">Pending Revenue</p>
                 <p className="text-xl sm:text-2xl font-bold text-amber-900">₹{pendingRevenue.toLocaleString('en-IN')}</p>
               </div>
-*/}
+*/} 
               <div className="bg-green-50 border border-green-200 rounded-lg p-4 sm:p-6">
                 <p className="text-xs sm:text-sm text-green-700 font-medium mb-2">Delivered Revenue</p>
                 <p className="text-xl sm:text-2xl font-bold text-green-900">₹{deliveredRevenue.toLocaleString('en-IN')}</p>

@@ -115,8 +115,7 @@ export default function CartComponent() {
           city: formData.city || '',
           pincode: formData.pincode || '',
           state: formData.state,
-          phone: formData.phone,
-          paymentMethod: 'razorpay'
+          phone: formData.phone
         },
         items: cartItems,
         subtotal,
