@@ -622,8 +622,8 @@ const OrdersDashboard = () => {
             </div>
 
             {/* Revenue Metrics */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-{/*          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 sm:p-6">
+ {/*            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 sm:p-6">
                 <p className="text-xs sm:text-sm text-gray-600 font-medium mb-2">Total Revenue</p>
                 <p className="text-xl sm:text-2xl font-bold text-gray-900">₹{totalRevenue.toLocaleString('en-IN')}</p>
               </div>
@@ -632,7 +632,7 @@ const OrdersDashboard = () => {
                 <p className="text-xs sm:text-sm text-amber-700 font-medium mb-2">Pending Revenue</p>
                 <p className="text-xl sm:text-2xl font-bold text-amber-900">₹{pendingRevenue.toLocaleString('en-IN')}</p>
               </div>
-*/} 
+
               <div className="bg-green-50 border border-green-200 rounded-lg p-4 sm:p-6">
                 <p className="text-xs sm:text-sm text-green-700 font-medium mb-2">Delivered Revenue</p>
                 <p className="text-xl sm:text-2xl font-bold text-green-900">₹{deliveredRevenue.toLocaleString('en-IN')}</p>
@@ -642,6 +642,7 @@ const OrdersDashboard = () => {
                 <p className="text-xl sm:text-2xl font-bold text-indigo-900">₹{avgOrderValue.toLocaleString('en-IN')}</p>
               </div>
             </div>
+*/} 
 
             {/* Business KPIs */}
             <div className="grid grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4">

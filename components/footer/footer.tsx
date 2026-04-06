@@ -6,7 +6,7 @@ import { FaInstagram } from 'react-icons/fa6'
 
 const navigation = {
   support: ['+91 9092659556', 'weebstore.com', 'Instagram'], 
-  company: ['About', 'Instagram', 'weebstore.com', 'Press'],  
+  company: ['About', 'Instagram', 'weebstore.com'],  
   legal: ['Terms of Service', 'Privacy Policy'  ],
 }
 
