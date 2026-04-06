@@ -34,10 +34,14 @@ const PRIVACY_CONTENT = [
 ]
 
 
+
+
 function getLinkHref(item: string): string {
-  const cleanItem = item.trim()
-  if (/^[\d\s+()-]+$/.test(cleanItem)) {
-    return `tel:${cleanItem.replace(/\s/g, '')}`
+  if (item === "Instagram") {
+    return "https://www.instagram.com/weeb._universe"
+  }
+  if (/^[\d\s+()-]+$/.test(item)) {
+    return `tel:${item.replace(/\s/g, '')}`
   }
   return '#'
 }
@@ -132,7 +136,7 @@ export default function Footer() {
                 Making the world a better place through constructing elegant hierarchies.
               </p>
               <div className="flex items-center gap-4 text-gray-400">
-                <a href="#" className="group rounded-full p-2 hover:text-white hover:bg-white/10 transition-all duration-200">
+                <a href="https://www.instagram.com/weeb._universe" className="group rounded-full p-2 hover:text-white hover:bg-white/10 transition-all duration-200">
                   <FaInstagram className="h-4 w-4 group-hover:scale-110" />
                 </a>
               </div>
