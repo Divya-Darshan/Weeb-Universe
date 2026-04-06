@@ -203,7 +203,7 @@ export default function Footer() {
 
           <div className="mt-12 border-t border-white/10 pt-8">
             <p className="text-xs text-gray-500 sm:text-center">
-              © {date.getFullYear()} Weeb Store. 3 friends building anime merch dreams.
+              © {date.getFullYear()} Weeb Store building anime merch dreams.
             </p>
           </div>
         </div>
