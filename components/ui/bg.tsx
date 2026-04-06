@@ -8,6 +8,7 @@ import Cart from '@/components/product/cart'
 const navigation = [
   { name: 'Drops', href: '#Drops' },
   { name: 'Collection', href: '#Collection' },
+  { name: 'Contacts', href: '#Contacts' },
 
 ]
 
