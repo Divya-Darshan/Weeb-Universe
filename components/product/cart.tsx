@@ -1,3 +1,4 @@
+// @/components/product/cart.tsx
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
@@ -9,6 +10,7 @@ import { api } from '@/convex/_generated/api'
 import { Unauthenticated } from 'convex/react'
 import { SignInButton } from '@clerk/nextjs'
 import { useUser } from '@clerk/nextjs'
+import { coupons } from '@/code'
 
 interface CartItem {
   id: number
@@ -99,8 +101,35 @@ export default function CartComponent() {
   const subtotal = total
   const shipping = cartItems.length > 0 ? 0.50 : 0
   const taxes = Math.round(subtotal * 0.18)
-  const grandTotal = subtotal + shipping + taxes
   const createOrder = useMutation(api.razor.orders.createOrder)
+ 
+ 
+  // Artyam coupon da!!
+  const [coupon, setCoupon] = useState('')
+  const [discount, setDiscount] = useState(0)
+  const [couponApplied, setCouponApplied] = useState(false)
+
+ const grandTotal = subtotal + shipping + taxes - discount
+
+  const applyCoupon = () => {
+    const code = coupon.trim().toUpperCase()
+    const selected = coupons.find((item) => item.code === code)
+
+    if (selected) {
+      if (selected.type === "flat") {
+        setDiscount(selected.value)
+      } else if (selected.type === "percent") {
+        setDiscount(Math.round(subtotal * (selected.value / 100)))
+      }
+      setCouponApplied(true)
+    } else {
+      setDiscount(0)
+      setCouponApplied(false)
+      alert("Invalid coupon")
+    }
+  }
+
+
 
   const handlePaymentSuccess = async (response: any) => {
     try {
@@ -371,6 +400,32 @@ export default function CartComponent() {
                           </div>
                         </div>
 
+                          {/* Coupon */}
+                          <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                            <h3 className="text-xs font-bold mb-2 text-gray-900">Coupon</h3>
+
+                            <div className="flex gap-2">
+                              <input
+                                value={coupon}
+                                onChange={(e) => setCoupon(e.target.value)}
+                                placeholder="Enter coupon code"
+                                className="flex-1 h-8 text-black px-2 text-xs border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                              />
+                              <button
+                                onClick={applyCoupon}
+                                className="px-3 bg-indigo-600 text-white text-xs rounded-md"
+                              >
+                                Apply
+                              </button>
+                            </div>
+
+                              {couponApplied && discount > 0 && (
+                                <p className="text-green-600 text-xs mt-2">
+                                  Discount applied successfully
+                                </p>
+                              )}
+                          </div>
+
                         {/* Summary */}
                         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-3 border border-indigo-100">
                           <h4 className="text-xs font-bold mb-2 text-black">Order Summary</h4>
@@ -387,11 +442,13 @@ export default function CartComponent() {
                               <span className="text-black">Tax</span>
                               <span className="font-semibold text-black ">₹{taxes.toLocaleString()}</span>
                             </div>
+
                             <div className="h-px bg-black my-1" />
                             <div className="flex justify-between">
                               <span className="font-bold text-gray-900">Total</span>
                               <span className="font-black text-indigo-600">₹{grandTotal.toLocaleString()}</span>
                             </div>
+
                           </div>
                         </div>
 
