@@ -442,7 +442,11 @@ export default function CartComponent() {
                               <span className="text-black">Tax</span>
                               <span className="font-semibold text-black ">₹{taxes.toLocaleString()}</span>
                             </div>
-
+{couponApplied && (
+  <p className="text-green-600 text-xs mt-2">
+    Coupon applied successfully.&nbsp;You SAVED -₹{discount}
+  </p>
+)}
                             <div className="h-px bg-black my-1" />
                             <div className="flex justify-between">
                               <span className="font-bold text-gray-900">Total</span>
