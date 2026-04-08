@@ -133,7 +133,7 @@ export default function Footer() {
                 <span className="text-2xl font-bold text-white">~</span>
               </div>
               <p className="max-w-xs text-sm leading-relaxed text-gray-300">
-                Making the world a better place through constructing elegant hierarchies.
+                    Stuff you actually want to keep on your desk your favorite characters in real life
               </p>
               <div className="flex items-center gap-4 text-gray-400">
                 <a href="https://www.instagram.com/weeb._universe" className="group rounded-full p-2 hover:text-white hover:bg-white/10 transition-all duration-200">
