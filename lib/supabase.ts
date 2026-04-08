@@ -8,12 +8,14 @@ export const imageKitUrl = 'https://ik.imagekit.io/weeb/'
 
 export const supabase = createClient(supabaseUrl, supabaseKey)
 
-// 🛒 Get ALL Products (from PRODUCTS table)
-export async function getProducts() {
+// lib/supabase.ts
+export async function getProducts(limit = 10, offset = 0) {
   const { data, error } = await supabase
-    .from('products')  // ✅ Fixed: products table
+    .from('products')
     .select('*')
     .order('created_at', { ascending: false })
+    .range(offset, offset + limit - 1)
+
   return { data: data || [], error }
 }
 
