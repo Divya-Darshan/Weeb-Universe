@@ -651,12 +651,12 @@ const OrdersDashboard = () => {
                 <p className="text-xs sm:text-sm text-rose-700 font-medium mb-2">Completion Rate</p>
                 <p className="text-2xl sm:text-3xl font-bold text-rose-900">{completionRate}%</p>
               </div>
-              <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-4 sm:p-6">
+              {/* <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-4 sm:p-6">
                 <p className="text-xs sm:text-sm text-cyan-700 font-medium mb-2">Urgent Orders</p>
                 <p className="text-2xl sm:text-3xl font-bold text-cyan-900">
                   {localOrders.filter(o => calculateUrgency(o) === 'urgent').length}
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         )}
