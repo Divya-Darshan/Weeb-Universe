@@ -1,5 +1,5 @@
 // @ /components/admin/dashboard.tsx
-// this this fucking sucks!!!!!  no it not
+
 'use client'
 
 import { useQuery, useMutation } from 'convex/react'
