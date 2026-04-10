@@ -20,18 +20,17 @@ const TERMS_CONTENT = [
   `Weeb Store represents an independent initiative operated by three individuals collaboratively developing an anime merchandise platform. By engaging with our services, customers acknowledge and accept these operational terms as presented.`
 ]
 
-
 const PRIVACY_CONTENT = [
-  `Weeb Store, in the course of facilitating customer transactions for anime merchandise including but not limited to apparel, collectibles, and related products through its e-commerce platform, collects and processes certain personal data comprising electronic mail addresses and mobile telephone numbers strictly for the purpose of order fulfillment, shipment coordination, and transactional communication as required under applicable e-commerce operational protocols.`,
+  `Weeb Store, in the course of facilitating customer transactions for anime merchandise including but not limited to apparel, collectibles, and related products through its e-commerce platform, collects and processes certain personal data comprising electronic mail addresses and mobile telephone numbers strictly for the purpose of order fulfillment, shipment coordination, and transactional communication as required under applicable e-commerce operational protocols. For any support or assistance, customers may contact +91 9092659556.`,
 
   `All payment processing transactions conducted through the Weeb Store platform are exclusively handled by Razorpay Payment Gateway Services Pvt. Ltd., a Reserve Bank of India licensed entity, operating under PCI-DSS Level 1 compliance standards, wherein Weeb Store maintains no access to, storage of, or visibility into customer payment instrument details including but not limited to credit/debit card numbers, CVV codes, or banking credentials at any stage of the transaction lifecycle.`,
 
-  `Customers exercising rights under applicable data protection regulations including but not limited to Information Technology Act, 2000 as amended and associated rules may submit formal requests for access, rectification, or erasure of their personal data maintained by Weeb Store by directing electronic correspondence to hello@weebstore.com containing complete identification details, order reference numbers where applicable, and specific nature of data subject request for processing within statutory timelines.`,
+  `Customers exercising rights under applicable data protection regulations including but not limited to Information Technology Act, 2000 as amended and associated rules may submit formal requests for access, rectification, or erasure of their personal data maintained by Weeb Store by directing electronic correspondence to hello@weebstore.com containing complete identification details, order reference numbers where applicable, and specific nature of data subject request for processing within statutory timelines. Alternatively, they may contact support at +91 9092659556.`,
 
   `Weeb Store does not engage in the sale, transfer, disclosure, or commercial exploitation of customer personal data to any third party entities, marketing networks, data aggregation services, or commercial partners under any circumstances beyond what is contractually required for order fulfillment and service delivery through authorized payment processors and logistics partners.`,
 
-  `This Privacy Notice was last amended and published during March 2026 and reflects current data handling practices of Weeb Store operating as an unregistered partnership of three individuals based in Tamil Nadu, India engaged in anime merchandise retail activities.`
-]
+  `This Privacy Notice was last amended and published during March 2026 and reflects current data handling practices of Weeb Store operating as an unregistered partnership of three individuals based in Tamil Nadu, India engaged in anime merchandise retail activities. For general inquiries, support is available at +91 9092659556.`
+];
 
 
 
