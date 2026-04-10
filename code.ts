@@ -1,7 +1,7 @@
 //  @/coupon.ts
 export const coupons = [
   {
-    code: "FLAT50",
+    code: "ARTYAM50",
     label: "₹50 Off",
     type: "flat",
     value: 50,
