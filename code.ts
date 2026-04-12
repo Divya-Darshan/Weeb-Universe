@@ -15,10 +15,10 @@ export const coupons = [
     description: "Get 10% off your subtotal",
   },
   {
-    code: "WELCOME20",
+    code: "WELCOME",
     label: "20% Off",
     type: "percent",
-    value: 20,
+    value: 100,
     description: "Welcome discount for new users",
   },
 ] as const
