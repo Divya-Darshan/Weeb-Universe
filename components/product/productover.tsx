@@ -137,7 +137,7 @@ export default function ProductOverview({ product, open, onClose }: ProductOverv
                       <p className="text-3xl font-bold text-gray-900">₹{product.price}</p>
                       
                       {/* QUANTITY SELECTOR */}
-                      <div className="mt-6 flex items-center space-x-4">
+                      <div className="mt-6 flex items-center text-black space-x-4">
                         <span className="text-sm font-medium text-gray-500">Qty</span>
                         <div className="flex items-center border border-gray-300 rounded-lg p-1">
                           <button
