@@ -3,156 +3,109 @@
 import { ImageKitProvider, Image } from '@imagekit/next'
 import { useEffect, useRef, useState } from 'react'
 
-
 const categories = [
-  {
-    id: 'marvel',
-    name: 'Marvel',
-    imageSrc: 'Category/naruto',
-  },
-  {
-    id: 'dc',
-    name: 'DC',
-    imageSrc: 'Category/dragonball',
-  },
-  {
-    id: 'anime',
-    name: 'Anime',
-    imageSrc: 'Category/jujutsu',
-  },
-  {
-    id: 'poster',
-    name: 'Poster',
-    imageSrc: 'Category/demonslayer',
-  },
-  {
-    id: 'style',
-    name: 'Style accessories',
-    imageSrc: 'Category/retro',
-  },
+  { id: 'marvel', name: 'Marvel', imageSrc: 'Category/naruto' },
+  { id: 'dc', name: 'DC', imageSrc: 'Category/dragonball' },
+  { id: 'anime', name: 'Anime', imageSrc: 'Category/jujutsu' },
+  { id: 'poster', name: 'Poster', imageSrc: 'Category/demonslayer' },
+  { id: 'style', name: 'Style accessories', imageSrc: 'Category/retro' },
 ]
 
 interface DropProps {
-
   selectedCategory?: string | null
   onCategorySelect?: (categoryId: string) => void
 }
 
 export default function Drop({ selectedCategory, onCategorySelect }: DropProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const [isHovering, setIsHovering] = useState(false)
-  const [cacheBuster, setCacheBuster] = useState<string | null>(null)
 
   useEffect(() => {
-    setCacheBuster(Date.now().toString())
-  }, [])
+    const el = scrollRef.current
+    if (!el || isHovering) return
 
-  useEffect(() => {
-    const container = scrollContainerRef.current
-    if (!container || isHovering) return
+    let frame = 0
+    let scrollLeft = el.scrollLeft
+    const speed = window.innerWidth < 640 ? 0.4 : 0.8
 
-    let animationFrameId: number
-    let scrollLeft = 0
-    const scrollSpeed = 1 // pixels per frame
-    const totalItemWidth = container.scrollWidth / 2
-
-    const animate = () => {
-      scrollLeft += scrollSpeed
-      container.scrollLeft = scrollLeft % totalItemWidth
-      animationFrameId = requestAnimationFrame(animate)
+    const loop = () => {
+      scrollLeft += speed
+      const maxScroll = el.scrollWidth / 2
+      if (scrollLeft >= maxScroll) scrollLeft = 0
+      el.scrollLeft = scrollLeft
+      frame = requestAnimationFrame(loop)
     }
 
-    // Start animation after a small delay to ensure DOM is ready
-    const timeoutId = setTimeout(() => {
-      animationFrameId = requestAnimationFrame(animate)
-    }, 100)
+    const start = window.setTimeout(() => {
+      frame = requestAnimationFrame(loop)
+    }, 150)
 
     return () => {
-      clearTimeout(timeoutId)
-      cancelAnimationFrame(animationFrameId)
+      window.clearTimeout(start)
+      cancelAnimationFrame(frame)
     }
   }, [isHovering])
 
   return (
     <ImageKitProvider urlEndpoint="https://ik.imagekit.io/weeb/">
-      <div id='Collection' className="w-full bg-[#101828]/95 py-12 sm:py-16">
+      <section id="Collection" className="w-full bg-[#101828]/95 py-10 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="mb-8">
-
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white">
               Collection
-
             </h2>
-
           </div>
 
-
-
-          {/* Infinite Carousel */}
-          <div 
+          <div
             className="relative"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
+            onTouchStart={() => setIsHovering(true)}
+            onTouchEnd={() => setIsHovering(false)}
           >
             <div
-              ref={scrollContainerRef}
-              className="flex gap-6 sm:gap-8 overflow-x-auto scroll-smooth no-scrollbar"
-              style={{ scrollBehavior: 'smooth' }}
+              ref={scrollRef}
+              className="flex gap-4 sm:gap-6 overflow-x-auto overscroll-x-contain scroll-smooth no-scrollbar pb-2"
             >
-              {/* Tripled for better infinite effect */}
-              {[...categories, ...categories, ...categories].map((category, index) => (
+              {[...categories, ...categories].map((category, index) => (
                 <button
                   key={`${category.id}-${index}`}
                   onClick={() => onCategorySelect?.(category.id)}
-                  className="flex-shrink-0 group cursor-pointer transition-all duration-300 focus:outline-none"
+                  className="flex-shrink-0 w-[110px] sm:w-[150px] lg:w-[180px] group focus:outline-none"
                 >
-                  {/* Circular Image Container */}
-                  <div className={`relative w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 mx-auto mb-4 transition-all duration-300 ${
-                    selectedCategory === category.id 
-                      ? '' 
-                      : 'hover:scale-110'
-                  }`}>
-                    <div className={`absolute inset-0 rounded-full overflow-hidden transition-all duration-300 shadow-lg ${
-                      selectedCategory === category.id 
-                        ? '' 
-                        : 'border-2 '
-                    }`}>
-                      <Image
-                          width={300}
-                          height={300}
-                          alt={category.name}
-                          src={
-                            cacheBuster
-                              ? `${category.imageSrc}?v=${cacheBuster}`
-                              : category.imageSrc
-                          }
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
-                    </div>
+                  <div
+                    className={`mx-auto mb-3 sm:mb-4 relative overflow-hidden rounded-full shadow-lg transition-transform duration-300
+                      w-24 h-24 sm:w-36 sm:h-36 lg:w-44 lg:h-44
+                      ${selectedCategory === category.id ? '' : 'group-hover:scale-105'}`}
+                  >
+                    <Image
+                      width={400}
+                      height={400}
+                      alt={category.name}
+                      src={category.imageSrc}
+                      sizes="(max-width: 640px) 96px, (max-width: 1024px) 144px, 176px"
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
                   </div>
 
-                  {/* Category Name */}
-                  <div className="text-center">
-                    <h3 className={`font-bold text-sm sm:text-base whitespace-nowrap px-2 transition-colors duration-300 ${
-                      selectedCategory === category.id 
-                        ? 'text-cyan-400' 
+                  <h3
+                    className={`text-center font-semibold text-xs sm:text-sm lg:text-base leading-tight transition-colors duration-300 ${
+                      selectedCategory === category.id
+                        ? 'text-cyan-400'
                         : 'text-white group-hover:text-cyan-400'
-                    }`}>
-                      {category.name}
-                    </h3>
-
-                  </div>
+                    }`}
+                  >
+                    {category.name}
+                  </h3>
                 </button>
               ))}
             </div>
 
-            {/* Gradient Overlays for fade effect */}
-            <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-[#020617] to-transparent pointer-events-none z-10" />
-            <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-l from-[#020617] to-transparent pointer-events-none z-10" />
+            <div className="absolute left-0 top-0 bottom-0 w-6 sm:w-12 bg-gradient-to-r from-[#020617] to-transparent pointer-events-none z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-6 sm:w-12 bg-gradient-to-l from-[#020617] to-transparent pointer-events-none z-10" />
           </div>
         </div>
-      </div>
+      </section>
 
       <style jsx>{`
         .no-scrollbar {
