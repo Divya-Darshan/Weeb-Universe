@@ -1,7 +1,7 @@
 'use client'
 
 import { ImageKitProvider, Image } from '@imagekit/next'
-import { useEffect, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 const categories = [
   { id: 'marvel', name: 'Marvel', imageSrc: 'Category/naruto' },
@@ -14,37 +14,18 @@ const categories = [
 interface DropProps {
   selectedCategory?: string | null
   onCategorySelect?: (categoryId: string) => void
+  direction?: 'left' | 'right'
+  pauseOnHover?: boolean
 }
 
-export default function Drop({ selectedCategory, onCategorySelect }: DropProps) {
-  const scrollRef = useRef<HTMLDivElement>(null)
+export default function Drop({
+  selectedCategory,
+  onCategorySelect,
+  direction = 'left',
+  pauseOnHover = true,
+}: DropProps) {
   const [isHovering, setIsHovering] = useState(false)
-
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el || isHovering) return
-
-    let frame = 0
-    let scrollLeft = el.scrollLeft
-    const speed = window.innerWidth < 640 ? 0.4 : 0.8
-
-    const loop = () => {
-      scrollLeft += speed
-      const maxScroll = el.scrollWidth / 2
-      if (scrollLeft >= maxScroll) scrollLeft = 0
-      el.scrollLeft = scrollLeft
-      frame = requestAnimationFrame(loop)
-    }
-
-    const start = window.setTimeout(() => {
-      frame = requestAnimationFrame(loop)
-    }, 150)
-
-    return () => {
-      window.clearTimeout(start)
-      cancelAnimationFrame(frame)
-    }
-  }, [isHovering])
+  const items = useMemo(() => [...categories, ...categories], [])
 
   return (
     <ImageKitProvider urlEndpoint="https://ik.imagekit.io/weeb/">
@@ -57,26 +38,27 @@ export default function Drop({ selectedCategory, onCategorySelect }: DropProps) 
           </div>
 
           <div
-            className="relative"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-            onTouchStart={() => setIsHovering(true)}
-            onTouchEnd={() => setIsHovering(false)}
+            className="relative overflow-hidden"
+            onMouseEnter={() => pauseOnHover && setIsHovering(true)}
+            onMouseLeave={() => pauseOnHover && setIsHovering(false)}
+            onTouchStart={() => pauseOnHover && setIsHovering(true)}
+            onTouchEnd={() => pauseOnHover && setIsHovering(false)}
           >
             <div
-              ref={scrollRef}
-              className="flex gap-4 sm:gap-6 overflow-x-auto overscroll-x-contain scroll-smooth no-scrollbar pb-2"
+              className={`marquee-track ${direction === 'right' ? 'marquee-right' : 'marquee-left'} ${
+                pauseOnHover && isHovering ? 'paused' : ''
+              }`}
             >
-              {[...categories, ...categories].map((category, index) => (
+              {items.map((category, index) => (
                 <button
                   key={`${category.id}-${index}`}
                   onClick={() => onCategorySelect?.(category.id)}
-                  className="flex-shrink-0 w-[110px] sm:w-[150px] lg:w-[180px] group focus:outline-none"
+                  className="item group flex-shrink-0 focus:outline-none"
                 >
                   <div
                     className={`mx-auto mb-3 sm:mb-4 relative overflow-hidden rounded-full shadow-lg transition-transform duration-300
-                      w-24 h-24 sm:w-36 sm:h-36 lg:w-44 lg:h-44
-                      ${selectedCategory === category.id ? '' : 'group-hover:scale-105'}`}
+                    w-24 h-24 sm:w-36 sm:h-36 lg:w-44 lg:h-44
+                    ${selectedCategory === category.id ? '' : 'group-hover:scale-105'}`}
                   >
                     <Image
                       width={400}
@@ -101,19 +83,94 @@ export default function Drop({ selectedCategory, onCategorySelect }: DropProps) 
               ))}
             </div>
 
-            <div className="absolute left-0 top-0 bottom-0 w-6 sm:w-12 bg-gradient-to-r from-[#020617] to-transparent pointer-events-none z-10" />
-            <div className="absolute right-0 top-0 bottom-0 w-6 sm:w-12 bg-gradient-to-l from-[#020617] to-transparent pointer-events-none z-10" />
+            <div className="fade-left" />
+            <div className="fade-right" />
           </div>
         </div>
       </section>
 
       <style jsx>{`
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+        .marquee-track {
+          display: flex;
+          width: max-content;
+          gap: 1rem;
+          will-change: transform;
         }
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
+
+        .item {
+          width: 110px;
+        }
+
+        @media (min-width: 640px) {
+          .marquee-track {
+            gap: 1.5rem;
+          }
+          .item {
+            width: 150px;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .item {
+            width: 180px;
+          }
+        }
+
+        .marquee-left {
+          animation: scroll-left 20s linear infinite;
+        }
+
+        .marquee-right {
+          animation: scroll-right 20s linear infinite;
+        }
+
+        .paused {
+          animation-play-state: paused;
+        }
+
+        .fade-left,
+        .fade-right {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 2rem;
+          z-index: 10;
+          pointer-events: none;
+        }
+
+        .fade-left {
+          left: 0;
+          background: linear-gradient(to right, #020617, transparent);
+        }
+
+        .fade-right {
+          right: 0;
+          background: linear-gradient(to left, #020617, transparent);
+        }
+
+        @keyframes scroll-left {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-50%);
+          }
+        }
+
+        @keyframes scroll-right {
+          from {
+            transform: translateX(-50%);
+          }
+          to {
+            transform: translateX(0);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .marquee-left,
+          .marquee-right {
+            animation: none;
+          }
         }
       `}</style>
     </ImageKitProvider>
