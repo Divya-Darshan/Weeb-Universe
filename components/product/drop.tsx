@@ -13,7 +13,7 @@ const categories = [
 
 interface DropProps {
   selectedCategory?: string | null
-  onCategorySelect?: (categoryId: string) => void
+  onCategorySelect?: (categoryId: string | null) => void
   direction?: 'left' | 'right'
   pauseOnHover?: boolean
 }
@@ -45,20 +45,28 @@ export default function Drop({
             onTouchEnd={() => pauseOnHover && setIsHovering(false)}
           >
             <div
-              className={`marquee-track ${direction === 'right' ? 'marquee-right' : 'marquee-left'} ${
-                pauseOnHover && isHovering ? 'paused' : ''
-              }`}
+              className={`marquee-track ${
+                direction === 'right' ? 'marquee-right' : 'marquee-left'
+              } ${pauseOnHover && isHovering ? 'paused' : ''}`}
             >
               {items.map((category, index) => (
                 <button
                   key={`${category.id}-${index}`}
-                  onClick={() => onCategorySelect?.(category.id)}
+                  onClick={() =>
+                    onCategorySelect?.(
+                      selectedCategory === category.id ? null : category.id
+                    )
+                  }
                   className="item group flex-shrink-0 focus:outline-none"
                 >
                   <div
                     className={`mx-auto mb-3 sm:mb-4 relative overflow-hidden rounded-full shadow-lg transition-transform duration-300
                     w-24 h-24 sm:w-36 sm:h-36 lg:w-44 lg:h-44
-                    ${selectedCategory === category.id ? '' : 'group-hover:scale-105'}`}
+                    ${
+                      selectedCategory === category.id
+                        ? 'ring-2 ring-white scale-105'
+                        : 'group-hover:scale-105'
+                    }`}
                   >
                     <Image
                       width={400}
@@ -70,13 +78,7 @@ export default function Drop({
                     />
                   </div>
 
-                  <h3
-                    className={`text-center font-semibold text-xs sm:text-sm lg:text-base leading-tight transition-colors duration-300 ${
-                      selectedCategory === category.id
-                        ? 'text-cyan-400'
-                        : 'text-white group-hover:text-cyan-400'
-                    }`}
-                  >
+                  <h3 className="text-center font-semibold text-xs sm:text-sm lg:text-base leading-tight text-white">
                     {category.name}
                   </h3>
                 </button>
