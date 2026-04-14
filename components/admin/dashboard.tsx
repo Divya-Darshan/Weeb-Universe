@@ -664,13 +664,13 @@ const OrdersDashboard = () => {
 
         {/* Filters */}
         <div className="mb-6 space-y-3">
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col text-black sm:flex-row gap-3">
             <input
               type="text"
               placeholder="Search orders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none text-black focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
