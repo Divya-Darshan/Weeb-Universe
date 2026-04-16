@@ -15,7 +15,7 @@ export const coupons = [
     description: "Get 10% off your subtotal",
   },
   {
-    code: "WELCOME",
+    code: "WELCOE",
     label: "20% Off",
     type: "percent",
     value: 100,
