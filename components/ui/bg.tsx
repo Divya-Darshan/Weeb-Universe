@@ -1,3 +1,4 @@
+// @component/ui/bg.tsx
 'use client'
 import Profile from '@/components/profile/profile'
 import { useState, useEffect } from 'react'
@@ -7,12 +8,13 @@ import Cart from '@/components/product/cart'
 import Logo from '@/public/logo.png'
 import Image from 'next/image'
 
+
+
 const navigation = [
   { name: 'Drops', href: '#Drops' },
   { name: 'Collection', href: '#Collection' },
   { name: 'Contacts', href: '#Contacts' },
   { name: 'About', href: '#About' },
-
 ]
 
 const sliderImages = [
@@ -23,7 +25,6 @@ const sliderImages = [
 ]
 
 export default function Example() {
-  
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
 
@@ -37,29 +38,21 @@ export default function Example() {
   const goToSlide = (index: number) => setCurrentSlide(index)
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % sliderImages.length)
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + sliderImages.length) % sliderImages.length)
+  const closeMobileMenu = () => setMobileMenuOpen(false)
 
   return (
     <div className="bg-gray-900">
       <header className="absolute inset-x-0 top-0 z-40">
         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
-          {/* Logo */}
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <Image
-                alt=""
-                src={Logo}
-                className="h-8 w-auto"
-              />
+              <Image alt="" src={Logo} className="h-8 w-auto" />
             </a>
           </div>
 
-          {/* Mobile menu + Cart - TOGETHER */}
           <div className="flex items-center gap-x-3 lg:hidden">
-            {/* Cart */}
             <Cart />
-            
-            {/* Hamburger */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
@@ -70,7 +63,6 @@ export default function Example() {
             </button>
           </div>
 
-          {/* Desktop nav */}
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
               <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-white">
@@ -79,17 +71,12 @@ export default function Example() {
             ))}
           </div>
 
-          {/* Desktop Profile + Cart - FIXED */}
           <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:gap-x-6">
-            {/* Cart - DESKTOP VISIBLE */}
             <Cart />
-            
-            {/* Profile */}
             <Profile />
           </div>
         </nav>
 
-        {/* Mobile menu dialog */}
         <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
           <div className="fixed inset-0 z-50" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
@@ -102,7 +89,7 @@ export default function Example() {
                   className="h-8 w-auto"
                 />
               </a>
-              
+
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
@@ -120,15 +107,19 @@ export default function Example() {
                     <a
                       key={item.name}
                       href={item.href}
+                      onClick={closeMobileMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-white/5"
                     >
                       {item.name}
                     </a>
                   ))}
                 </div>
-                {/* Mobile Profile */}
+
                 <div className="py-6">
-                  <a href="#" className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5">
+                  <a
+                    href="#"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5"
+                  >
                     <Profile />
                   </a>
                 </div>
@@ -138,11 +129,8 @@ export default function Example() {
         </Dialog>
       </header>
 
-      {/* Image Slider */}
       <div className="relative w-full pt-20 bg-gray-900 px-4 sm:px-0">
-        {/* Slider container */}
         <div className="relative h-96 sm:h-screen max-h-[600px] overflow-hidden rounded-2xl mx-auto max-w-6xl mt-8">
-          {/* Images */}
           {sliderImages.map((image, index) => (
             <div
               key={index}
@@ -155,36 +143,28 @@ export default function Example() {
                 alt={`Slide ${index + 1}`}
                 className="w-full h-full object-cover rounded-2xl"
               />
-              {/* Overlay */}
               <div className="absolute inset-0 bg-black/20 rounded-2xl" />
             </div>
           ))}
 
-          {/* Dots Navigation */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 flex gap-3">
             {sliderImages.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all ${
-                  index === currentSlide
-                    ? 'bg-white w-8'
-                    : 'bg-white/50 hover:bg-white/70'
+                  index === currentSlide ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/70'
                 }`}
               />
             ))}
           </div>
         </div>
 
-        {/* Content below slider */}
         <div className="w-full max-w-6xl mx-auto px-6 py-16 flex flex-col items-center justify-center text-center">
           <p className="text-gray-400 text-sm tracking-wide mb-4 uppercase">
             Latest Collections
           </p>
         </div>
-
-
-
       </div>
     </div>
   )
