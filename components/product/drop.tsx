@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react'
 
 const categories = [
   { id: 'marvel', name: 'Marvel', imageSrc: 'Category/naruto' },
-  { id: 'dc', name: 'DC', imageSrc: 'Category/dragonball' },
+  { id: 'dc', name: 'DC', imageSrc: 'Category/mainlogo.png' },
   { id: 'anime', name: 'Anime', imageSrc: 'Category/jujutsu' },
   { id: 'poster', name: 'Poster', imageSrc: 'Category/demonslayer' },
   { id: 'style', name: 'Style accessories', imageSrc: 'Category/retro' },
