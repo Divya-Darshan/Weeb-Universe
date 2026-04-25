@@ -1,14 +1,13 @@
 // @component/ui/bg.tsx
 'use client'
+
 import Profile from '@/components/profile/profile'
 import { useState, useEffect } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Cart from '@/components/product/cart'
 import Logo from '@/public/logo.svg'
 import Image from 'next/image'
-
-
 
 const navigation = [
   { name: 'Drops', href: '#Drops' },
@@ -36,8 +35,6 @@ export default function Example() {
   }, [])
 
   const goToSlide = (index: number) => setCurrentSlide(index)
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % sliderImages.length)
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + sliderImages.length) % sliderImages.length)
   const closeMobileMenu = () => setMobileMenuOpen(false)
 
   return (
@@ -47,8 +44,7 @@ export default function Example() {
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-<Image alt="" src={Logo} className="h-600 w-auto brightness-0 invert" />
-
+              <Image alt="" src={Logo} className="h-12 w-auto brightness-0 invert" />
             </a>
           </div>
 
@@ -84,11 +80,7 @@ export default function Example() {
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
-                <img
-                  alt=""
-                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                  className="h-8 w-auto"
-                />
+                <Image alt="" src={Logo} className="h-12 w-auto brightness-0 invert" />
               </a>
 
               <button
@@ -117,12 +109,9 @@ export default function Example() {
                 </div>
 
                 <div className="py-6">
-                  <a
-                    href="#"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-white/5"
-                  >
+                  <div onClick={closeMobileMenu}>
                     <Profile />
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -130,31 +119,31 @@ export default function Example() {
         </Dialog>
       </header>
 
-      <div className="relative w-full pt-20 bg-gray-900 px-4 sm:px-0">
-        <div className="relative h-96 sm:h-screen max-h-[600px] overflow-hidden rounded-2xl mx-auto max-w-6xl mt-8">
+      <div className="relative isolate w-full pt-20 bg-gray-900 px-4 sm:px-0">
+        <div className="relative z-10 h-96 sm:h-screen max-h-[600px] overflow-hidden rounded-2xl mx-auto max-w-6xl mt-8">
           {sliderImages.map((image, index) => (
             <div
               key={index}
-              className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
                 index === currentSlide ? 'opacity-100' : 'opacity-0'
               }`}
             >
               <img
                 src={image}
                 alt={`Slide ${index + 1}`}
-                className="w-full h-full object-cover rounded-2xl"
+                className="w-full h-full object-cover rounded-2xl transition-transform duration-700 ease-out hover:scale-[1.05]"
               />
-              <div className="absolute inset-0 bg-black/20 rounded-2xl" />
+              <div className="absolute inset-0 rounded-2xl bg-black/20" />
             </div>
           ))}
 
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 flex gap-3">
+          <div className="absolute bottom-6 left-1/2 z-40 flex -translate-x-1/2 gap-3">
             {sliderImages.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  index === currentSlide ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/70'
+                className={`h-3 w-3 rounded-full transition-all ${
+                  index === currentSlide ? 'w-8 bg-white' : 'bg-white/50 hover:bg-white/70'
                 }`}
               />
             ))}
