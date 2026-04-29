@@ -10,7 +10,7 @@ import { api } from '@/convex/_generated/api'
 import { Unauthenticated } from 'convex/react'
 import { SignInButton } from '@clerk/nextjs'
 import { useUser } from '@clerk/nextjs'
-import { coupons } from '@/code'
+import { coupons } from '@/components/code'
 
 interface CartItem {
   id: number
