@@ -20,10 +20,11 @@ interface ProductsProps {
 }
 
 const PAGE_SIZE = 10
+const VISIBLE_PROD = 12 // Initial number of products to show before "Load More" is clicked "why 12 it loks better than 10 in grid layout in mobile and pc both"
 
 export default function Products({ selectedCategory }: ProductsProps) {
   const [allProducts, setAllProducts] = useState<Product[]>([])
-  const [visibleCount, setVisibleCount] = useState(10)
+  const [visibleCount, setVisibleCount] = useState(VISIBLE_PROD) 
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
