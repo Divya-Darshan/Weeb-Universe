@@ -3,6 +3,8 @@
 
 import { useState } from 'react'
 import { FaInstagram } from 'react-icons/fa6'
+import Image from 'next/image'
+import Logo from '@/public/logo.svg'
 
 const navigation = {
   support: ['+91 9092659556', 'weebstore.com', 'Instagram'], 
@@ -129,7 +131,9 @@ export default function Footer() {
             {/* Left block */}
             <div className="space-y-6">
               <div className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500">
-                <span className="text-2xl font-bold text-white">~</span>
+                <span className="text-2xl font-bold text-white">
+                  <Image alt="Weeb Store Logo" src={Logo} className="h-8 w-auto brightness-0 invert" />
+                </span>
               </div>
               <p className="max-w-xs text-sm leading-relaxed text-gray-300">
                     Stuff you actually want to keep on your desk your favorite characters in real life
