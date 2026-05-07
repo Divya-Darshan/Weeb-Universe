@@ -130,9 +130,9 @@ export default function Footer() {
           <div className="grid gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
             {/* Left block */}
             <div className="space-y-6">
-              <div className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500">
+              <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-indigo-500">
                 <span className="text-2xl font-bold text-white">
-                  <Image alt="Weeb Store Logo" src={Logo} className="h-8 w-auto brightness-0 invert" />
+                  <Image alt="Weeb Store Logo" src={Logo} className="h-10 w-auto brightness-0 invert" />
                 </span>
               </div>
               <p className="max-w-xs text-sm leading-relaxed text-gray-300">
