@@ -17,10 +17,10 @@ const navigation = [
 ]
 
 const sliderImages = [
-  'https://static.getimg.ai/media/getimg_ai_img-eEUBXVbYBAAMq4uuiVme3.webp',
-  'https://static.getimg.ai/media/getimg_ai_img-YNZFXURZzeJX6aKEeCy2z (1)-1.webp',
-  'https://static.getimg.ai/media/getimg_ai_img-NVx2DfFXPRx9PzMCyDRmb (1).webp',
-  'https://static.getimg.ai/media/getimg_ai_img-4dRQmdqK4Gqjp1hyt62ty.webp',
+  '',
+  '',
+  '',
+  '',
 ]
 
 export default function Example() {
